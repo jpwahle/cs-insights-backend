@@ -1,0 +1,93 @@
+{
+  "name": "nlp-land-backend",
+  "version": "0.1.0",
+  "description": "API server of the nlp-land project. This is the main part of storing data and accessing an external data analysis endpoint. It uses a mongoDB instance to store everything.",
+  "main": "./lib/main.js",
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "test": "nyc ts-mocha -t 60000 --exit test/**/*.ts",
+    "build": "tsc -p .",
+    "build:live": "concurrently \"tsc -w -p .\" \"nodemon ./lib/main.js\"",
+    "start": "node ./lib/main.js",
+    "cluster": "node ./lib/cluster.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ag-gipp/NLP-Land-backend.git"
+  },
+  "author": "Jan Philip Wahle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ag-gipp/NLP-Land-backend/issues"
+  },
+  "homepage": "https://github.com/ag-gipp/NLP-Land-backend#readme",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/chai": "^4.2.22",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/express-session": "^1.17.4",
+    "@types/jsonwebtoken": "^8.5.5",
+    "@types/lodash": "^4.14.176",
+    "@types/mocha": "^9.0.0",
+    "@types/mongodb-memory-server": "^2.3.0",
+    "@types/mongoose": "^5.11.97",
+    "@types/passport": "^1.0.7",
+    "@types/passport-auth0": "^1.0.5",
+    "@types/passport-jwt": "^3.0.6",
+    "@types/passport-local": "^1.0.34",
+    "@types/swagger-ui-express": "^4.1.3",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "chai": "^4.3.4",
+    "concurrently": "^6.3.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-typescript": "^14.0.1",
+    "eslint-config-airbnb-typescript-prettier": "^4.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "mongodb-memory-server": "^8.0.2",
+    "nodemon": "^2.0.14",
+    "nyc": "^15.1.0",
+    "prettier": "^2.4.1",
+    "ts-mocha": "^8.0.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "chai-http": "^4.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-oas-generator": "^1.0.41",
+    "express-restify-mongoose": "^6.1.2",
+    "express-session": "^1.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.13.12",
+    "passport": "^0.5.0",
+    "passport-auth0": "^1.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "redoc-express": "^1.0.0"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "reporter": [
+      "text",
+      "text-summary"
+    ],
+    "exclude": [
+      "test/lib/test/**/*"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  }
+}

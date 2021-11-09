@@ -1,0 +1,3727 @@
+{
+  "definitions": {
+    "Affiliation": {
+      "title": "Affiliation",
+      "required": [
+        "name",
+        "country"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        },
+        "_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Author": {
+      "title": "Author",
+      "required": [
+        "fullname",
+        "email"
+      ],
+      "properties": {
+        "fullname": {
+          "type": "string"
+        },
+        "affiliations": {
+          "type": "string",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "email": {
+          "type": "string"
+        },
+        "_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Paper": {
+      "title": "Paper",
+      "required": [
+        "title",
+        "abstractText",
+        "abstractExtractor",
+        "typeOfPaper",
+        "shortOrLong",
+        "atMainConference",
+        "isSharedTask",
+        "isStudentPaper",
+        "doi",
+        "preProcessingGitHash",
+        "pdfUrl",
+        "absUrl",
+        "datePublished",
+        "citationInfoTimestamp"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "abstractText": {
+          "type": "string"
+        },
+        "abstractExtractor": {
+          "type": "string",
+          "enum": [
+            "grobid",
+            "anthology",
+            "rulebased"
+          ]
+        },
+        "typeOfPaper": {
+          "type": "string",
+          "enum": [
+            "journal",
+            "conference",
+            "demo",
+            "workshop",
+            "poster",
+            "tutorial",
+            "doctoralconsortium",
+            "other"
+          ]
+        },
+        "shortOrLong": {
+          "type": "string",
+          "enum": [
+            "short",
+            "long",
+            "unknown"
+          ]
+        },
+        "atMainConference": {
+          "type": "boolean"
+        },
+        "isSharedTask": {
+          "type": "boolean"
+        },
+        "isStudentPaper": {
+          "type": "boolean"
+        },
+        "doi": {
+          "type": "string"
+        },
+        "preProcessingGitHash": {
+          "type": "string"
+        },
+        "pdfUrl": {
+          "type": "string"
+        },
+        "absUrl": {
+          "type": "string"
+        },
+        "datePublished": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "citationInfoTimestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "citedBy": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "firstAuthor": {
+          "type": "string"
+        },
+        "venues": {
+          "type": "string"
+        },
+        "_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Venue": {
+      "title": "Venue",
+      "properties": {
+        "names": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "acronyms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "venueCodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "venueDetails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "callForPapersText": {
+                "type": "string"
+              },
+              "timePublished": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": []
+          }
+        },
+        "_id": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "title": "User",
+      "required": [
+        "email",
+        "password",
+        "fullname",
+        "token",
+        "isAdmin",
+        "isActive",
+        "isDeleted"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "fullname": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "isAdmin": {
+          "type": "boolean"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "isDeleted": {
+          "type": "boolean"
+        },
+        "_id": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "host": "localhost:3000",
+  "info": {
+    "title": "nlp-land-backend",
+    "version": "0.1.0",
+    "license": {
+      "name": "MIT"
+    },
+    "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI server of the nlp-land project. This is the main part of storing data and accessing an external data analysis endpoint. It uses a mongoDB instance to store everything."
+  },
+  "paths": {
+    "/api/v1/affiliations": {
+      "get": {
+        "summary": "/api/v1/affiliations",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Affiliation"
+        ]
+      },
+      "post": {
+        "summary": "/api/v1/affiliations",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "ACL"
+                },
+                "country": {
+                  "type": "string",
+                  "example": "USA"
+                },
+                "city": {
+                  "type": "string",
+                  "example": "Wuppertal"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "6183de2dab2f54603e33e53f"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "ACL"
+                },
+                "country": {
+                  "type": "string",
+                  "example": "USA"
+                },
+                "city": {
+                  "type": "string",
+                  "example": "Wuppertal"
+                },
+                "__v": {
+                  "type": "number",
+                  "example": 0
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "string",
+              "example": "A token is required for authentication"
+            }
+          }
+        },
+        "tags": [
+          "Affiliation"
+        ],
+        "produces": [
+          "application/json",
+          "text/html"
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/affiliations",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Affiliation"
+        ]
+      }
+    },
+    "/api/v1/affiliations/count": {
+      "get": {
+        "summary": "/api/v1/affiliations/count",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Affiliation"
+        ]
+      }
+    },
+    "/api/v1/affiliations/{id}": {
+      "get": {
+        "summary": "/api/v1/affiliations/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Affiliation"
+        ]
+      },
+      "post": {
+        "summary": "/api/v1/affiliations/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Affiliation"
+        ]
+      },
+      "put": {
+        "summary": "/api/v1/affiliations/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Affiliation"
+        ]
+      },
+      "patch": {
+        "summary": "/api/v1/affiliations/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Affiliation"
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/affiliations/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Affiliation"
+        ]
+      }
+    },
+    "/api/v1/affiliations/{id}/shallow": {
+      "get": {
+        "summary": "/api/v1/affiliations/{id}/shallow",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Affiliation"
+        ]
+      }
+    },
+    "/api/v1/authors": {
+      "get": {
+        "summary": "/api/v1/authors",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Author"
+        ]
+      },
+      "post": {
+        "summary": "/api/v1/authors",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fullname": {
+                  "type": "string",
+                  "example": "Jan Philip"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "******"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "jpw@nlpland.de"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "string",
+              "example": "A token is required for authentication"
+            }
+          }
+        },
+        "tags": [
+          "Author"
+        ],
+        "produces": [
+          "text/html"
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/authors",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Author"
+        ]
+      }
+    },
+    "/api/v1/authors/count": {
+      "get": {
+        "summary": "/api/v1/authors/count",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Author"
+        ]
+      }
+    },
+    "/api/v1/authors/{id}": {
+      "get": {
+        "summary": "/api/v1/authors/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Author"
+        ]
+      },
+      "post": {
+        "summary": "/api/v1/authors/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Author"
+        ]
+      },
+      "put": {
+        "summary": "/api/v1/authors/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Author"
+        ]
+      },
+      "patch": {
+        "summary": "/api/v1/authors/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Author"
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/authors/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Author"
+        ]
+      }
+    },
+    "/api/v1/authors/{id}/shallow": {
+      "get": {
+        "summary": "/api/v1/authors/{id}/shallow",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Author"
+        ]
+      }
+    },
+    "/api/v1/papers": {
+      "get": {
+        "summary": "/api/v1/papers",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      },
+      "post": {
+        "summary": "/api/v1/papers",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/papers",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      }
+    },
+    "/api/v1/papers/count": {
+      "get": {
+        "summary": "/api/v1/papers/count",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      }
+    },
+    "/api/v1/papers/{id}": {
+      "get": {
+        "summary": "/api/v1/papers/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      },
+      "post": {
+        "summary": "/api/v1/papers/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      },
+      "put": {
+        "summary": "/api/v1/papers/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      },
+      "patch": {
+        "summary": "/api/v1/papers/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/papers/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      }
+    },
+    "/api/v1/papers/{id}/shallow": {
+      "get": {
+        "summary": "/api/v1/papers/{id}/shallow",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Paper"
+        ]
+      }
+    },
+    "/api/v1/venues": {
+      "get": {
+        "summary": "/api/v1/venues",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      },
+      "post": {
+        "summary": "/api/v1/venues",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/venues",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      }
+    },
+    "/api/v1/venues/count": {
+      "get": {
+        "summary": "/api/v1/venues/count",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      }
+    },
+    "/api/v1/venues/{id}": {
+      "get": {
+        "summary": "/api/v1/venues/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      },
+      "post": {
+        "summary": "/api/v1/venues/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      },
+      "put": {
+        "summary": "/api/v1/venues/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      },
+      "patch": {
+        "summary": "/api/v1/venues/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/venues/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      }
+    },
+    "/api/v1/venues/{id}/shallow": {
+      "get": {
+        "summary": "/api/v1/venues/{id}/shallow",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Venue"
+        ]
+      }
+    },
+    "/docs/redoc": {
+      "get": {
+        "summary": "/docs/redoc",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "example": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>REST API Documentation for NLP-land-backend</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link href=\"https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700\" rel=\"stylesheet\">\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n      }\n    </style>\n  </head>\n  <body>\n    <redoc spec-url='/api-spec/v3'></redoc>\n    <script src=\"https://unpkg.com/redoc@latest/bundles/redoc.standalone.js\"> </script>\n  </body>\n</html>"
+            }
+          },
+          "304": {}
+        },
+        "tags": [],
+        "produces": [
+          "text/html"
+        ]
+      }
+    },
+    "/docs/oas.json": {
+      "get": {
+        "summary": "/docs/oas.json",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "definitions": {
+                  "type": "object",
+                  "properties": {
+                    "Affiliation": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "example": "Affiliation"
+                        },
+                        "required": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "name"
+                          ]
+                        },
+                        "properties": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "country": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "city": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "lat": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "number"
+                                }
+                              }
+                            },
+                            "lng": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "number"
+                                }
+                              }
+                            },
+                            "_id": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Author": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "example": "Author"
+                        },
+                        "required": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "fullname"
+                          ]
+                        },
+                        "properties": {
+                          "type": "object",
+                          "properties": {
+                            "fullname": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "affiliations": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "timestamp": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "format": {
+                                  "type": "string",
+                                  "example": "date-time"
+                                }
+                              }
+                            },
+                            "email": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "_id": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Paper": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "example": "Paper"
+                        },
+                        "required": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "title"
+                          ]
+                        },
+                        "properties": {
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "abstractText": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "abstractExtractor": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "enum": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "example": [
+                                    "grobid"
+                                  ]
+                                }
+                              }
+                            },
+                            "typeOfPaper": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "enum": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "example": [
+                                    "journal"
+                                  ]
+                                }
+                              }
+                            },
+                            "shortOrLong": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "enum": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "example": [
+                                    "short"
+                                  ]
+                                }
+                              }
+                            },
+                            "atMainConference": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "boolean"
+                                }
+                              }
+                            },
+                            "isSharedTask": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "boolean"
+                                }
+                              }
+                            },
+                            "isStudentPaper": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "boolean"
+                                }
+                              }
+                            },
+                            "doi": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "preProcessingGitHash": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "pdfUrl": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "absUrl": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "datePublished": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "format": {
+                                  "type": "string",
+                                  "example": "date-time"
+                                }
+                              }
+                            },
+                            "citationInfoTimestamp": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "format": {
+                                  "type": "string",
+                                  "example": "date-time"
+                                }
+                              }
+                            },
+                            "citedBy": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "array"
+                                },
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "authors": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "array"
+                                },
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "firstAuthor": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "venues": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            },
+                            "_id": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Venue": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "example": "Venue"
+                        },
+                        "properties": {
+                          "type": "object",
+                          "properties": {
+                            "names": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "array"
+                                },
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "string"
+                                    },
+                                    "required": {
+                                      "type": "boolean",
+                                      "example": true
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "acronyms": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "array"
+                                },
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "string"
+                                    },
+                                    "required": {
+                                      "type": "boolean",
+                                      "example": true
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "venueCodes": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "array"
+                                },
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "string"
+                                    },
+                                    "required": {
+                                      "type": "boolean",
+                                      "example": true
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "venueDetails": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "array"
+                                },
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "object"
+                                    },
+                                    "properties": {
+                                      "type": "object",
+                                      "properties": {
+                                        "callForPapersText": {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "example": "string"
+                                            }
+                                          }
+                                        },
+                                        "timePublished": {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "example": "string"
+                                            },
+                                            "format": {
+                                              "type": "string",
+                                              "example": "date-time"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "required": {
+                                      "type": "array",
+                                      "items": {},
+                                      "example": [
+                                        null
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "_id": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "nlp-land-backend"
+                    },
+                    "version": {
+                      "type": "string",
+                      "example": "0.1.0"
+                    },
+                    "license": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "MIT"
+                        }
+                      }
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI server of the nlp-land project. This is the main part of storing data and accessing an external data analysis endpoint. It uses a mongoDB instance to store everything."
+                    }
+                  }
+                },
+                "paths": {
+                  "type": "object",
+                  "properties": {
+                    "/api/v1/affiliations": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        },
+                        "post": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        },
+                        "delete": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/affiliations/count": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations/count"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/affiliations/{id}": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        },
+                        "post": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        },
+                        "put": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        },
+                        "patch": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        },
+                        "delete": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/affiliations/{id}/shallow": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/affiliations/{id}/shallow"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Affiliation"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/authors": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        },
+                        "post": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        },
+                        "delete": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/authors/count": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors/count"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/authors/{id}": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        },
+                        "post": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        },
+                        "put": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        },
+                        "patch": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        },
+                        "delete": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/authors/{id}/shallow": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/authors/{id}/shallow"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Author"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/papers": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        },
+                        "post": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        },
+                        "delete": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/papers/count": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers/count"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/papers/{id}": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        },
+                        "post": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        },
+                        "put": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        },
+                        "patch": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        },
+                        "delete": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/papers/{id}/shallow": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/papers/{id}/shallow"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Paper"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/venues": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        },
+                        "post": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        },
+                        "delete": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/venues/count": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues/count"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/venues/{id}": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        },
+                        "post": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        },
+                        "put": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        },
+                        "patch": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        },
+                        "delete": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues/{id}"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/api/v1/venues/{id}/shallow": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/api/v1/venues/{id}/shallow"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "in": {
+                                    "type": "string"
+                                  },
+                                  "required": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "example": [
+                                {
+                                  "name": "id",
+                                  "in": "path",
+                                  "required": true
+                                }
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "Venue"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/docs/oas.json": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/docs/oas.json"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {}
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "/docs/redoc": {
+                      "type": "object",
+                      "properties": {
+                        "get": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": "string",
+                              "example": "/docs/redoc"
+                            },
+                            "consumes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "application/json"
+                              ]
+                            },
+                            "parameters": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            },
+                            "responses": {
+                              "type": "object",
+                              "properties": {
+                                "304": {
+                                  "type": "object",
+                                  "properties": {}
+                                }
+                              }
+                            },
+                            "tags": {
+                              "type": "array",
+                              "items": {},
+                              "example": [
+                                null
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "swagger": {
+                  "type": "string",
+                  "example": "2.0"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ]
+                  },
+                  "example": [
+                    {
+                      "name": "Affiliation"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "tags": [
+    {
+      "name": "Affiliation"
+    },
+    {
+      "name": "Author"
+    },
+    {
+      "name": "Paper"
+    },
+    {
+      "name": "Venue"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+    "rules": {
+      "completed-docs": {
+        "options": ["classes", "enum-members", "enums", "functions", "interfaces", "methods", "namespaces", "properties", "types", "variables"],
+        "severity": "error"
+      }
+    },
+    "extends": "tslint-config-airbnb"
+}
