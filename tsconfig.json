@@ -63,7 +63,8 @@
       {
         "name": "typescript-tslint-plugin"
       }
-    ]
+    ],
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts", "lib", "test/lib/**/**"]

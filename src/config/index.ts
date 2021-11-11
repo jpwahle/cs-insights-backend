@@ -1,7 +1,7 @@
-import lodash from 'lodash';
 import path from 'path';
 import { options as defaultOptions } from './default';
 import { APIOptions } from './interfaces';
+const lodash = require('lodash');
 
 export async function loadOptions(
   baseDir: string = '/etc/nlpland/config',

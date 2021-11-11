@@ -1,11 +1,11 @@
-import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import express, { NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
 import restify from 'express-restify-mongoose';
 import * as DocumentTypes from '../models/interfaces';
 import { APIOptions } from '../../config/interfaces';
-import passport from 'passport';
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const bcrypt = require('bcryptjs');
 
 export function initialize(
   userModel: mongoose.Model<DocumentTypes.User>,
@@ -104,26 +104,29 @@ export function initialize(
     }
   );
 
-  router.post(`${options.server.prefix}${options.server.version}/login`, async (req, res, next) => {
-    passport.authenticate('login', async (err, user) => {
-      try {
-        if (err || !user) {
-          res.status(400).json({ message: 'Wrong email or password.' });
-        } else {
-          req.login(user, { session: false }, async (error) => {
-            /* istanbul ignore next */
-            if (error) return next(error);
+  router.post(
+    `${options.server.prefix}${options.server.version}/login`,
+    async (req: any, res, next) => {
+      passport.authenticate('login', async (err: Error | boolean, user: DocumentTypes.User) => {
+        try {
+          if (err || !user) {
+            res.status(400).json({ message: 'Wrong email or password.' });
+          } else {
+            req.login(user, { session: false }, async (error: Error) => {
+              /* istanbul ignore next */
+              if (error) return next(error);
 
-            const body = { _id: user._id, email: user.email };
-            const token = jwt.sign({ user: body }, options.auth.jwt.secret);
+              const body = { _id: user._id, email: user.email };
+              const token = jwt.sign({ user: body }, options.auth.jwt.secret);
 
-            return res.json({ token });
-          });
+              return res.json({ token });
+            });
+          }
+        } catch (error) {
+          /* istanbul ignore next */
+          return next(error);
         }
-      } catch (error) {
-        /* istanbul ignore next */
-        return next(error);
-      }
-    })(req, res, next);
-  });
+      })(req, res, next);
+    }
+  );
 }

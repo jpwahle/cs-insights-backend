@@ -1,14 +1,14 @@
 import express from 'express';
-import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
-import cors from 'cors';
 import expressOasGenerator, { SPEC_OUTPUT_FILE_BEHAVIOR } from 'express-oas-generator';
 import Models from './models';
 import * as DocumentTypes from './models/interfaces';
+const cors = require('cors');
 
 import { APIOptions } from '../config/interfaces';
-import passport from 'passport';
 import { initAuth } from './middleware/auth';
+const passport = require('passport');
+const bcrypt = require('bcryptjs');
 
 export class APIServer {
   app: express.Express;
@@ -73,14 +73,14 @@ export class APIServer {
     if (count === 0 && defaultUser.password) {
       bcrypt
         .hash(defaultUser.password, 10)
-        .then((hash) => {
+        .then((hash: string) => {
           defaultUser.password = hash;
           this.models.User.create(defaultUser)
             .then(() => console.log('Default user created.'))
             .catch(/* istanbul ignore next */ (error) => console.log(error));
         })
 
-        .catch(/* istanbul ignore next */ (err) => console.log(err));
+        .catch(/* istanbul ignore next */ (err: Error) => console.log(err));
     }
   };
 }
