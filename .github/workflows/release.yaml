@@ -100,8 +100,6 @@ jobs:
         uses: reedyuk/npm-version@1.1.1
         with:
           version: ${{steps.tagging.outputs.tag}}
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
