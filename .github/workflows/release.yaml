@@ -27,7 +27,6 @@ jobs:
           npm run test
 
   Coverage:
-    if: github.event_name == "push"
     needs: [Fulltests]
     runs-on: ubuntu-latest
     steps:
