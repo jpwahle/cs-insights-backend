@@ -40,9 +40,11 @@ jobs:
       - name: Run tests
         run: |
           npm run test
-      - name: Upload coverage
-        run: |
-          npm run coverage
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/lcov.info
 
   Docs:
     name: Push docs to release Branch
