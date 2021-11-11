@@ -8,9 +8,6 @@ export interface APIOptions {
       secret: string;
       maxAge: string;
     };
-    session: {
-      secret: string;
-    };
   };
   user: {
     default: {

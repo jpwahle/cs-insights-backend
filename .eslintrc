@@ -2,7 +2,9 @@
   "extends": ["airbnb-typescript/base", "prettier"],
   "plugins": ["prettier", "@typescript-eslint", "import"],
   "rules": {
-    "prettier/prettier": ["error"]
+    "prettier/prettier": ["error"],
+    "no-unused-expressions": "off",
+    "@typescript-eslint/no-unused-expressions": ["off"]
   },
   "parserOptions": {
     "project": ["./tsconfig.json", "./tsconfig-test.json"]

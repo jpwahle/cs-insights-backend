@@ -1,0 +1,45 @@
+name: Release
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+
+jobs:
+  Fulltests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: |
+          npm install
+      - name: Run linting
+        run: |
+          npm run lint
+      - name: Run tests
+        run: |
+          npm run test
+
+  Coverage:
+    if: github.event.pull_request.merged == true
+    needs: [Fulltests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: |
+          npm install
+      - name: Run tests
+        run: |
+          npm run test
+      - name: Upload coverage
+        run: |
+          npm run coverage
