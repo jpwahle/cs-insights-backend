@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import restify from 'express-restify-mongoose';
 import * as DocumentTypes from '../models/interfaces';
 import { APIOptions } from '../../config/interfaces';
-import passport from 'passport';
+const passport = require('passport');
 
 export function initialize(
   model: mongoose.Model<DocumentTypes.Venue>,

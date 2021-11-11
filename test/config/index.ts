@@ -4,7 +4,7 @@ import 'mocha';
 import { expect } from 'chai';
 import { loadOptions } from '../../src/config';
 import { options } from '../../src/config/default';
-import lodash from 'lodash';
+const lodash = require('lodash');
 
 describe('config', () => {
   specify('User config available', async () => {

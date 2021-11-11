@@ -8,7 +8,7 @@ import { APIOptions } from '../../src/config/interfaces';
 import * as Setup from '../setup';
 import * as DocumentTypes from '../../src/app/models/interfaces';
 import mongoose from 'mongoose';
-import lodash from 'lodash';
+const lodash = require('lodash');
 
 chai.use(chaiHttp);
 

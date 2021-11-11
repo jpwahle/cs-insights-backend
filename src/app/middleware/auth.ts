@@ -1,9 +1,9 @@
-import passport from 'passport';
-import passportLocal from 'passport-local';
 import Models from '../models';
-import bcrypt from 'bcryptjs';
-import passportJwt from 'passport-jwt';
 import { APIOptions } from '../../config/interfaces';
+const passportLocal = require('passport-local');
+const passportJwt = require('passport-jwt');
+const passport = require('passport');
+const bcrypt = require('bcryptjs');
 
 export function initAuth(models: Models, options: APIOptions) {
   passport.use(
@@ -13,7 +13,7 @@ export function initAuth(models: Models, options: APIOptions) {
         usernameField: 'email',
         passwordField: 'password',
       },
-      async (email, password, done) => {
+      async (email: string, password: string, done: any) => {
         try {
           const user = await models.User.findOne({ email }).select('+password');
 
@@ -41,7 +41,7 @@ export function initAuth(models: Models, options: APIOptions) {
         jwtFromRequest: passportJwt.ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
         secretOrKey: options.auth.jwt.secret,
       },
-      (jwtToken, done) => {
+      (jwtToken: any, done: any) => {
         models.User.findOne({ _id: jwtToken.user._id })
           .select('+isAdmin +isActive')
           .exec((err, user) => {
