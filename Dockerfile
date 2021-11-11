@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:10
 
 RUN mkdir /api-server
 WORKDIR /api-server
