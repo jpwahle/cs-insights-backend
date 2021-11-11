@@ -11,7 +11,6 @@ export class Controllers {
   static initialize(
     models: Models,
     router: express.Application | express.Router,
-    // authMiddleware: { (req: any, res: express.Response, next: NextFunction): void },
     options: APIOptions
   ) {
     affiliations.initialize(models.Affiliation, router, options);

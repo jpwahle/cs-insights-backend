@@ -1,5 +1,6 @@
 import { APIOptions } from './interfaces';
 
+/* istanbul ignore next */
 export const options: APIOptions = {
   // Environment
   environment: {
@@ -14,9 +15,6 @@ export const options: APIOptions = {
         process.env.JWT_SECRET ||
         'Never use this in production. Use JWT_SECRET environment variable.',
       maxAge: '4w',
-    },
-    session: {
-      secret: process.env.SESSION_SECRET || 'secret',
     },
   },
   // User

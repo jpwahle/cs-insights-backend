@@ -13,54 +13,44 @@ export function initialize(
   // venues endpoint
   restify.serve(router, model, {
     name: 'venues',
-    preMiddleware: passport.authenticate('jwt'),
+    preMiddleware: passport.authenticate('jwt', { session: false }),
     prefix: options.server.prefix,
     version: options.server.version,
-    preCreate: (req: any, _: express.Response, next: NextFunction) => {
+
+    preCreate: (req: any, res: express.Response, next: NextFunction) => {
       if (req.user.isAdmin) {
         // Add who created the venue and when
         req.body.createdBy = req.user._id;
         req.body.createdAt = new Date();
         return next();
       }
-
-      return next({
-        statusCode: 403,
-        message: 'Only admins can create new venues using the venue API',
+      return res.status(403).json({
+        message: 'Only admins can create new venues using the venues API',
       });
     },
 
-    // disable user modification, except for admins and the creator itself
-    preUpdate: (req: any, _: express.Response, next: NextFunction) => {
-      // extract requested user from request
-      const document = <DocumentTypes.User>req?.erm?.document;
-
-      // allow update for user of the venue and admins
-      if (req.user.isAdmin || req.user._id.equals(document?._id)) {
+    // disable user modification, except for admins
+    preUpdate: (req: any, res: express.Response, next: NextFunction) => {
+      if (req.user.isAdmin) {
         return next();
       }
 
       // disable for everybody else
-      return next({
-        statusCode: 403,
-        message: 'Only admins or the user itself can update venues properties',
+      return res.status(403).json({
+        message: 'Only admins can update venues properties',
       });
     },
 
-    // disable deletion, except for admins and the creator itself
+    // disable deletion, except for admins
     preDelete: (req: any, res: express.Response, next: NextFunction) => {
-      // extract requested user from request
-      const document = <DocumentTypes.User>req?.erm?.document;
-
-      // allow update for user of the venue and admins
-      if (req?.user?.isAdmin || req.user._id.equals(document?._id)) {
+      // allow update for admins
+      if (req.user.isAdmin) {
         return next();
       }
 
       // disable for everybody else
-      return next({
-        statusCode: 403,
-        message: 'Only admins and the creator can delete a venue',
+      return res.status(403).json({
+        message: 'Only admins can delete a venue',
       });
     },
   });

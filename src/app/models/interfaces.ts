@@ -1,18 +1,23 @@
 import mongoose from 'mongoose';
 
-export interface Author extends mongoose.Document {
-  fullname: string;
-  affiliations: mongoose.Types.ObjectId[];
-  timestamp: Date;
-  email: string;
-}
-
 export interface Affiliation extends mongoose.Document {
   name: string;
   country: string;
   city: string;
   lat: number;
   lng: number;
+  createdBy: mongoose.Types.ObjectId;
+  createdAt: Date;
+}
+
+export interface Author extends mongoose.Document {
+  fullname: string;
+  affiliations: mongoose.Types.ObjectId[];
+  timestamp: Date;
+  email: string;
+  createdBy: mongoose.Types.ObjectId;
+  createdAt: Date;
+  dblpId: string;
 }
 
 export interface Venue extends mongoose.Document {
@@ -23,6 +28,9 @@ export interface Venue extends mongoose.Document {
     callForPapersText: string;
     timePublished: Date;
   }[];
+  createdBy: mongoose.Types.ObjectId;
+  createdAt: Date;
+  dblpId: string;
 }
 
 export interface Paper extends mongoose.Document {
@@ -56,12 +64,16 @@ export interface Paper extends mongoose.Document {
   authors: mongoose.Types.ObjectId[];
   firstAuthor: mongoose.Types.ObjectId;
   venues: mongoose.Types.ObjectId[];
+
+  createdBy: mongoose.Types.ObjectId;
+  createdAt: Date;
+  dblpId: string;
 }
 
 export interface User extends mongoose.Document {
   email: string;
-  password: string;
   fullname: string;
+  password?: string;
   token?: string;
   isAdmin?: boolean;
   isActive?: boolean;

@@ -2,7 +2,6 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import redoc from 'redoc-express';
 import expressOasGenerator, { SPEC_OUTPUT_FILE_BEHAVIOR } from 'express-oas-generator';
 import Models from './models';
 import * as DocumentTypes from './models/interfaces';
@@ -10,17 +9,17 @@ import * as DocumentTypes from './models/interfaces';
 import { APIOptions } from '../config/interfaces';
 import passport from 'passport';
 import { initAuth } from './middleware/auth';
-import session from 'express-session';
 
 export class APIServer {
   app: express.Express;
 
   options: APIOptions;
 
-  swaggerDocGen: any;
+  models: Models;
 
-  constructor(options: APIOptions) {
+  constructor(options: APIOptions, models: Models) {
     this.app = express();
+    this.models = models;
     this.options = options;
   }
 
@@ -29,13 +28,9 @@ export class APIServer {
     this.app.use(cors());
   };
 
-  addAuth = (models: Models) => {
-    this.app.use(
-      session({ secret: this.options.auth.session.secret, resave: true, saveUninitialized: true })
-    );
-    initAuth(models, this.options);
+  addAuth = () => {
+    initAuth(this.models, this.options);
     this.app.use(passport.initialize());
-    this.app.use(passport.session());
   };
 
   start = () => {
@@ -44,29 +39,17 @@ export class APIServer {
     });
   };
 
-  connectDb = () => {
-    mongoose
-      .connect(this.options.database.url, {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
-      })
-      .then(() => console.log(`Connected to mongodb.`))
-      .catch((err) => console.log(err));
+  connectDb = async () => {
+    await mongoose.connect(this.options.database.url, {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    });
   };
 
   attachRouter = (router: express.Router) => {
     this.app.use(router);
-  };
-
-  attachDocs = () => {
-    this.app.get(
-      this.options.docs.redocUiServePath,
-      redoc({
-        title: this.options.docs.title,
-        specUrl: '/api-spec/v3',
-      })
-    );
   };
 
   handleOasRequests = () => {
@@ -84,21 +67,20 @@ export class APIServer {
     });
   };
 
-  createDefaultUser = (defaultUser: DocumentTypes.User, models: Models) => {
-    models.User.countDocuments()
-      .then((count) => {
-        if (count === 0) {
-          bcrypt
-            .hash(defaultUser.password, 10)
-            .then((hash) => {
-              defaultUser.password = hash;
-              models.User.create(defaultUser)
-                .then(() => console.log('Default user created.'))
-                .catch((error) => console.log(error));
-            })
-            .catch((err) => console.log(err));
-        }
-      })
-      .catch((err) => console.log(err));
+  createDefaultUser = async (defaultUser: DocumentTypes.User) => {
+    const count = await this.models.User.countDocuments();
+    /* istanbul ignore else */
+    if (count === 0 && defaultUser.password) {
+      bcrypt
+        .hash(defaultUser.password, 10)
+        .then((hash) => {
+          defaultUser.password = hash;
+          this.models.User.create(defaultUser)
+            .then(() => console.log('Default user created.'))
+            .catch(/* istanbul ignore next */ (error) => console.log(error));
+        })
+
+        .catch(/* istanbul ignore next */ (err) => console.log(err));
+    }
   };
 }
