@@ -13,10 +13,10 @@ export function initialize(
   // authors endpoint
   restify.serve(router, model, {
     name: 'authors',
-    preMiddleware: passport.authenticate('jwt'),
+    preMiddleware: passport.authenticate('jwt', { session: false }),
     prefix: options.server.prefix,
     version: options.server.version,
-    preCreate: (req: any, _: express.Response, next: NextFunction) => {
+    preCreate: (req: any, res: express.Response, next: NextFunction) => {
       if (req.user.isAdmin) {
         // Add who created the author and when
         req.body.createdBy = req.user._id;
@@ -24,41 +24,32 @@ export function initialize(
         return next();
       }
 
-      return next({
-        statusCode: 403,
+      return res.status(403).json({
         message: 'Only admins can create new authors using the author API',
       });
     },
     // disable user modification, except for admins and the creator itself
-    preUpdate: (req: any, _: express.Response, next: NextFunction) => {
-      // extract requested user from request
-      const document = <DocumentTypes.User>req?.erm?.document;
-
+    preUpdate: (req: any, res: express.Response, next: NextFunction) => {
       // allow update for user of the author and admins
-      if (req.user.isAdmin || req.user._id.equals(document?._id)) {
+      if (req.user.isAdmin) {
         return next();
       }
 
       // disable for everybody else
-      return next({
-        statusCode: 403,
+      return res.status(403).json({
         message: 'Only admins or the user itself can update author properties',
       });
     },
 
     // disable deletion, except for admins and the creator itself
     preDelete: (req: any, res: express.Response, next: NextFunction) => {
-      // extract requested user from request
-      const document = <DocumentTypes.User>req?.erm?.document;
-
       // allow update for user of the author and admins
-      if (req?.user?.isAdmin || req.user._id.equals(document?._id)) {
+      if (req.user.isAdmin) {
         return next();
       }
 
       // disable for everybody else
-      return next({
-        statusCode: 403,
+      return res.status(403).json({
         message: 'Only admins and the creator can delete an author',
       });
     },

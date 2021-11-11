@@ -16,40 +16,32 @@ export function initialize(
     name: 'users',
     prefix: options.server.prefix,
     version: options.server.version,
-    preMiddleware: passport.authenticate('jwt'),
-    // disable user creation, except for admins
-    preCreate: (req: any, _: express.Response, next: NextFunction) => {
-      if (req.user.isAdmin) {
-        return next();
-      }
+    preMiddleware: passport.authenticate('jwt', { session: false }),
 
-      return next({
-        statusCode: 403,
-        message: 'Only admins can create new user profiles using the users API',
+    // disable user creation
+    preCreate: (_: any, res: express.Response) => {
+      return res.status(403).json({
+        message: 'Users can only be created using the register API',
       });
     },
 
     // disable user modification, except for admins and the user itself
-    preUpdate: (req: any, _: express.Response, next: NextFunction) => {
-      // extract requested user from request
-      const document = <DocumentTypes.User>req.erm.document;
-
+    preUpdate: (req: any, res: express.Response, next: NextFunction) => {
       // only admins can make a change to the isAdmin flag
       if (req.body.isAdmin && !req.user.isAdmin) {
-        return next({
-          statusCode: 403,
+        return res.status(403).json({
           message: 'Only admins can change the isAdmin flag of a user',
         });
       }
 
       // allow update for user and admins
-      if (req.user.isAdmin || req.user._id.equals(document._id)) {
+      /* istanbul ignore else */
+      if (req.user.isAdmin || req.user._id.equals(req.params.id)) {
         return next();
       }
 
       // disable for everybody else
-      return next({
-        statusCode: 403,
+      return res.status(403).json({
         message: 'Only admins or the user itself can update user properties',
       });
     },
@@ -62,8 +54,7 @@ export function initialize(
       }
 
       // disable for everybody else
-      return next({
-        statusCode: 403,
+      return res.status(403).json({
         message: 'Only admins can delete a user profile',
       });
     },
@@ -71,22 +62,22 @@ export function initialize(
 
   router.post(
     `${options.server.prefix}${options.server.version}/register`,
-    async (req: express.Request, res: express.Response) => {
+    async (req: express.Request, res: express.Response, next: NextFunction) => {
       // Our register logic starts here
       try {
         // Get user input
         const { fullname, email, password } = req.body;
 
         userModel.validate(req.body).catch((err) => {
+          /* istanbul ignore else */
           if (err) res.status(400).json({ message: err });
         });
 
         // check if user already exist
-        // Validate if user exist in our database
         const oldUser = await userModel.findOne({ email });
 
         if (oldUser) {
-          return res.status(409).json({ message: 'User Already Exist. Please Login' });
+          return res.status(409).json({ message: 'User already exist. Please login.' });
         }
 
         // Encrypt user password
@@ -95,63 +86,44 @@ export function initialize(
         // Create user in our database
         const user = await userModel.create({
           fullname,
-          email: email.toLowerCase(), // sanitize: convert email to lowercase
+          email: email.toLowerCase(),
           password: encryptedPassword,
+          isAdmin: false,
+          isActive: false,
         });
 
-        // Create token
-        const token = jwt.sign(
-          { user_id: user._id, email },
-          process.env.JWT_SECRET || options.auth.jwt.secret,
-          {
-            expiresIn: options.auth.jwt.maxAge,
-          }
-        );
-        // save user token
-        user.token = token;
+        user.isAdmin = undefined;
+        user.isActive = undefined;
 
         // return new user
         res.status(201).json(user);
       } catch (err) {
-        console.log(err);
+        /* istanbul ignore next */
+        return next(err);
       }
     }
   );
 
-  router.post(
-    `${options.server.prefix}${options.server.version}/login`,
-    async (req: express.Request, res: express.Response) => {
+  router.post(`${options.server.prefix}${options.server.version}/login`, async (req, res, next) => {
+    passport.authenticate('login', async (err, user) => {
       try {
-        // Get user input
-        const { email, password } = req.body;
+        if (err || !user) {
+          res.status(400).json({ message: 'Wrong email or password.' });
+        } else {
+          req.login(user, { session: false }, async (error) => {
+            /* istanbul ignore next */
+            if (error) return next(error);
 
-        // Validate user input
-        if (!(email && password)) {
-          res.status(400).json({ message: 'Missing email or password.' });
+            const body = { _id: user._id, email: user.email };
+            const token = jwt.sign({ user: body }, options.auth.jwt.secret);
+
+            return res.json({ token });
+          });
         }
-        // Validate if user exist in our database
-        const user = await userModel.findOne({ email });
-
-        if (user && (await bcrypt.compare(password, user.password))) {
-          // Create token
-          const token = jwt.sign(
-            { user_id: user._id, email },
-            process.env.JWT_SECRET || options.auth.jwt.secret,
-            {
-              expiresIn: options.auth.jwt.maxAge,
-            }
-          );
-
-          // save user token
-          user.token = token;
-
-          // user
-          res.status(200).json(user);
-        }
-        res.status(400).json({ message: 'Invalid Credentials' });
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        /* istanbul ignore next */
+        return next(error);
       }
-    }
-  );
+    })(req, res, next);
+  });
 }

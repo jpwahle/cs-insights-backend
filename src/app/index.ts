@@ -4,14 +4,13 @@ import Models from './models';
 import { APIOptions } from '../config/interfaces';
 import { APIServer } from './apiserver';
 import * as DocumentTypes from './models/interfaces';
-// import { createAuthMiddleware } from './middleware/auth';
 
-export function initServer(options: APIOptions): APIServer {
+export async function initServer(options: APIOptions): Promise<APIServer> {
   // Initialize models
   const models = new Models();
 
   // Create a basic server instance
-  const app = new APIServer(options);
+  const app = new APIServer(options, models);
 
   // Initialize automatic oas for responses
   app.handleOasResponses();
@@ -20,19 +19,16 @@ export function initServer(options: APIOptions): APIServer {
   app.init();
 
   // Add auth middleware
-  app.addAuth(models);
+  app.addAuth();
 
   // Initialize automatic oas for requests
   app.handleOasRequests();
 
   // Establish mongodb connection
-  app.connectDb();
+  await app.connectDb();
 
   // Initialize controller and link them into the router, then into the server
   const router = express.Router();
-
-  // Initialize auth middleware
-  // const authMiddleware = createAuthMiddleware(options);
 
   // Initialize controllers with models and router
   Controllers.initialize(models, router, options);
@@ -40,11 +36,8 @@ export function initServer(options: APIOptions): APIServer {
   // Attach router to the server
   app.attachRouter(router);
 
-  // Attach documentation endpoint
-  app.attachDocs();
-
   // check for existing users in the db, if none is found, create default user
-  app.createDefaultUser(<DocumentTypes.User>options.user.default, models);
+  await app.createDefaultUser(<DocumentTypes.User>options.user.default);
 
   // Start the server
   app.start();
