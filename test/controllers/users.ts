@@ -45,10 +45,6 @@ describe('/users', () => {
     ).body.token;
   });
 
-  // afterEach(async () => {
-  //   await Setup.clearDatabase(['users']);
-  // });
-
   describe('No access', () => {
     let someUserToken: string;
 

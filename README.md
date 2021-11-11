@@ -42,6 +42,10 @@ source .env
 npm run build:live
 ```
 
+## Documentation
+
+TODO: Add documentation link to github pages and to standard enpoints [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
+
 ## Tests
 
 ### CI
@@ -71,15 +75,14 @@ npm run test
 npm run lint
 ```
 
-However, is recommended to run the main pipeline with act before you make a pull request to make sure GitHub actions will produce the same results as you locally.
-
 ## Releases and deploys (TODO)
 
-New Git and GitHub deploys, releases, as well as changelogs are automatically created and deployed when a pull request is merged into the default branch.
+New Git and GitHub deploys, releases, as well as changelogs are automatically created and deployed when a pull request is merged from the `dev` into the `main` branch.
+Every time you want to develop a new feature, create an issue and assign yourself to that issue. This will trigger a GitHub action that creates a new issue from the dev branch.
+When you are done developing, create a commit with a message that includes "#patch", "#minor", or "#major" according to the semantic versioning [specification](https://semver.org/).
+Next, create a pull request to the `dev` branch. Assign the pull request one of the labels "fix", "feature", or "test" so they appear correctly later in the changelogs.
 
 TODO: Add instructions on semantic release.
-
-Please refer to the semantic versioning [specification](https://semver.org/) and the [semantic-release package](https://www.npmjs.com/package/semantic-release) for more information.
 
 ## Contributing
 

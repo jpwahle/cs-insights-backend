@@ -43,3 +43,25 @@ jobs:
       - name: Upload coverage
         run: |
           npm run coverage
+
+  Docs:
+    name: Push docs to release Branch
+    needs: [Fulltests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: |
+          npm install
+      - name: Run tests (and generate docs with oas)
+        run: |
+          npm run test
+      - name: Deploy docs 🚀
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: docs
+          folder: ./docs

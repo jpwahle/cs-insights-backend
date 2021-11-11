@@ -21,9 +21,6 @@ export async function initServer(options: APIOptions): Promise<APIServer> {
   // Add auth middleware
   app.addAuth();
 
-  // Initialize automatic oas for requests
-  app.handleOasRequests();
-
   // Establish mongodb connection
   await app.connectDb();
 
@@ -38,6 +35,9 @@ export async function initServer(options: APIOptions): Promise<APIServer> {
 
   // check for existing users in the db, if none is found, create default user
   await app.createDefaultUser(<DocumentTypes.User>options.user.default);
+
+  // Initialize automatic oas for requests
+  app.handleOasRequests();
 
   // Start the server
   app.start();
