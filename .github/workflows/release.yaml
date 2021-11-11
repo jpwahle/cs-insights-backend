@@ -4,6 +4,9 @@ on:
     branches:
       - main
     types: [closed]
+  push:
+    branches:
+      - main
 
 jobs:
   Fulltests:
@@ -24,7 +27,7 @@ jobs:
           npm run test
 
   Coverage:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == "push"
     needs: [Fulltests]
     runs-on: ubuntu-latest
     steps:
