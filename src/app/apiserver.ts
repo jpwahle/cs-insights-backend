@@ -60,7 +60,7 @@ export class APIServer {
     expressOasGenerator.handleResponses(this.app, {
       specOutputPath: this.options.docs.oasFile,
       mongooseModels: mongoose.modelNames(),
-      specOutputFileBehavior: SPEC_OUTPUT_FILE_BEHAVIOR.RECREATE,
+      specOutputFileBehavior: SPEC_OUTPUT_FILE_BEHAVIOR.PRESERVE,
       swaggerDocumentOptions: {},
       ignoredNodeEnvironments: ['production'],
       swaggerUiServePath: this.options.docs.swaggerUiServePath,

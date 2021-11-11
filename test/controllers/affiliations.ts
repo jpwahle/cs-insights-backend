@@ -17,6 +17,22 @@ let apiOptions: APIOptions;
 let adminToken: string;
 let adminUser: DocumentTypes.User;
 
+before(() => {
+  return new Promise<void>((resolve) => {
+    Setup.initDb().then(() => {
+      Setup.initApi().then(() => {
+        console.log('BEFORE ALL ROOT');
+        resolve();
+      });
+    });
+  });
+});
+
+after(async () => {
+  await Setup.clearDatabase();
+  await Setup.closeDatabase();
+});
+
 describe('/affiliations', () => {
   const route = '/affiliations';
 
@@ -33,7 +49,6 @@ describe('/affiliations', () => {
   };
 
   before(async () => {
-    await Setup.initDb();
     const { app, options } = await Setup.initApi();
     apiServer = app;
     apiOptions = options;
