@@ -82,8 +82,6 @@ Every time you want to develop a new feature, create an issue and assign yoursel
 When you are done developing, create a commit with a message that includes "#patch", "#minor", or "#major" according to the semantic versioning [specification](https://semver.org/).
 Next, create a pull request to the `dev` branch. Assign the pull request one of the labels "fix", "feature", or "test" so they appear correctly later in the changelogs.
 
-TODO: Add instructions on semantic release.
-
 ## Contributing
 
 Fork the repo, make changes and send a PR. We'll review it together!
