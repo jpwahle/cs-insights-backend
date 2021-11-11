@@ -6,4 +6,8 @@ COPY ./ /api-server
 
 ENV NODE_ENV=production
 RUN npm install --production
-RUN npm run build --prod
+
+# TODO: Switch the lines below to build the app in production mode.
+# Currently some strict typing is not working which we need to fix
+RUN npm run build
+# RUN npm run build --prod
