@@ -49,7 +49,6 @@ jobs:
           file: ./coverage/lcov.info
 
   Docs:
-    name: Push docs to release Branch
     needs: [Fulltests]
     runs-on: ubuntu-latest
     steps:
