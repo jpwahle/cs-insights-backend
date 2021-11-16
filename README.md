@@ -14,12 +14,20 @@
 
 ## Getting Started
 
+## Pre-steps
+
+Copy the .env.sample file to .env
+
+```
+cd NLP-Land-backend
+cp .env.sample .env
+```
+
 ### Production
 
 To spin up the production version of this project, switch into the root directory of this project and run:
 
 ```console
-cd NLP-Land-backend
 docker-compose up --build
 ```
 
