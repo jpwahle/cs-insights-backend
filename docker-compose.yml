@@ -7,8 +7,6 @@ services:
       - .env
     depends_on:
       - mongo
-    volumes:
-      - '.:/api-server'
     command: npm run cluster
     ports:
       - 3000:3000
