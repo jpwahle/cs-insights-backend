@@ -6,5 +6,4 @@ COPY ./ /api-server
 
 ENV NODE_ENV=production
 RUN npm install --production
-
 RUN npm run build --prod
