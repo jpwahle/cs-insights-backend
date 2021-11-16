@@ -28,7 +28,9 @@ docker-compose up --build
 To run the development environment locally, you need to spin up a mongodb instance.
 
 ```console
-source .env && docker run -d -p 27017:27017 --name mongodev \
+source .env
+set -o allexport
+docker run -d -p 27017:27017 --name mongodev \
     -e MONGO_INITDB_ROOT_USERNAME=$MONGO_USER \
     -e MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD \
     -e MONGO_INITDB_DATABASE=$MONGO_DB \
