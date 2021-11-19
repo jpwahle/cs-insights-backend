@@ -88,7 +88,7 @@ npm run test
 npm run lint
 ```
 
-## Releases and deploys (TODO)
+## Releases and deploys
 
 New Git and GitHub deploys, releases, as well as changelogs are automatically created and deployed when a pull request is merged from the `dev` into the `main` branch.
 Every time you want to develop a new feature, create an issue and assign yourself to that issue. This will trigger a GitHub action that creates a new issue from the dev branch.
