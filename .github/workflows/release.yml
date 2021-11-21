@@ -4,7 +4,9 @@ on:
     branches:
       - main
     types: [closed]
-
+  push:
+    branches:
+      - main
 jobs:
   Test:
     runs-on: ubuntu-latest
@@ -24,7 +26,6 @@ jobs:
           npm run test
 
   Coverage:
-    if: github.event.pull_request.merged == true
     needs: [Test]
     runs-on: ubuntu-latest
     steps:
@@ -67,7 +68,6 @@ jobs:
           folder: ./docs
 
   Release:
-    if: github.event.pull_request.merged == true
     needs: [Test]
     runs-on: ubuntu-latest
     steps:
