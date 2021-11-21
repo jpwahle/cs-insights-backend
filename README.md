@@ -3,7 +3,7 @@
 <p align="center">
 <a href="https://codecov.io/gh/ag-gipp/NLP-Land-backend"><img src="https://codecov.io/gh/ag-gipp/NLP-Land-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
 <a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/branch.yaml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/branch.yaml/badge.svg">  
-<a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yaml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yaml/badge.svg">  
+<a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yaml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yaml/badge.svg?branch=dev">  
 <a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/main.yaml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/main.yaml/badge.svg">
 <a href="https://github.com/ag-gipp/NLP-Land-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/ag-gipp/NLP-Land-backend?sort=semver"></a>
 <a href="https://hub.docker.com/repository/docker/jpelhaw/nlp-land-backend"><img alt="Docker Release" src="https://img.shields.io/docker/v/jpelhaw/nlp-land-backend?label=Docker"></a>
