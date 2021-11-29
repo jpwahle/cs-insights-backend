@@ -14,25 +14,30 @@
 
 ## Getting Started
 
-## Pre-steps
-
-Copy the .env.sample file to .env
+First, you need to copy the sample `.env.sample` file to `.env`
 
 ```
 cd NLP-Land-backend
 cp .env.sample .env
 ```
 
-### Production
+Then we are providing two ways to setup this project.
+
+    
+<details> <summary> Production </summary>
+<br/>
+In production mode an instance of mongo is created in Docker and the backend started and connected to it.
 
 To spin up the production version of this project, switch into the root directory of this project and run:
 
 ```console
 docker-compose up --build
 ```
-
-### Development
-
+</details>
+<details> <summary> Development </summary>
+<br/>
+If you want to actively develop this project, you need to install the project and dependencies locally.
+    
 To run the development environment locally, you need to spin up a mongodb instance.
 
 ```console
@@ -45,27 +50,28 @@ docker run -d -p 27017:27017 --name mongodev \
     mongo
 ```
 
-Then you can refresh the backend with auto-reload (that is whenever the code was changed) using:
+Then you can start the backend with auto-reload (whenever the code was changed) using:
 
 ```console
 set -o allexport
 source .env
 npm run build:live
 ```
-
-## Documentation
-
-The redoc documentation can be found [here](https://ag-gipp.github.io/NLP-Land-backend).
-    
-A general overview of additional endpoints, parameters, and possible queries can be found [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
+</details>
 
 ## Tests
+    
+This repository follows clean code principles using static typing, linting, unit tests, semanitc releases, and documentation. In the following you can find details for running these tests in the cloud and locally.
 
-### CI
+<details> <summary> Continous Integration (CI) </summary>
 
-Whenever you create a pull request against the default branch, GitHub actions will create a CI job executing unit tests and linting.
+1. Whenever an issue is assigned, a issue branch from the current `dev` branch is created.
+2. Whenever you create a pull request against the `dev` branch, typing, linting, and unit tests are checked.
+3. Whenever a maintainer or admin creates a pull request from the `dev` to the `main` branch, a new release, docker image, documentation, and coverage report is generated.
 
-### Local
+</details>
+    
+<details> <summary> Local Pipelines </summary>
 
 To run these CI pipelines such as tests and linting locally install [act](https://github.com/nektos/act). With act you can run CI tests in docker containers the way they are run on GitHub actions.
 
@@ -87,17 +93,22 @@ You can also run the tests without act using:
 npm run test
 npm run lint
 ```
+</details>
 
-## Releases and deploys
+## Documentation
+The auto-generated redoc documentation can be found [here](https://ag-gipp.github.io/NLP-Land-backend).
+    
+A general overview of standard endpoints, parameters, and possible queries can be found [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
 
-New Git and GitHub deploys, releases, as well as changelogs are automatically created and deployed when a pull request is merged from the `dev` into the `main` branch.
-Every time you want to develop a new feature, create an issue and assign yourself to that issue. This will trigger a GitHub action that creates a new issue from the dev branch.
-When you are done developing, create a commit with a message that includes "#patch", "#minor", or "#major" according to the semantic versioning [specification](https://semver.org/).
-Next, create a pull request to the `dev` branch. Assign the pull request one of the labels "fix", "feature", or "test" so they appear correctly later in the changelogs.
+    
+## Contribution
 
-## Contributing
-
-Fork the repo, make changes and send a PR. We'll review it together!
+New Git and GitHub deploys, releases, as well as changelogs are automatically created and deployed when a maintainer or admin merges a pull request from the `dev` into the `main` branch.
+    
+Developers should proceed in the following way:
+1. If you want to develop a new feature, fix, or test, create an issue and assign yourself to that issue. This will trigger a GitHub action that creates a new issue from the dev branch.
+2. When you are done developing, create a commit with a message that includes "#patch", "#minor", or "#major" according to the semantic versioning [specification](https://semver.org/).
+3. Finally, create a pull request to the `dev` branch. Assign the pull request one of the labels "fix", "feature", or "test" so they appear correctly later in the changelogs.
 
 ## License
 
@@ -107,4 +118,4 @@ This project is licensed under the terms of MIT license. For more information, p
 
 If you use this repository, or use our tool for analysis, please cite our work:
 
-TODO: Add citation here and as CITATION.cff file when paper is out.
+TODO: Add citation here and a CITATION.cff file when paper is out.
