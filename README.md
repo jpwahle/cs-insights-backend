@@ -118,4 +118,4 @@ This project is licensed under the terms of MIT license. For more information, p
 
 If you use this repository, or use our tool for analysis, please cite our work:
 
-TODO: Add citation here and a CITATION.cff file when paper is out.
+TODO: Add citation here and a CITATION.bib file when paper is out.
