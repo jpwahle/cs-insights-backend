@@ -19,6 +19,8 @@ export const paperSchema = new mongoose.Schema(
         'poster',
         'tutorial',
         'doctoralconsortium',
+        'masterthesis',
+        'phdthesis',
         'other',
       ],
       required: true,
@@ -49,7 +51,7 @@ export const paperSchema = new mongoose.Schema(
 
     datePublished: { type: Date, required: true },
     citationInfoTimestamp: { type: Date, required: true },
-    citedBy: [
+    cites: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Paper',
