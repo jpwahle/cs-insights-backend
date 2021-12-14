@@ -1,66 +1,77 @@
 # NLP-Land-backend
 
 <p align="center">
-<a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yml/main.svg">  
-<a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/main.yml/badge.svg?branch=main">
-<!-- Add code coverage report here -->
+<a href="https://codecov.io/gh/ag-gipp/NLP-Land-backend"><img src="https://codecov.io/gh/ag-gipp/NLP-Land-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
+<a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/branch.yaml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/branch.yaml/badge.svg">  
+<a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yaml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yaml/badge.svg?branch=dev">  
+<a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/main.yaml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/main.yaml/badge.svg">
+<a href="https://github.com/ag-gipp/NLP-Land-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/ag-gipp/NLP-Land-backend?sort=semver"></a>
+<a href="https://hub.docker.com/repository/docker/jpelhaw/nlp-land-backend"><img alt="Docker Release" src="https://img.shields.io/docker/v/jpelhaw/nlp-land-backend?label=Docker"></a>
+<a href="https://ag-gipp.github.io/NLP-Land-backend/"><img alt="Docs" src="https://img.shields.io/badge/Docs-gh--pages-blue"></a>
 <a href="https://github.com/ag-gipp/NLP-Land-backend/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
-<a href="https://github.com/psf/black"><img alt="Code style: Airbnb" src="https://img.shields.io/badge/codestyle-Airbnb-red"></a>
-<a href="https://github.com/semantic-release/semantic-release"><img alt="Semantic Release" src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg"></a>
-<a href="https://github.com/ag-gipp/NLP-Land-backend/releases"><img alt="Actions Status" src="https://img.shields.io/github/v/release/ag-gipp/NLP-Land-backend?sort=semver"></a>
-
+<a href="https://github.com/airbnb/javascript"><img alt="Code style: Airbnb" src="https://img.shields.io/badge/codestyle-Airbnb-success"></a>
 </p>
 
 ## Getting Started
 
-## Pre-steps
-
-Copy the .env.sample file to .env
+First, you need to copy the sample `.env.sample` file to `.env`
 
 ```
 cd NLP-Land-backend
 cp .env.sample .env
 ```
 
-### Production
+Then we are providing two ways to setup this project.
+
+    
+<details> <summary> Production </summary>
+<br/>
+In production mode an instance of mongo is created in Docker and the backend started and connected to it.
 
 To spin up the production version of this project, switch into the root directory of this project and run:
 
 ```console
 docker-compose up --build
 ```
-
-### Development
-
+</details>
+<details> <summary> Development </summary>
+<br/>
+If you want to actively develop this project, you need to install the project and dependencies locally.
+    
 To run the development environment locally, you need to spin up a mongodb instance.
 
 ```console
-source .env && docker run -d -p 27017:27017 --name mongodev \
+source .env
+set -o allexport
+docker run -d -p 27017:27017 --name mongodev \
     -e MONGO_INITDB_ROOT_USERNAME=$MONGO_USER \
     -e MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD \
     -e MONGO_INITDB_DATABASE=$MONGO_DB \
     mongo
 ```
 
-Then you can refresh the backend with auto-reload (that is whenever the code was changed) using:
+Then you can start the backend with auto-reload (whenever the code was changed) using:
 
 ```console
 set -o allexport
 source .env
 npm run build:live
 ```
-
-## Documentation
-
-TODO: Add documentation link to github pages and to standard enpoints [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
+</details>
 
 ## Tests
+    
+This repository follows clean code principles using static typing, linting, unit tests, semanitc releases, and documentation. In the following you can find details for running these tests in the cloud and locally.
 
-### CI
+<details> <summary> Continous Integration (CI) </summary>
 
-Whenever you create a pull request against the default branch, GitHub actions will create a CI job executing unit tests and linting.
+1. Whenever an issue is assigned, a issue branch from the current `dev` branch is created.
+2. Whenever you create a pull request against the `dev` branch, typing, linting, and unit tests are checked.
+3. Whenever a maintainer or admin creates a pull request from the `dev` to the `main` branch, a new release, docker image, documentation, and coverage report is generated.
 
-### Local
+</details>
+    
+<details> <summary> Local Pipelines </summary>
 
 To run these CI pipelines such as tests and linting locally install [act](https://github.com/nektos/act). With act you can run CI tests in docker containers the way they are run on GitHub actions.
 
@@ -82,17 +93,22 @@ You can also run the tests without act using:
 npm run test
 npm run lint
 ```
+</details>
 
-## Releases and deploys (TODO)
+## Documentation
+The auto-generated redoc documentation can be found [here](https://ag-gipp.github.io/NLP-Land-backend).
+    
+A general overview of standard endpoints, parameters, and possible queries can be found [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
 
-New Git and GitHub deploys, releases, as well as changelogs are automatically created and deployed when a pull request is merged from the `dev` into the `main` branch.
-Every time you want to develop a new feature, create an issue and assign yourself to that issue. This will trigger a GitHub action that creates a new issue from the dev branch.
-When you are done developing, create a commit with a message that includes "#patch", "#minor", or "#major" according to the semantic versioning [specification](https://semver.org/).
-Next, create a pull request to the `dev` branch. Assign the pull request one of the labels "fix", "feature", or "test" so they appear correctly later in the changelogs.
+    
+## Contribution
 
-## Contributing
-
-Fork the repo, make changes and send a PR. We'll review it together!
+New Git and GitHub deploys, releases, as well as changelogs are automatically created and deployed when a maintainer or admin merges a pull request from the `dev` into the `main` branch.
+    
+Developers should proceed in the following way:
+1. If you want to develop a new feature, fix, or test, create an issue and assign yourself to that issue. This will trigger a GitHub action that creates a new issue from the dev branch.
+2. When you are done developing, create a commit with a message that includes "#patch", "#minor", or "#major" according to the semantic versioning [specification](https://semver.org/).
+3. Finally, create a pull request to the `dev` branch. Assign the pull request one of the labels "fix", "feature", or "test" so they appear correctly later in the changelogs.
 
 ## License
 
@@ -102,4 +118,4 @@ This project is licensed under the terms of MIT license. For more information, p
 
 If you use this repository, or use our tool for analysis, please cite our work:
 
-TODO: Add citation here and as CITATION.cff file when paper is out.
+TODO: Add citation here and a CITATION.bib file when paper is out.
