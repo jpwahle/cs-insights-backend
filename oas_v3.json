@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "nlp-land-backend",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "license": {
       "name": "MIT"
     },
@@ -75,7 +75,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "61b8559259b63906dd431793"
+                      "example": "61b85609dac65006cd35cf80"
                     },
                     "name": {
                       "type": "string",
@@ -99,11 +99,11 @@
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431766"
+                      "example": "61b85608dac65006cd35cf53"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:02.589Z"
+                      "example": "2021-12-14T08:30:01.469Z"
                     },
                     "__v": {
                       "type": "number",
@@ -199,7 +199,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "61b8559259b63906dd431780"
+                      "example": "61b85609dac65006cd35cf6d"
                     },
                     "name": {
                       "type": "string",
@@ -223,14 +223,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:02.459Z"
+                      "example": "2021-12-14T08:30:01.336Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "61b8559159b63906dd431766"
+                          "example": "61b85608dac65006cd35cf53"
                         },
                         "email": {
                           "type": "string",
@@ -312,7 +312,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "61b8559259b63906dd431796"
+                      "example": "61b85609dac65006cd35cf83"
                     },
                     "name": {
                       "type": "string",
@@ -336,11 +336,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:02.627Z"
+                      "example": "2021-12-14T08:30:01.508Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431766"
+                      "example": "61b85608dac65006cd35cf53"
                     },
                     "__v": {
                       "type": "number",
@@ -505,12 +505,12 @@
                         "type": "string"
                       },
                       "example": [
-                        "61b8559159b63906dd43175f"
+                        "61b85608dac65006cd35cf4c"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "61b8559359b63906dd4317ca"
+                      "example": "61b8560adac65006cd35cfb7"
                     },
                     "fullname": {
                       "type": "string",
@@ -518,7 +518,7 @@
                     },
                     "timestamp": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:01.278Z"
+                      "example": "2021-12-14T08:30:00.155Z"
                     },
                     "email": {
                       "type": "string",
@@ -530,11 +530,11 @@
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431766"
+                      "example": "61b85608dac65006cd35cf53"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:03.438Z"
+                      "example": "2021-12-14T08:30:02.298Z"
                     },
                     "__v": {
                       "type": "number",
@@ -630,7 +630,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "61b8559359b63906dd4317b7"
+                      "example": "61b8560adac65006cd35cfa4"
                     },
                     "affiliations": {
                       "type": "array",
@@ -638,7 +638,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "61b8559159b63906dd43175f"
+                        "61b85608dac65006cd35cf4c"
                       ]
                     },
                     "fullname": {
@@ -647,7 +647,7 @@
                     },
                     "timestamp": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:01.278Z"
+                      "example": "2021-12-14T08:30:00.155Z"
                     },
                     "email": {
                       "type": "string",
@@ -659,14 +659,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:03.296Z"
+                      "example": "2021-12-14T08:30:02.149Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "61b8559159b63906dd431766"
+                          "example": "61b85608dac65006cd35cf53"
                         },
                         "email": {
                           "type": "string",
@@ -752,12 +752,12 @@
                         "type": "string"
                       },
                       "example": [
-                        "61b8559159b63906dd43175f"
+                        "61b85608dac65006cd35cf4c"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "61b8559359b63906dd4317cd"
+                      "example": "61b8560adac65006cd35cfba"
                     },
                     "fullname": {
                       "type": "string",
@@ -765,7 +765,7 @@
                     },
                     "timestamp": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:01.278Z"
+                      "example": "2021-12-14T08:30:00.155Z"
                     },
                     "email": {
                       "type": "string",
@@ -777,11 +777,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:03.476Z"
+                      "example": "2021-12-14T08:30:02.356Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431766"
+                      "example": "61b85608dac65006cd35cf53"
                     },
                     "__v": {
                       "type": "number",
@@ -999,7 +999,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "61b8559159b63906dd431761"
+                        "61b85608dac65006cd35cf4e"
                       ]
                     },
                     "venues": {
@@ -1008,12 +1008,12 @@
                         "type": "string"
                       },
                       "example": [
-                        "61b8559159b63906dd431763"
+                        "61b85608dac65006cd35cf50"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "61b8559459b63906dd431801"
+                      "example": "61b8560bdac65006cd35cfee"
                     },
                     "title": {
                       "type": "string",
@@ -1065,15 +1065,15 @@
                     },
                     "datePublished": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:01.407Z"
+                      "example": "2021-12-14T08:30:00.267Z"
                     },
                     "citationInfoTimestamp": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:01.407Z"
+                      "example": "2021-12-14T08:30:00.267Z"
                     },
                     "firstAuthor": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431762"
+                      "example": "61b85608dac65006cd35cf4f"
                     },
                     "dblpId": {
                       "type": "string",
@@ -1081,11 +1081,11 @@
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431766"
+                      "example": "61b85608dac65006cd35cf53"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:04.394Z"
+                      "example": "2021-12-14T08:30:03.271Z"
                     },
                     "__v": {
                       "type": "number",
@@ -1181,7 +1181,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "61b8559459b63906dd4317ee"
+                      "example": "61b8560bdac65006cd35cfdb"
                     },
                     "cites": {
                       "type": "array",
@@ -1196,7 +1196,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "61b8559159b63906dd431761"
+                        "61b85608dac65006cd35cf4e"
                       ]
                     },
                     "venues": {
@@ -1205,7 +1205,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "61b8559159b63906dd431763"
+                        "61b85608dac65006cd35cf50"
                       ]
                     },
                     "title": {
@@ -1258,15 +1258,15 @@
                     },
                     "datePublished": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:01.407Z"
+                      "example": "2021-12-14T08:30:00.267Z"
                     },
                     "citationInfoTimestamp": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:01.407Z"
+                      "example": "2021-12-14T08:30:00.267Z"
                     },
                     "firstAuthor": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431762"
+                      "example": "61b85608dac65006cd35cf4f"
                     },
                     "dblpId": {
                       "type": "string",
@@ -1274,14 +1274,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:04.230Z"
+                      "example": "2021-12-14T08:30:03.100Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "61b8559159b63906dd431766"
+                          "example": "61b85608dac65006cd35cf53"
                         },
                         "email": {
                           "type": "string",
@@ -1374,7 +1374,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "61b8559159b63906dd431761"
+                        "61b85608dac65006cd35cf4e"
                       ]
                     },
                     "venues": {
@@ -1383,12 +1383,12 @@
                         "type": "string"
                       },
                       "example": [
-                        "61b8559159b63906dd431763"
+                        "61b85608dac65006cd35cf50"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "61b8559459b63906dd431804"
+                      "example": "61b8560bdac65006cd35cff1"
                     },
                     "title": {
                       "type": "string",
@@ -1440,15 +1440,15 @@
                     },
                     "datePublished": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:01.407Z"
+                      "example": "2021-12-14T08:30:00.267Z"
                     },
                     "citationInfoTimestamp": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:01.407Z"
+                      "example": "2021-12-14T08:30:00.267Z"
                     },
                     "firstAuthor": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431762"
+                      "example": "61b85608dac65006cd35cf4f"
                     },
                     "dblpId": {
                       "type": "string",
@@ -1456,11 +1456,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:04.445Z"
+                      "example": "2021-12-14T08:30:03.325Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431766"
+                      "example": "61b85608dac65006cd35cf53"
                     },
                     "__v": {
                       "type": "number",
@@ -1668,7 +1668,7 @@
                     },
                     "_id": {
                       "type": "string",
-                      "example": "61b8559759b63906dd431868"
+                      "example": "61b8560edac65006cd35d055"
                     },
                     "venueDetails": {
                       "type": "array",
@@ -1688,9 +1688,9 @@
                       },
                       "example": [
                         {
-                          "_id": "61b8559759b63906dd431869",
+                          "_id": "61b8560edac65006cd35d056",
                           "callForPapersText": "Test",
-                          "timePublished": "2021-12-14T08:28:01.550Z"
+                          "timePublished": "2021-12-14T08:30:00.402Z"
                         }
                       ]
                     },
@@ -1700,11 +1700,11 @@
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431766"
+                      "example": "61b85608dac65006cd35cf53"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:07.169Z"
+                      "example": "2021-12-14T08:30:06.061Z"
                     },
                     "__v": {
                       "type": "number",
@@ -1800,7 +1800,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "61b8559659b63906dd431851"
+                      "example": "61b8560ddac65006cd35d03e"
                     },
                     "names": {
                       "type": "array",
@@ -1847,9 +1847,9 @@
                       },
                       "example": [
                         {
-                          "_id": "61b8559659b63906dd431852",
+                          "_id": "61b8560ddac65006cd35d03f",
                           "callForPapersText": "Test",
-                          "timePublished": "2021-12-14T08:28:01.550Z"
+                          "timePublished": "2021-12-14T08:30:00.402Z"
                         }
                       ]
                     },
@@ -1859,14 +1859,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:06.969Z"
+                      "example": "2021-12-14T08:30:05.833Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "61b8559159b63906dd431766"
+                          "example": "61b85608dac65006cd35cf53"
                         },
                         "email": {
                           "type": "string",
@@ -1975,7 +1975,7 @@
                     },
                     "_id": {
                       "type": "string",
-                      "example": "61b8559759b63906dd43186c"
+                      "example": "61b8560edac65006cd35d059"
                     },
                     "venueDetails": {
                       "type": "array",
@@ -1995,9 +1995,9 @@
                       },
                       "example": [
                         {
-                          "_id": "61b8559759b63906dd43186d",
+                          "_id": "61b8560edac65006cd35d05a",
                           "callForPapersText": "Test",
-                          "timePublished": "2021-12-14T08:28:01.550Z"
+                          "timePublished": "2021-12-14T08:30:00.402Z"
                         }
                       ]
                     },
@@ -2007,11 +2007,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2021-12-14T08:28:07.234Z"
+                      "example": "2021-12-14T08:30:06.115Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "61b8559159b63906dd431766"
+                      "example": "61b85608dac65006cd35cf53"
                     },
                     "__v": {
                       "type": "number",
@@ -2230,7 +2230,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "61b8559259b63906dd43176c"
+                      "example": "61b85608dac65006cd35cf59"
                     },
                     "fullname": {
                       "type": "string",
@@ -2310,7 +2310,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "61b8559259b63906dd43176c"
+                      "example": "61b85608dac65006cd35cf59"
                     },
                     "fullname": {
                       "type": "string",
@@ -2423,7 +2423,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "61b8559259b63906dd43176c"
+                      "example": "61b85608dac65006cd35cf59"
                     },
                     "fullname": {
                       "type": "string",
@@ -2589,7 +2589,7 @@
                   "properties": {
                     "token": {
                       "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxYjg1NTkxNTliNjM5MDZkZDQzMTc2NiIsImVtYWlsIjoianB3QG5scGxhbmQuY29tIn0sImlhdCI6MTYzOTQ3MDQ4MX0.vvBdrn__ix2djW_HdjXee7K7nJYpv_GBtbGvU-Qd6EM"
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxYjg1NjA4ZGFjNjUwMDZjZDM1Y2Y1MyIsImVtYWlsIjoianB3QG5scGxhbmQuY29tIn0sImlhdCI6MTYzOTQ3MDYwMH0.BuYl3_WwWzyYBS0EJIwfOKvaCZJzkExGwd1xCIrRjto"
                     }
                   }
                 }
