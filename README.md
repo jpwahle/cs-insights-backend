@@ -78,13 +78,13 @@ To run these CI pipelines such as tests and linting locally install [act](https:
 To run the full check suite with act you need the full ubuntu image (>12GB) and then execute:
 
 ```console
-act -P self-hosted=nektos/act-environments-ubuntu:18.04-full --reuse --rm
+act
 ```
 
 To run a single check like the Test from the pipeline, execute:
 
 ```console
-act -j Test -P self-hosted=nektos/act-environments-ubuntu:18.04-full --reuse --rm
+act -j Test
 ```
 
 You can also run the tests without act using:

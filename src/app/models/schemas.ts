@@ -19,6 +19,8 @@ export const paperSchema = new mongoose.Schema(
         'poster',
         'tutorial',
         'doctoralconsortium',
+        'masterthesis',
+        'phdthesis',
         'other',
       ],
       required: true,
@@ -49,7 +51,7 @@ export const paperSchema = new mongoose.Schema(
 
     datePublished: { type: Date, required: true },
     citationInfoTimestamp: { type: Date, required: true },
-    citedBy: [
+    cites: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Paper',
@@ -133,7 +135,6 @@ export const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
     fullname: { type: String, required: true },
-    token: { type: String, required: false },
     isAdmin: { type: Boolean, required: false, select: false },
     isActive: { type: Boolean, required: false, select: false },
   },

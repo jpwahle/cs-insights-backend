@@ -7,9 +7,8 @@ on:
   push:
     branches:
       - main
-
 jobs:
-  Fulltests:
+  Test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +26,7 @@ jobs:
           npm run test
 
   Coverage:
-    needs: [Fulltests]
+    needs: [Test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -49,7 +48,8 @@ jobs:
           file: ./coverage/lcov.info
 
   Docs:
-    needs: [Fulltests]
+    name: Push docs to release Branch
+    needs: [Test]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -70,8 +70,7 @@ jobs:
           folder: ./docs
 
   Release:
-    if: github.event.pull_request.merged == true
-    needs: [Fulltests]
+    needs: [Test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
