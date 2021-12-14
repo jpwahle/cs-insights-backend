@@ -135,7 +135,6 @@ export const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
     fullname: { type: String, required: true },
-    token: { type: String, required: false },
     isAdmin: { type: Boolean, required: false, select: false },
     isActive: { type: Boolean, required: false, select: false },
   },
