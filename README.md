@@ -38,7 +38,7 @@ docker-compose up --build
 <br/>
 If you want to actively develop this project, you need to install the project and dependencies locally.
     
-To run the development environment locally, you need to spin up a mongodb instance.
+To run the development environment locally, you need to create up a mongodb instance the first time you start the backend.
 
 ```console
 source .env
@@ -48,6 +48,10 @@ docker run -d -p 27017:27017 --name mongodev \
     -e MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD \
     -e MONGO_INITDB_DATABASE=$MONGO_DB \
     mongo
+```
+For future uses the following command will suffice.
+```console
+docker start mongodev
 ```
 
 Then you can start the backend with auto-reload (whenever the code was changed) using:
@@ -61,11 +65,11 @@ npm run build:live
 
 ## Tests
     
-This repository follows clean code principles using static typing, linting, unit tests, semanitc releases, and documentation. In the following you can find details for running these tests in the cloud and locally.
+This repository follows clean code principles using static typing, linting, unit tests, semantic releases, and documentation. In the following you can find details for running these tests in the cloud and locally.
 
-<details> <summary> Continous Integration (CI) </summary>
+<details> <summary> Continuous Integration (CI) </summary>
 
-1. Whenever an issue is assigned, a issue branch from the current `dev` branch is created.
+1. Whenever an issue is assigned, an issue branch from the current `dev` branch is created.
 2. Whenever you create a pull request against the `dev` branch, typing, linting, and unit tests are checked.
 3. Whenever a maintainer or admin creates a pull request from the `dev` to the `main` branch, a new release, docker image, documentation, and coverage report is generated.
 

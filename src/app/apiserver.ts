@@ -5,10 +5,12 @@ import Models from './models';
 import * as DocumentTypes from './models/interfaces';
 const cors = require('cors');
 
+
 import { APIOptions } from '../config/interfaces';
 import { initAuth } from './middleware/auth';
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
+const routes = require('./routes/papers');
 
 export class APIServer {
   app: express.Express;
@@ -26,6 +28,7 @@ export class APIServer {
   init = () => {
     this.app.use(express.json());
     this.app.use(cors());
+    this.app.use(`${this.options.server.prefix}${this.options.server.version}`, routes)
   };
 
   addAuth = () => {
