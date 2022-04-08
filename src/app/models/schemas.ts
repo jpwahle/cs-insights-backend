@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 export const paperSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    abstractText: { type: String, required: true },
+    abstractText: { type: String, required: true, select: false },
     abstractExtractor: {
       type: String,
       enum: ['grobid', 'anthology', 'rulebased'],

@@ -3,11 +3,12 @@ import mongoose from 'mongoose';
 import restify from 'express-restify-mongoose';
 import * as DocumentTypes from '../models/interfaces';
 import { APIOptions } from '../../config/interfaces';
+import { PaperStats } from '../../types';
 const passport = require('passport');
 
 export function initialize(
   model: mongoose.Model<DocumentTypes.Paper>,
-  router: express.Router | express.Application,
+  router: express.Router,
   options: APIOptions
 ) {
   // papers endpoint
@@ -54,4 +55,106 @@ export function initialize(
       });
     },
   });
+
+  router.get(
+    `${options.server.route}/fe/papers/stats`,
+    async (req: express.Request, res: express.Response) => {
+      try {
+        const timeData = await model.aggregate([
+          {
+            $group: {
+              _id: {
+                $year: '$datePublished',
+              },
+              cites: {
+                $sum: {
+                  $size: '$cites',
+                },
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              year: '$_id',
+              cites: 1,
+            },
+          },
+          {
+            $sort: {
+              year: 1,
+            },
+          },
+        ]);
+        let data: PaperStats = {
+          timeData: timeData,
+        };
+        res.json(data);
+      } catch (error: any) {
+        res.status(500).json({ message: error.message });
+      }
+    }
+  );
+
+  router.get(
+    `${options.server.route}/fe/papers/paged`,
+    async (
+      req: express.Request<{}, {}, {}, { page: string; pageSize: string }>,
+      res: express.Response
+    ) => {
+      try {
+        const pageSize = parseInt(req.query.pageSize);
+        const page = parseInt(req.query.page);
+
+        const rowCount = await model.countDocuments();
+        const rows = await model.aggregate([
+          {
+            $lookup: {
+              from: 'venues',
+              localField: 'venues',
+              foreignField: '_id',
+              as: 'venues',
+            },
+          },
+          {
+            $lookup: {
+              from: 'authors',
+              localField: 'authors',
+              foreignField: '_id',
+              as: 'authors',
+            },
+          },
+          {
+            $project: {
+              year: {
+                $year: '$datePublished',
+              },
+              cites: {
+                $size: '$cites',
+              },
+              title: 1,
+              authors: '$authors.fullname',
+              venue: {
+                $arrayElemAt: ['$venues.names', 0],
+              },
+            },
+          },
+          {
+            $sort: {
+              cites: -1,
+            },
+          },
+          { $skip: page * pageSize },
+          { $limit: pageSize },
+        ]);
+        const data = {
+          rowCount: rowCount,
+          rows: rows,
+        };
+        res.json(data);
+      } catch (error: any) {
+        res.status(500).json({ message: error.message });
+      }
+    }
+  );
 }
