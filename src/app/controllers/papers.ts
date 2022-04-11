@@ -4,6 +4,7 @@ import restify from 'express-restify-mongoose';
 import * as DocumentTypes from '../models/interfaces';
 import { APIOptions } from '../../config/interfaces';
 import { PaperStats } from '../../types';
+import { UNKNOWN } from '../../config/default';
 const passport = require('passport');
 
 export function initialize(
@@ -57,7 +58,7 @@ export function initialize(
   });
 
   router.get(
-    `${options.server.route}/fe/papers/stats`,
+    `${options.server.baseRoute}/fe/papers/stats`,
     async (req: express.Request, res: express.Response) => {
       try {
         const timeData = await model.aggregate([
@@ -74,20 +75,27 @@ export function initialize(
             },
           },
           {
-            $project: {
-              _id: 0,
-              year: '$_id',
-              cites: 1,
+            $sort: {
+              _id: 1,
             },
           },
           {
-            $sort: {
-              year: 1,
+            $group: {
+              _id: '',
+              years: {
+                $push: '$_id',
+              },
+              cites: {
+                $push: '$cites',
+              },
             },
+          },
+          {
+            $unset: '_id',
           },
         ]);
         let data: PaperStats = {
-          timeData: timeData,
+          timeData: timeData[0],
         };
         res.json(data);
       } catch (error: any) {
@@ -97,7 +105,7 @@ export function initialize(
   );
 
   router.get(
-    `${options.server.route}/fe/papers/paged`,
+    `${options.server.baseRoute}/fe/papers/paged`,
     async (
       req: express.Request<{}, {}, {}, { page: string; pageSize: string }>,
       res: express.Response
@@ -134,8 +142,8 @@ export function initialize(
               },
               title: 1,
               authors: '$authors.fullname',
-              venue: {
-                $arrayElemAt: ['$venues.names', 0],
+              venues: {
+                $ifNull: [{ $arrayElemAt: ['$venues.names', 0] }, [UNKNOWN]],
               },
             },
           },

@@ -61,7 +61,7 @@ export function initialize(
   });
 
   router.post(
-    `${options.server.route}/register`,
+    `${options.server.baseRoute}/register`,
     async (req: express.Request, res: express.Response, next: NextFunction) => {
       // Our register logic starts here
       try {
@@ -104,7 +104,7 @@ export function initialize(
     }
   );
 
-  router.post(`${options.server.route}/login`, async (req: any, res, next) => {
+  router.post(`${options.server.baseRoute}/login`, async (req: any, res, next) => {
     passport.authenticate('login', async (err: Error | boolean, user: DocumentTypes.User) => {
       try {
         if (err || !user) {

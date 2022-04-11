@@ -20,6 +20,30 @@ let adminUser: DocumentTypes.User;
 describe('/papers', () => {
   const route = '/papers';
 
+  const dummyVenue = {
+    _id: new mongoose.Types.ObjectId(),
+    dblpId: 'some-id-123',
+  };
+
+  const dummyVenue2 = {
+    _id: new mongoose.Types.ObjectId(),
+    dblpId: 'some-id-124',
+  };
+
+  const dummyAuthor = {
+    _id: new mongoose.Types.ObjectId(),
+    fullname: 'test',
+    email: 'test@test.com',
+    dblpId: 'some-id-125',
+  };
+
+  const dummyAuthor2 = {
+    _id: new mongoose.Types.ObjectId(),
+    fullname: 'test',
+    email: 'test@test.com',
+    dblpId: 'some-id-126',
+  };
+
   const dummyPaper = {
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
@@ -35,11 +59,55 @@ describe('/papers', () => {
     absUrl: 'https://dummy-url.de/',
     datePublished: new Date(),
     citationInfoTimestamp: new Date(),
-    citedBy: [new mongoose.Types.ObjectId()],
-    authors: [new mongoose.Types.ObjectId()],
+    cites: [new mongoose.Types.ObjectId(), new mongoose.Types.ObjectId()],
+    authors: [dummyAuthor._id, dummyAuthor2._id],
     firstAuthor: new mongoose.Types.ObjectId(),
-    venues: [[new mongoose.Types.ObjectId()]],
-    dblpId: 'some-id-123',
+    venues: [dummyVenue._id, dummyVenue2._id],
+    dblpId: 'some-id-127',
+  };
+
+  const dummyPaper2 = {
+    _id: new mongoose.Types.ObjectId(),
+    title: 'Some Paper Title',
+    abstractText: 'This paper is about a really interesting topic',
+    abstractExtractor: 'grobid',
+    typeOfPaper: 'conference',
+    shortOrLong: 'long',
+    atMainConference: true,
+    isSharedTask: false,
+    isStudentPaper: false,
+    doi: 'doi/1.23.123',
+    preProcessingGitHash: 'f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6',
+    pdfUrl: 'https://dummy-url.de/pdf.pdf',
+    absUrl: 'https://dummy-url.de/',
+    datePublished: new Date(),
+    citationInfoTimestamp: new Date(),
+    cites: [],
+    authors: [],
+    venues: [],
+    dblpId: 'some-id-12',
+  };
+
+  const dummyPaper3 = {
+    title: 'Some Paper Title',
+    abstractText: 'This paper is about a really interesting topic',
+    abstractExtractor: 'grobid',
+    typeOfPaper: 'conference',
+    shortOrLong: 'long',
+    atMainConference: true,
+    isSharedTask: false,
+    isStudentPaper: false,
+    doi: 'doi/1.23.123',
+    preProcessingGitHash: 'f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6',
+    pdfUrl: 'https://dummy-url.de/pdf.pdf',
+    absUrl: 'https://dummy-url.de/',
+    datePublished: new Date(),
+    citationInfoTimestamp: new Date(),
+    cites: [dummyPaper2._id],
+    authors: [dummyAuthor._id],
+    firstAuthor: new mongoose.Types.ObjectId(),
+    venues: [new mongoose.Types.ObjectId()],
+    dblpId: 'some-id-129',
   };
 
   const dummyUpdate = {
@@ -54,49 +122,41 @@ describe('/papers', () => {
     adminToken = (
       await chai
         .request(app.app)
-        .post(`${options.server.prefix}${options.server.version}/login`)
+        .post(`${options.server.baseRoute}/login`)
         .send(options.user.default)
     ).body.token;
     adminUser = (
       await chai
         .request(app.app)
-        .get(
-          `${options.server.prefix}${options.server.version}/users?query={"email":"${options.user.default.email}"}`
-        )
+        .get(`${options.server.baseRoute}/users?query={"email":"${options.user.default.email}"}`)
         .set('Authorization', `Bearer ${adminToken}`)
     ).body[0];
   });
 
   afterEach(async () => {
-    await Setup.clearDatabase(['papers']);
+    await Setup.clearDatabase(['papers', 'venues', 'authors']);
   });
 
   describe('No access', () => {
     let someUserToken: string;
     before(async () => {
-      await chai
-        .request(apiServer.app)
-        .post(`${apiOptions.server.prefix}${apiOptions.server.version}/register`)
-        .send({
+      await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/register`).send({
+        email: 'dummy@user.de',
+        password: 'insecure',
+        fullname: 'Your Name',
+      });
+      someUserToken = (
+        await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/login`).send({
           email: 'dummy@user.de',
           password: 'insecure',
-          fullname: 'Your Name',
-        });
-      someUserToken = (
-        await chai
-          .request(apiServer.app)
-          .post(`${apiOptions.server.prefix}${apiOptions.server.version}/login`)
-          .send({
-            email: 'dummy@user.de',
-            password: 'insecure',
-          })
+        })
       ).body.token;
     });
     describe('Unauthorized access', () => {
       specify('Unauthorized GET', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+          .get(`${apiOptions.server.baseRoute}${route}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -107,7 +167,7 @@ describe('/papers', () => {
       specify('Unauthorized POST', (done) => {
         chai
           .request(apiServer.app)
-          .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+          .post(`${apiOptions.server.baseRoute}${route}`)
           .send(dummyPaper)
           .end((err, res) => {
             should().not.exist(err);
@@ -135,7 +195,7 @@ describe('/papers', () => {
       specify('Unauthorized DELETE', (done) => {
         chai
           .request(apiServer.app)
-          .delete(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+          .delete(`${apiOptions.server.baseRoute}${route}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -148,7 +208,7 @@ describe('/papers', () => {
       let paper: DocumentTypes.Paper;
 
       beforeEach(async () => {
-        const dummyPaperDb = lodash.merge({}, dummyPaper, {
+        const dummyPaperDb = lodash.merge(dummyPaper, {
           createdAt: new Date(),
           createdBy: adminUser._id,
         });
@@ -158,7 +218,7 @@ describe('/papers', () => {
       specify('Forbidden POST', (done) => {
         chai
           .request(apiServer.app)
-          .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+          .post(`${apiOptions.server.baseRoute}${route}`)
           .set('Authorization', `Bearer ${someUserToken}`)
           .send(dummyPaper)
           .end((err, res) => {
@@ -170,7 +230,7 @@ describe('/papers', () => {
       specify('Forbidden PATCH', (done) => {
         chai
           .request(apiServer.app)
-          .patch(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}`)
+          .patch(`${apiOptions.server.baseRoute}${route}/${paper._id}`)
           .set('Authorization', `Bearer ${someUserToken}`)
           .send(dummyUpdate)
           .end((err, res) => {
@@ -182,7 +242,7 @@ describe('/papers', () => {
       specify('Forbidden DELETE', (done) => {
         chai
           .request(apiServer.app)
-          .delete(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}`)
+          .delete(`${apiOptions.server.baseRoute}${route}/${paper._id}`)
           .set('Authorization', `Bearer ${someUserToken}`)
           .send(dummyPaper)
           .end((err, res) => {
@@ -198,7 +258,7 @@ describe('/papers', () => {
     let paper: DocumentTypes.Paper;
 
     beforeEach(async () => {
-      const dummyPaperDb = lodash.merge({}, dummyPaper, {
+      const dummyPaperDb = lodash.merge(dummyPaper, {
         createdAt: new Date(),
         createdBy: adminUser._id,
       });
@@ -209,7 +269,7 @@ describe('/papers', () => {
       chai
         .request(apiServer.app)
         .get(
-          `${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}?populate=createdBy&select=createdBy.fullname,createdBy.email`
+          `${apiOptions.server.baseRoute}${route}/${paper._id}?populate=createdBy&select=createdBy.fullname,createdBy.email`
         )
         .set('Authorization', `Bearer ${adminToken}`)
         .end((err, res) => {
@@ -228,7 +288,7 @@ describe('/papers', () => {
     specify('Successful GET/count', (done) => {
       chai
         .request(apiServer.app)
-        .get(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/count`)
+        .get(`${apiOptions.server.baseRoute}${route}/count`)
         .set('Authorization', `Bearer ${adminToken}`)
         .end((err, res) => {
           should().not.exist(err);
@@ -242,7 +302,7 @@ describe('/papers', () => {
     specify('Successful GET', (done) => {
       chai
         .request(apiServer.app)
-        .get(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+        .get(`${apiOptions.server.baseRoute}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .end((err, res) => {
           should().not.exist(err);
@@ -259,7 +319,7 @@ describe('/papers', () => {
     specify('Successful POST', (done) => {
       chai
         .request(apiServer.app)
-        .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+        .post(`${apiOptions.server.baseRoute}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send(dummyPaper)
         .end((err, res) => {
@@ -277,7 +337,7 @@ describe('/papers', () => {
     specify('Successful PATCH', (done) => {
       chai
         .request(apiServer.app)
-        .patch(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}`)
+        .patch(`${apiOptions.server.baseRoute}${route}/${paper._id}`)
         .send(dummyUpdate)
         .set('Authorization', `Bearer ${adminToken}`)
         .end((err, res) => {
@@ -292,10 +352,70 @@ describe('/papers', () => {
     specify('Successful DELETE', async () => {
       const res = await chai
         .request(apiServer.app)
-        .delete(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}`)
+        .delete(`${apiOptions.server.baseRoute}${route}/${paper._id}`)
         .set('Authorization', `Bearer ${adminToken}`);
       expect(res).to.have.status(204);
       expect((await apiServer.models.Paper.countDocuments()) === 0);
+    });
+  });
+
+  describe('Successful access (frontend endpoints)', () => {
+    beforeEach(async () => {
+      const dummyCreated = {
+        createdAt: new Date(),
+        createdBy: adminUser._id,
+      };
+      await apiServer.models.Venue.create(
+        lodash.merge(dummyVenue, dummyCreated),
+        lodash.merge(dummyVenue2, dummyCreated)
+      );
+
+      await apiServer.models.Author.create(
+        lodash.merge(dummyAuthor, dummyCreated),
+        lodash.merge(dummyAuthor2, dummyCreated)
+      );
+      await apiServer.models.Paper.create(
+        lodash.merge(dummyPaper, dummyCreated),
+        lodash.merge(dummyPaper2, dummyCreated),
+        lodash.merge(dummyPaper3, dummyCreated)
+      );
+    });
+
+    specify('Successful GET/stats', (done) => {
+      chai
+        .request(apiServer.app)
+        .get(`${apiOptions.server.baseRoute}/fe${route}/stats`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .end((err, res) => {
+          should().not.exist(err);
+          expect(res).to.have.status(200);
+          expect(res.body.timeData.years).to.be.an('array');
+          expect(res.body.timeData.years[0]).to.equal(new Date().getFullYear());
+          expect(res.body.timeData.cites).to.be.an('array');
+          expect(res.body.timeData.cites[0]).to.equal(3);
+          done();
+        });
+    });
+
+    specify('Successful GET/paged', (done) => {
+      chai
+        .request(apiServer.app)
+        .get(`${apiOptions.server.baseRoute}/fe${route}/paged?page=0&pageSize=50`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .end((err, res) => {
+          should().not.exist(err);
+          expect(res).to.have.status(200);
+          expect(res.body.rowCount).to.equal(3);
+          expect(res.body.rows).to.be.an('array');
+          expect(res.body.rows[0]._id).to.exist;
+          expect(res.body.rows[0].title).to.exist;
+          expect(res.body.rows[0].authors).to.exist;
+          expect(res.body.rows[0].venues).to.exist;
+          expect(res.body.rows[0].cites).to.exist;
+          expect(res.body.rows[0].cites).to.equal(2);
+          expect(res.body.rows[0].year).to.exist;
+          done();
+        });
     });
   });
 });
