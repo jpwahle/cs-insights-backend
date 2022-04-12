@@ -80,7 +80,7 @@ describe('/papers', () => {
     preProcessingGitHash: 'f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6',
     pdfUrl: 'https://dummy-url.de/pdf.pdf',
     absUrl: 'https://dummy-url.de/',
-    datePublished: new Date(),
+    datePublished: new Date('2020-01-02'),
     citationInfoTimestamp: new Date(),
     cites: [],
     authors: [],
@@ -196,6 +196,28 @@ describe('/papers', () => {
         chai
           .request(apiServer.app)
           .delete(`${apiOptions.server.baseRoute}${route}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(401);
+            done();
+          });
+      });
+
+      specify('Unauthorized GET/stats', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}/fe${route}/stats`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(401);
+            done();
+          });
+      });
+
+      specify('Unauthorized GET/paged', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}/fe${route}/paged`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -390,9 +412,11 @@ describe('/papers', () => {
           should().not.exist(err);
           expect(res).to.have.status(200);
           expect(res.body.timeData.years).to.be.an('array');
-          expect(res.body.timeData.years[0]).to.equal(new Date().getFullYear());
+          expect(res.body.timeData.years[0]).to.equal(2020);
+          expect(res.body.timeData.years[1]).to.equal(new Date().getFullYear());
           expect(res.body.timeData.cites).to.be.an('array');
-          expect(res.body.timeData.cites[0]).to.equal(3);
+          expect(res.body.timeData.cites[0]).to.equal(0);
+          expect(res.body.timeData.cites[1]).to.equal(3);
           done();
         });
     });
@@ -414,6 +438,18 @@ describe('/papers', () => {
           expect(res.body.rows[0].cites).to.exist;
           expect(res.body.rows[0].cites).to.equal(2);
           expect(res.body.rows[0].year).to.exist;
+          done();
+        });
+    });
+
+    specify('Unsuccessful GET/paged: missing parameters', (done) => {
+      chai
+        .request(apiServer.app)
+        .get(`${apiOptions.server.baseRoute}/fe${route}/paged`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .end((err, res) => {
+          should().not.exist(err);
+          expect(res).to.have.status(422);
           done();
         });
     });
