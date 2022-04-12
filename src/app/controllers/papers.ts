@@ -120,9 +120,6 @@ export function initialize(
         });
       } else {
         try {
-          const pageSize = parseInt(req.query.pageSize);
-          const page = parseInt(req.query.page);
-
           const rowCount = await model.countDocuments();
           const rows = await model.aggregate([
             {
