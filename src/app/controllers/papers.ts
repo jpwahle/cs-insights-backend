@@ -1,3 +1,4 @@
+//@ts-nocheck
 import express, { NextFunction } from 'express';
 import mongoose from 'mongoose';
 import restify from 'express-restify-mongoose';
@@ -5,6 +6,7 @@ import * as DocumentTypes from '../models/interfaces';
 import { APIOptions } from '../../config/interfaces';
 import { PaperStats } from '../../types';
 import { UNKNOWN } from '../../config/default';
+import { buildAggregateFilterObject } from './filter';
 const passport = require('passport');
 
 export function initialize(
@@ -62,7 +64,38 @@ export function initialize(
     passport.authenticate('jwt', { session: false }),
     async (req: express.Request, res: express.Response) => {
       try {
-        const timeData = await model.aggregate([
+        console.log(req.query);
+        const query = req.query;
+        const matchObject = {};
+        const pipeline = [];
+        if (query.yearStart) {
+          matchObject.datePublished = matchObject.datePublished || {};
+          matchObject.datePublished.$gt = new Date(query.yearStart);
+        }
+        if (query.yearEnd && query.yearEnd != 'undefined' && query.yearEnd != 'null') {
+          matchObject.datePublished = matchObject.datePublished || {};
+          matchObject.datePublished.$lt = new Date('' + (parseInt(query.yearEnd) + 1));
+        }
+        if (query.author && query.author != 'undefined' && query.author != 'null') {
+          // TODO use id match instead
+          // pipeline.push({
+          //   $lookup: { from: 'authors', localField: 'authors', foreignField: '_id', as: 'authors' },
+          // });
+          matchObject.authors = new mongoose.Types.ObjectId(query.author);
+        }
+        if (query.venue && query.venue != 'undefined' && query.venue != 'null') {
+          // TODO use id match instead
+          // pipeline.push({
+          //   $lookup: { from: 'venues', localField: 'venues', foreignField: '_id', as: 'venues' },
+          // });
+          matchObject.venues = new mongoose.Types.ObjectId(query.venue);
+          // matchObject['venues.name'] = query.venue;
+        }
+        console.log(matchObject);
+        // matchObject.console.log(query);
+        pipeline.push({ $match: matchObject });
+        // const filterObject = buildAggregateFilterObject(req.query);
+        pipeline.push(
           {
             $group: {
               _id: {
@@ -93,13 +126,22 @@ export function initialize(
           },
           {
             $unset: '_id',
-          },
-        ]);
+          }
+        );
+
+        const timeData = (await model.aggregate(pipeline))[0] || { years: [], cites: [] };
+        console.log(timeData);
+        // if (!timeData){
+        //   timeData =
+        // }
+
         let data: PaperStats = {
-          timeData: timeData[0],
+          timeData: timeData,
         };
+        console.log(data);
         res.json(data);
       } catch (error: any) {
+        console.log(error);
         res.status(500).json({ message: error.message });
       }
     }
