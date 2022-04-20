@@ -23,10 +23,15 @@ export function initialize(
         });
       } else {
         try {
-          const venueData = await model.find(
-            { names: { $regex: pattern } },
-            { names: { $first: '$names' } }
-          );
+          // const venueData = await model.find(
+          //   { names: { $regex: pattern } },
+          // { names: { $first: '$names' } }
+          // );
+          const venueData = await model.aggregate([
+            { $match: { names: { $regex: pattern } } },
+            { $project: { names: { $first: '$names' } } },
+          ]);
+
           res.json(venueData);
         } catch (error: any) {
           res.status(500).json({ message: error.message });

@@ -4,7 +4,7 @@ import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
 import { PaperStats } from '../../../types';
 import { UNKNOWN } from '../../../config/default';
-import { buildMatchObject } from './filter';
+import { buildFindObject, buildMatchObject, getMatchObject } from './filter';
 
 const passport = require('passport');
 
@@ -25,7 +25,6 @@ export function initialize(
     ) => {
       try {
         const matchObject = buildMatchObject(req.query);
-        console.log(matchObject);
         const timeData = await model.aggregate([
           matchObject,
           {
@@ -74,9 +73,15 @@ export function initialize(
     route + '/paged',
     passport.authenticate('jwt', { session: false }),
     async (
-      req: express.Request<{}, {}, {}, { page: string; pageSize: string }>,
+      req: express.Request<
+        {},
+        {},
+        {},
+        { page: string; pageSize: string; yearStart: string; yearEnd: string }
+      >,
       res: express.Response
     ) => {
+      const findObject = buildFindObject(req.query);
       const pageSize = parseInt(req.query.pageSize);
       const page = parseInt(req.query.page);
       if ((page != 0 && !page) || !pageSize) {
@@ -85,8 +90,9 @@ export function initialize(
         });
       } else {
         try {
-          const rowCount = await model.countDocuments();
+          const rowCount = await model.find(findObject).countDocuments();
           const rows = await model.aggregate([
+            getMatchObject(findObject),
             {
               $lookup: {
                 from: 'venues',
