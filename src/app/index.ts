@@ -5,7 +5,7 @@ import { APIOptions } from '../config/interfaces';
 import { APIServer } from './apiserver';
 import * as DocumentTypes from './models/interfaces';
 
-export async function getExpressApp(options: APIOptions): Promise<APIServer> {
+export async function initServer(options: APIOptions): Promise<APIServer> {
   // Initialize models
   const models = new Models();
 
@@ -38,13 +38,6 @@ export async function getExpressApp(options: APIOptions): Promise<APIServer> {
 
   // Initialize automatic oas for requests
   app.handleOasRequests();
-
-  return app;
-}
-
-export async function initServer(options: APIOptions): Promise<APIServer> {
-  // This needs to be separated, so the tests do not start the server
-  const app = await getExpressApp(options);
 
   // Start the server
   app.start();

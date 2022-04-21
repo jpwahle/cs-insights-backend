@@ -100,6 +100,7 @@ export function initialize(
         };
         res.json(data);
       } catch (error: any) {
+        /* istanbul ignore next */
         res.status(500).json({ message: error.message });
       }
     }
@@ -167,6 +168,7 @@ export function initialize(
           };
           res.json(data);
         } catch (error: any) {
+          /* istanbul ignore next */
           res.status(500).json({ message: error.message });
         }
       }

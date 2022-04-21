@@ -1,4 +1,4 @@
-import { getExpressApp } from '../src/app';
+import { initServer } from '../src/app';
 import { APIServer } from '../src/app/apiserver';
 import { loadOptions } from '../src/config';
 import { APIOptions } from '../src/config/interfaces';
@@ -40,6 +40,7 @@ export async function initApi(): Promise<{
     return { app, options };
   }
 
-  app = await getExpressApp(options);
+  options.server.port = 3001;
+  app = await initServer(options);
   return { app, options };
 }
