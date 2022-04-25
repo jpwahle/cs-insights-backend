@@ -15,7 +15,7 @@ export function initialize(
 
   router.get(
     route + '/list',
-    passport.authenticate('jwt', { session: false }),
+    passport.authenticate('user', { session: false }),
     async (req: express.Request, res: express.Response) => {
       const pattern = req.query.pattern;
       if (!pattern) {
@@ -27,6 +27,7 @@ export function initialize(
           const authorData = await model.find({ fullname: { $regex: pattern } }, { fullname: 1 });
           res.json(authorData);
         } catch (error: any) {
+          /* istanbul ignore next */
           res.status(500).json({ message: error.message });
         }
       }

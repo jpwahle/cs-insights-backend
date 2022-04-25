@@ -14,7 +14,7 @@ export function initialize(
   // papers endpoint
   restify.serve(router, model, {
     name: 'papers',
-    preMiddleware: passport.authenticate('jwt', { session: false }),
+    preMiddleware: passport.authenticate('admin', { session: false }),
     prefix: options.server.prefix,
     version: options.server.version,
     preCreate: (req: any, res: express.Response, next: NextFunction) => {

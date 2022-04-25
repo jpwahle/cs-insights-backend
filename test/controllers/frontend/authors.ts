@@ -5,7 +5,6 @@ import chaiHttp from 'chai-http';
 import { APIServer } from '../../../src/app/apiserver';
 import { APIOptions } from '../../../src/config/interfaces';
 import * as Setup from '../../setup';
-import * as DocumentTypes from '../../../src/app/models/interfaces';
 import mongoose from 'mongoose';
 
 process.env.NODE_ENV = 'test';
@@ -16,8 +15,7 @@ chai.use(chaiHttp);
 
 let apiServer: APIServer;
 let apiOptions: APIOptions;
-let adminToken: string;
-let adminUser: DocumentTypes.User;
+let userToken: string;
 
 describe('/fe/authors', () => {
   const route = '/fe/authors';
@@ -41,13 +39,15 @@ describe('/fe/authors', () => {
     const { app, options } = await Setup.initApi();
     apiServer = app;
     apiOptions = options;
-    adminToken = (
+
+    const adminToken = (
       await chai
         .request(app.app)
         .post(`${options.server.baseRoute}/login`)
         .send(options.user.default)
     ).body.token;
-    adminUser = (
+
+    const adminUser = (
       await chai
         .request(app.app)
         .get(`${options.server.baseRoute}/users?query={"email":"${options.user.default.email}"}`)
@@ -63,6 +63,18 @@ describe('/fe/authors', () => {
       lodash.merge(dummyAuthor, dummyCreated),
       lodash.merge(dummyAuthor2, dummyCreated)
     );
+
+    await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/register`).send({
+      email: 'dummy@user.de',
+      password: 'insecure',
+      fullname: 'Your Name',
+    });
+    userToken = (
+      await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/login`).send({
+        email: 'dummy@user.de',
+        password: 'insecure',
+      })
+    ).body.token;
   });
 
   after(async () => {
@@ -84,14 +96,13 @@ describe('/fe/authors', () => {
     });
   });
 
-  // TODO change tests to use someUserToken instead of adminToken
   describe('Successful access', () => {
     describe('GET/list', () => {
       specify('Successful GET/list', (done) => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/list?pattern=hell`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -106,7 +117,7 @@ describe('/fe/authors', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(422);

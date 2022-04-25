@@ -18,7 +18,7 @@ export function initialize(
 
   router.get(
     route + '/stats',
-    passport.authenticate('jwt', { session: false }),
+    passport.authenticate('user', { session: false }),
     async (
       req: express.Request<{}, {}, {}, { yearStart: string; yearEnd: string }>,
       res: express.Response
@@ -64,6 +64,7 @@ export function initialize(
         };
         res.json(data);
       } catch (error: any) {
+        /* istanbul ignore next */
         res.status(500).json({ message: error.message });
       }
     }
@@ -71,7 +72,7 @@ export function initialize(
 
   router.get(
     route + '/paged',
-    passport.authenticate('jwt', { session: false }),
+    passport.authenticate('user', { session: false }),
     async (
       req: express.Request<
         {},
@@ -138,6 +139,7 @@ export function initialize(
           };
           res.json(data);
         } catch (error: any) {
+          /* istanbul ignore next */
           res.status(500).json({ message: error.message });
         }
       }

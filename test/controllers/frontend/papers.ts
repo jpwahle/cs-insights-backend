@@ -5,7 +5,6 @@ import chaiHttp from 'chai-http';
 import { APIServer } from '../../../src/app/apiserver';
 import { APIOptions } from '../../../src/config/interfaces';
 import * as Setup from '../../setup';
-import * as DocumentTypes from '../../../src/app/models/interfaces';
 import mongoose from 'mongoose';
 
 process.env.NODE_ENV = 'test';
@@ -16,8 +15,7 @@ chai.use(chaiHttp);
 
 let apiServer: APIServer;
 let apiOptions: APIOptions;
-let adminToken: string;
-let adminUser: DocumentTypes.User;
+let userToken: string;
 
 describe('/fe/papers', () => {
   const route = '/fe/papers';
@@ -117,13 +115,13 @@ describe('/fe/papers', () => {
     const { app, options } = await Setup.initApi();
     apiServer = app;
     apiOptions = options;
-    adminToken = (
+    const adminToken = (
       await chai
         .request(app.app)
         .post(`${options.server.baseRoute}/login`)
         .send(options.user.default)
     ).body.token;
-    adminUser = (
+    const adminUser = (
       await chai
         .request(app.app)
         .get(`${options.server.baseRoute}/users?query={"email":"${options.user.default.email}"}`)
@@ -138,7 +136,6 @@ describe('/fe/papers', () => {
       lodash.merge(dummyVenue, dummyCreated),
       lodash.merge(dummyVenue2, dummyCreated)
     );
-
     await apiServer.models.Author.create(
       lodash.merge(dummyAuthor, dummyCreated),
       lodash.merge(dummyAuthor2, dummyCreated)
@@ -148,6 +145,18 @@ describe('/fe/papers', () => {
       lodash.merge(dummyPaper2, dummyCreated),
       lodash.merge(dummyPaper3, dummyCreated)
     );
+
+    await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/register`).send({
+      email: 'dummy@user.de',
+      password: 'insecure',
+      fullname: 'Your Name',
+    });
+    userToken = (
+      await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/login`).send({
+        email: 'dummy@user.de',
+        password: 'insecure',
+      })
+    ).body.token;
   });
 
   after(async () => {
@@ -180,14 +189,13 @@ describe('/fe/papers', () => {
     });
   });
 
-  // TODO change tests to use someUserToken instead of adminToken
   describe('Successful access', () => {
     describe('GET/stats', () => {
       specify('Successful GET/stats', (done) => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/stats`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -205,7 +213,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/stats?yearStart=2021`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -223,7 +231,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/stats?yearEnd=2021`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -241,7 +249,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/stats?authors=${dummyAuthor._id}`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -259,7 +267,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/stats?venue=${dummyVenue._id}`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -272,6 +280,22 @@ describe('/fe/papers', () => {
             done();
           });
       });
+
+      specify('GET/stats filter no results', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/stats?yearStart=2022&yearEnd=2020`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.timeData.years).to.be.an('array');
+            expect(res.body.timeData.years).to.be.length(0);
+            expect(res.body.timeData.cites).to.be.an('array');
+            expect(res.body.timeData.cites).to.be.length(0);
+            done();
+          });
+      });
     });
 
     describe('GET/paged', () => {
@@ -279,7 +303,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -300,7 +324,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/paged`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(422);
@@ -312,7 +336,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&yearStart=${2021}`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -333,7 +357,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&yearEnd=${2021}`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -354,7 +378,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&yearEnd=${2021}`)
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -377,7 +401,7 @@ describe('/fe/papers', () => {
           .get(
             `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&author=${dummyAuthor._id}`
           )
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
@@ -400,7 +424,7 @@ describe('/fe/papers', () => {
           .get(
             `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&venue=${dummyVenue._id}`
           )
-          .set('Authorization', `Bearer ${adminToken}`)
+          .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);

@@ -14,7 +14,7 @@ export function initialize(
   const route = `${options.server.baseRoute}/fe/venues`;
   router.get(
     route + '/list',
-    passport.authenticate('jwt', { session: false }),
+    passport.authenticate('user', { session: false }),
     async (req: express.Request, res: express.Response) => {
       const pattern = req.query.pattern;
       if (!pattern) {
@@ -23,6 +23,7 @@ export function initialize(
         });
       } else {
         try {
+          // if the schema gets changed to only one name, this is faster
           // const venueData = await model.find(
           //   { names: { $regex: pattern } },
           // { names: { $first: '$names' } }
@@ -34,6 +35,7 @@ export function initialize(
 
           res.json(venueData);
         } catch (error: any) {
+          /* istanbul ignore next */
           res.status(500).json({ message: error.message });
         }
       }

@@ -16,7 +16,7 @@ export function initialize(
     name: 'users',
     prefix: options.server.prefix,
     version: options.server.version,
-    preMiddleware: passport.authenticate('jwt', { session: false }),
+    preMiddleware: passport.authenticate('admin', { session: false }),
 
     // disable user creation
     preCreate: (_: any, res: express.Response) => {
