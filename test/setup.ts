@@ -40,6 +40,7 @@ export async function initApi(): Promise<{
     return { app, options };
   }
 
+  options.server.port = 3001;
   app = await initServer(options);
   return { app, options };
 }

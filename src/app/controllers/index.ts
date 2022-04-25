@@ -8,11 +8,7 @@ import * as users from './users';
 import { APIOptions } from '../../config/interfaces';
 
 export class Controllers {
-  static initialize(
-    models: Models,
-    router: express.Application | express.Router,
-    options: APIOptions
-  ) {
+  static initialize(models: Models, router: express.Router, options: APIOptions) {
     affiliations.initialize(models.Affiliation, router, options);
     authors.initialize(models.Author, router, options);
     papers.initialize(models.Paper, router, options);

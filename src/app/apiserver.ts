@@ -36,7 +36,7 @@ export class APIServer {
   start = () => {
     this.app.listen(this.options.server.port, () => {
       console.log(
-        `Server at ${this.options.server.prefix}${this.options.server.version} listening on port ${this.options.server.port}.`
+        `Server at ${this.options.server.baseRoute} listening on port ${this.options.server.port}.`
       );
     });
   };

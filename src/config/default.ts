@@ -49,5 +49,10 @@ export const options: APIOptions = {
     jsonParserLimit: '10mb',
     prefix: '/api',
     version: `/v${process.env.npm_package_version?.split('.', 1)[0]}`,
+    get baseRoute() {
+      return this.prefix + this.version;
+    },
   },
 };
+
+export const UNKNOWN = 'unknown';

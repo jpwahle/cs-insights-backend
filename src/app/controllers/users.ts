@@ -61,7 +61,7 @@ export function initialize(
   });
 
   router.post(
-    `${options.server.prefix}${options.server.version}/register`,
+    `${options.server.baseRoute}/register`,
     async (req: express.Request, res: express.Response, next: NextFunction) => {
       // Our register logic starts here
       try {
@@ -104,29 +104,26 @@ export function initialize(
     }
   );
 
-  router.post(
-    `${options.server.prefix}${options.server.version}/login`,
-    async (req: any, res, next) => {
-      passport.authenticate('login', async (err: Error | boolean, user: DocumentTypes.User) => {
-        try {
-          if (err || !user) {
-            res.status(400).json({ message: 'Wrong email or password.' });
-          } else {
-            req.login(user, { session: false }, async (error: Error) => {
-              /* istanbul ignore next */
-              if (error) return next(error);
+  router.post(`${options.server.baseRoute}/login`, async (req: any, res, next) => {
+    passport.authenticate('login', async (err: Error | boolean, user: DocumentTypes.User) => {
+      try {
+        if (err || !user) {
+          res.status(400).json({ message: 'Wrong email or password.' });
+        } else {
+          req.login(user, { session: false }, async (error: Error) => {
+            /* istanbul ignore next */
+            if (error) return next(error);
 
-              const body = { _id: user._id, email: user.email };
-              const token = jwt.sign({ user: body }, options.auth.jwt.secret);
+            const body = { _id: user._id, email: user.email };
+            const token = jwt.sign({ user: body }, options.auth.jwt.secret);
 
-              return res.json({ token });
-            });
-          }
-        } catch (error) {
-          /* istanbul ignore next */
-          return next(error);
+            return res.json({ token });
+          });
         }
-      })(req, res, next);
-    }
-  );
+      } catch (error) {
+        /* istanbul ignore next */
+        return next(error);
+      }
+    })(req, res, next);
+  });
 }
