@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
 import { PaperStats } from '../../../types';
-import { UNKNOWN } from '../../../config/default';
 import { buildFindObject, buildMatchObject, getMatchObject } from './filter';
+import { UNKNOWN } from '../../../config/consts';
 
 const passport = require('passport');
 

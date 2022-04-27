@@ -49,21 +49,13 @@ docker run -d -p 27017:27017 --name mongodev \
     -e MONGO_INITDB_DATABASE=$MONGO_DB \
     mongo
 ```
-For future uses the following command will suffice.
-```console
-docker start mongodev
-```
 
-Then you can start the backend with auto-reload (whenever the code was changed) using.
-```console
-npm run build:live
-```
-
-Alternatively, just run the following.
-It starts the docker container, uses auto-reload, compiles TypeScript files, and spawns multiple processes.
+Then you can start the backend using.
 ```console
 npm run dev
 ```
+It starts the docker container (if it is not started yet), uses auto-reload (whenever the code was changed), automatically compiles TypeScript files, and spawns multiple processes.
+
 </details>
 
 ## Tests
