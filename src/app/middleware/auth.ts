@@ -36,6 +36,7 @@ export function initAuth(models: Models, options: APIOptions) {
     )
   );
   passport.use(
+    'admin',
     new passportJwt.Strategy(
       {
         jwtFromRequest: passportJwt.ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
@@ -44,6 +45,32 @@ export function initAuth(models: Models, options: APIOptions) {
       (jwtToken: any, done: any) => {
         models.User.findOne({ _id: jwtToken.user._id })
           .select('+isAdmin +isActive')
+          .exec((err, user) => {
+            /* istanbul ignore if */
+            if (err) {
+              return done(err, false);
+            }
+            /* istanbul ignore else */
+            if (user) {
+              return done(undefined, user, jwtToken);
+            } else {
+              return done(undefined, false);
+            }
+          });
+      }
+    )
+  );
+
+  passport.use(
+    'user',
+    new passportJwt.Strategy(
+      {
+        jwtFromRequest: passportJwt.ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+        secretOrKey: options.auth.jwt.secret,
+      },
+      (jwtToken: any, done: any) => {
+        models.User.findOne({ _id: jwtToken.user._id })
+          .select('+isActive')
           .exec((err, user) => {
             /* istanbul ignore if */
             if (err) {

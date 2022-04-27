@@ -54,5 +54,3 @@ export const options: APIOptions = {
     },
   },
 };
-
-export const UNKNOWN = 'unknown';
