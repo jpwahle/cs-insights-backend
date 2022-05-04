@@ -118,4 +118,15 @@ This project is licensed under the terms of MIT license. For more information, p
 
 If you use this repository, or use our tool for analysis, please cite our work:
 
-TODO: Add citation here and a CITATION.bib file when paper is out.
+```bib
+@inproceedings{Wahle2022c,
+  title        = {D3: A Massive Dataset of Scholarly Metadata for Analyzing the State of Computer Science Research},
+  author       = {Wahle, Jan Philip and Ruas, Terry and Mohammad, Saif M. and Gipp, Bela},
+  year         = {2022},
+  month        = {July},
+  booktitle    = {Proceedings of The 13th Language Resources and Evaluation Conference},
+  publisher    = {European Language Resources Association},
+  address      = {Marseille, France},
+  doi          = {},
+}
+```
