@@ -199,12 +199,12 @@ describe('/fe/papers', () => {
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.timeData.years).to.be.an('array');
-            expect(res.body.timeData.years[0]).to.equal(2020);
-            expect(res.body.timeData.years[1]).to.equal(2022);
-            expect(res.body.timeData.cites).to.be.an('array');
-            expect(res.body.timeData.cites[0]).to.equal(0);
-            expect(res.body.timeData.cites[1]).to.equal(3);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(2020);
+            expect(res.body.years[1]).to.equal(2022);
+            expect(res.body.cites).to.be.an('array');
+            expect(res.body.cites[0]).to.equal(0);
+            expect(res.body.cites[1]).to.equal(3);
             done();
           });
       });
@@ -217,12 +217,12 @@ describe('/fe/papers', () => {
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.timeData.years).to.be.an('array');
-            expect(res.body.timeData.years).to.be.length(1);
-            expect(res.body.timeData.years[0]).to.equal(2022);
-            expect(res.body.timeData.cites).to.be.an('array');
-            expect(res.body.timeData.cites[0]).to.equal(3);
-            expect(res.body.timeData.cites).to.be.length(1);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years).to.be.length(1);
+            expect(res.body.years[0]).to.equal(2022);
+            expect(res.body.cites).to.be.an('array');
+            expect(res.body.cites[0]).to.equal(3);
+            expect(res.body.cites).to.be.length(1);
             done();
           });
       });
@@ -235,12 +235,12 @@ describe('/fe/papers', () => {
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.timeData.years).to.be.an('array');
-            expect(res.body.timeData.years[0]).to.equal(2020);
-            expect(res.body.timeData.years).to.be.length(1);
-            expect(res.body.timeData.cites).to.be.an('array');
-            expect(res.body.timeData.cites[0]).to.equal(0);
-            expect(res.body.timeData.cites).to.be.length(1);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(2020);
+            expect(res.body.years).to.be.length(1);
+            expect(res.body.cites).to.be.an('array');
+            expect(res.body.cites[0]).to.equal(0);
+            expect(res.body.cites).to.be.length(1);
             done();
           });
       });
@@ -253,12 +253,12 @@ describe('/fe/papers', () => {
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.timeData.years).to.be.an('array');
-            expect(res.body.timeData.years[0]).to.equal(2020);
-            expect(res.body.timeData.years).to.be.length(2);
-            expect(res.body.timeData.cites).to.be.an('array');
-            expect(res.body.timeData.cites[0]).to.equal(0);
-            expect(res.body.timeData.cites).to.be.length(2);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(2020);
+            expect(res.body.years).to.be.length(2);
+            expect(res.body.cites).to.be.an('array');
+            expect(res.body.cites[0]).to.equal(0);
+            expect(res.body.cites).to.be.length(2);
             done();
           });
       });
@@ -271,12 +271,12 @@ describe('/fe/papers', () => {
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.timeData.years).to.be.an('array');
-            expect(res.body.timeData.years[0]).to.equal(2022);
-            expect(res.body.timeData.years).to.be.length(1);
-            expect(res.body.timeData.cites).to.be.an('array');
-            expect(res.body.timeData.cites[0]).to.equal(2);
-            expect(res.body.timeData.cites).to.be.length(1);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(2022);
+            expect(res.body.years).to.be.length(1);
+            expect(res.body.cites).to.be.an('array');
+            expect(res.body.cites[0]).to.equal(2);
+            expect(res.body.cites).to.be.length(1);
             done();
           });
       });
@@ -289,10 +289,10 @@ describe('/fe/papers', () => {
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.timeData.years).to.be.an('array');
-            expect(res.body.timeData.years).to.be.length(0);
-            expect(res.body.timeData.cites).to.be.an('array');
-            expect(res.body.timeData.cites).to.be.length(0);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years).to.be.length(0);
+            expect(res.body.cites).to.be.an('array');
+            expect(res.body.cites).to.be.length(0);
             done();
           });
       });

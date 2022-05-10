@@ -12,10 +12,6 @@ interface CiteOverTime {
 
 export type DatapointOverTime = PaperOverTime | CiteOverTime;
 
-export interface PaperStats {
-  timeData: DatapointOverTime[];
-}
-
 export interface PaperJson {
   year: number;
   cites: number;
