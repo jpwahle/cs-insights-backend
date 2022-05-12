@@ -2,9 +2,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
-import { PaperStats } from '../../../types';
 import { buildFindObject, buildMatchObject, getMatchObject } from './filter';
 import { UNKNOWN } from '../../../config/consts';
+import { DatapointOverTime } from '../../../types';
 
 const passport = require('passport');
 
@@ -59,9 +59,7 @@ export function initialize(
             $unset: '_id',
           },
         ]);
-        let data: PaperStats = {
-          timeData: timeData[0] || { years: [], cites: [] },
-        };
+        let data: DatapointOverTime[] = timeData[0] || { years: [], cites: [] };
         res.json(data);
       } catch (error: any) {
         /* istanbul ignore next */
