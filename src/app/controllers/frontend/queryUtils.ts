@@ -32,3 +32,23 @@ export function buildMatchObject(query: FilterQuery) {
   const findObject: FilterMongo = buildFindObject(query);
   return getMatchObject(findObject);
 }
+
+export function buildSortObject(sortField: string, sortDirection: string) {
+  if (!sortField || !sortDirection) {
+    return {
+      $skip: 0,
+    };
+  } else {
+    let direction: number;
+    if (sortDirection === 'asc') {
+      direction = 1;
+    } else {
+      direction = -1;
+    }
+    const sort: { [key: string]: number } = {};
+    sort[sortField] = direction;
+    return {
+      $sort: sort,
+    };
+  }
+}
