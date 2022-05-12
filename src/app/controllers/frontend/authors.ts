@@ -24,7 +24,10 @@ export function initialize(
         });
       } else {
         try {
-          const authorData = await model.find({ fullname: { $regex: pattern } }, { fullname: 1 });
+          const authorData = await model.find(
+            { fullname: { $regex: '\\b' + pattern, $options: 'i' } },
+            { fullname: 1 }
+          );
           res.json(authorData);
         } catch (error: any) {
           /* istanbul ignore next */
