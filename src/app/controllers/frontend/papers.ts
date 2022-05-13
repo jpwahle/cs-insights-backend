@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
 import { buildFindObject, buildMatchObject, getMatchObject } from './filter';
-import { UNKNOWN } from '../../../config/consts';
-import { DatapointOverTime } from '../../../types';
+import { NA } from '../../../config/consts';
+import { DatapointsOverTime, FilterQuery, PagedParameters } from '../../../types';
 
 const passport = require('passport');
 
@@ -19,10 +19,7 @@ export function initialize(
   router.get(
     route + '/stats',
     passport.authenticate('user', { session: false }),
-    async (
-      req: express.Request<{}, {}, {}, { yearStart: string; yearEnd: string }>,
-      res: express.Response
-    ) => {
+    async (req: express.Request<{}, {}, {}, FilterQuery>, res: express.Response) => {
       try {
         const matchObject = buildMatchObject(req.query);
         const timeData = await model.aggregate([
@@ -50,7 +47,7 @@ export function initialize(
               years: {
                 $push: '$_id',
               },
-              cites: {
+              counts: {
                 $push: '$cites',
               },
             },
@@ -59,7 +56,21 @@ export function initialize(
             $unset: '_id',
           },
         ]);
-        let data: DatapointOverTime[] = timeData[0] || { years: [], cites: [] };
+        let data: DatapointsOverTime = timeData[0] || { years: [], counts: [] };
+        // fill missing years with 0s
+        const min = 1936;
+        const max = 2022;
+        const start = req.query.yearStart ? parseInt(req.query.yearStart) : min;
+        const end = req.query.yearEnd ? parseInt(req.query.yearEnd) : max;
+        const entries = end - start;
+        for (let i = 0; i <= entries; i++) {
+          const year = start + i;
+          if (data.years[i] !== year) {
+            data.years.splice(i, 0, year);
+            data.counts.splice(i, 0, 0);
+          }
+        }
+
         res.json(data);
       } catch (error: any) {
         /* istanbul ignore next */
@@ -72,12 +83,7 @@ export function initialize(
     route + '/paged',
     passport.authenticate('user', { session: false }),
     async (
-      req: express.Request<
-        {},
-        {},
-        {},
-        { page: string; pageSize: string; yearStart: string; yearEnd: string }
-      >,
+      req: express.Request<{}, {}, {}, FilterQuery & PagedParameters>,
       res: express.Response
     ) => {
       const findObject = buildFindObject(req.query);
@@ -117,9 +123,9 @@ export function initialize(
                   $size: '$cites',
                 },
                 title: 1,
-                authors: '$authors.fullname',
+                authors: { $ifNull: ['$authors.fullname', NA] },
                 venues: {
-                  $ifNull: [{ $arrayElemAt: ['$venues.names', 0] }, [UNKNOWN]],
+                  $ifNull: [{ $arrayElemAt: ['$venues.names', 0] }, [NA]],
                 },
               },
             },
