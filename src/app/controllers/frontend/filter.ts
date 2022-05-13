@@ -3,8 +3,9 @@ import { FilterMongo, FilterQuery } from '../../../types';
 
 // no endpoints in this file
 
-//For use in queries with find()
+// For use in queries with find()
 export function buildFindObject(query: FilterQuery) {
+  console.log(query);
   const findObject: FilterMongo = {};
   if (query.yearStart) {
     findObject.datePublished = findObject.datePublished || {};
@@ -14,11 +15,15 @@ export function buildFindObject(query: FilterQuery) {
     findObject.datePublished = findObject.datePublished || {};
     findObject.datePublished.$lt = new Date('' + (parseInt(query.yearEnd) + 1));
   }
-  if (query.author && query.author != 'null') {
-    findObject.authors = new mongoose.Types.ObjectId(query.author);
+  if (query.authors) {
+    findObject.authors = {
+      $in: JSON.parse(query.authors).map((author: string) => new mongoose.Types.ObjectId(author)),
+    };
   }
-  if (query.venue && query.venue != 'null') {
-    findObject.venues = new mongoose.Types.ObjectId(query.venue);
+  if (query.venues) {
+    findObject.venues = {
+      $in: JSON.parse(query.venues).map((venue: string) => new mongoose.Types.ObjectId(venue)),
+    };
   }
   return findObject;
 }
