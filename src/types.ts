@@ -13,15 +13,15 @@ export type PagedParameters = {
 };
 
 export interface FilterQuery {
-  yearStart: string;
-  yearEnd: string;
+  yearStart?: string;
+  yearEnd?: string;
   author?: string;
   venue?: string;
 }
 
 export interface FilterMongo {
   datePublished?: {
-    $gt?: Date;
+    $gte?: Date;
     $lt?: Date;
   };
   authors?: mongoose.Types.ObjectId;

@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
-import { buildFindObject, buildMatchObject, getMatchObject } from './filter';
+import { buildFindObject, buildMatchObject, buildSortObject, getMatchObject } from './queryUtils';
 import { NA } from '../../../config/consts';
 import { DatapointsOverTime, FilterQuery, PagedParameters } from '../../../types';
 
@@ -84,6 +84,7 @@ export function initialize(
     passport.authenticate('user', { session: false }),
     async (
       req: express.Request<{}, {}, {}, FilterQuery & PagedParameters>,
+
       res: express.Response
     ) => {
       const findObject = buildFindObject(req.query);
@@ -91,7 +92,8 @@ export function initialize(
       const page = parseInt(req.query.page);
       if ((page != 0 && !page) || !pageSize) {
         res.status(422).json({
-          message: 'The request is missing the required parameter "page" or "pageSize".',
+          message:
+            'The request is missing the required parameter "page", "pageSize", "sortField", or "sortDirection".',
         });
       } else {
         try {
@@ -129,11 +131,7 @@ export function initialize(
                 },
               },
             },
-            {
-              $sort: {
-                cites: -1,
-              },
-            },
+            buildSortObject(req.query.sortField, req.query.sortDirection),
             { $skip: page * pageSize },
             { $limit: pageSize },
           ]);
