@@ -1,24 +1,16 @@
 import mongoose from 'mongoose';
 
-interface PaperOverTime {
-  year: string;
-  papers: number;
-}
+export type DatapointsOverTime = {
+  years: number[];
+  counts: number[];
+};
 
-interface CiteOverTime {
-  year: string;
-  cites: number;
-}
-
-export type DatapointOverTime = PaperOverTime | CiteOverTime;
-
-export interface PaperJson {
-  year: number;
-  cites: number;
-  title: string;
-  venues: string;
-  authors: string[];
-}
+export type PagedParameters = {
+  page: string;
+  pageSize: string;
+  sortField: string;
+  sortDirection: string;
+};
 
 export interface FilterQuery {
   yearStart?: string;
