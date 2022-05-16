@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
-import { buildFindObject, buildMatchObject, getMatchObject } from './filter';
+import { buildFindObject, buildMatchObject, buildSortObject, getMatchObject } from './queryUtils';
 import { UNKNOWN } from '../../../config/consts';
 import { DatapointOverTime } from '../../../types';
 
@@ -76,7 +76,14 @@ export function initialize(
         {},
         {},
         {},
-        { page: string; pageSize: string; yearStart: string; yearEnd: string }
+        {
+          page: string;
+          pageSize: string;
+          sortField: string;
+          sortDirection: string;
+          yearStart: string;
+          yearEnd: string;
+        }
       >,
       res: express.Response
     ) => {
@@ -85,7 +92,8 @@ export function initialize(
       const page = parseInt(req.query.page);
       if ((page != 0 && !page) || !pageSize) {
         res.status(422).json({
-          message: 'The request is missing the required parameter "page" or "pageSize".',
+          message:
+            'The request is missing the required parameter "page", "pageSize", "sortField", or "sortDirection".',
         });
       } else {
         try {
@@ -123,11 +131,7 @@ export function initialize(
                 },
               },
             },
-            {
-              $sort: {
-                cites: -1,
-              },
-            },
+            buildSortObject(req.query.sortField, req.query.sortDirection),
             { $skip: page * pageSize },
             { $limit: pageSize },
           ]);
