@@ -311,6 +311,29 @@ describe('/fe/papers', () => {
           });
       });
 
+      specify('Successful GET/paged: sorted', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&sortField=cites&sortDirection=asc`
+          )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(3);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]._id).to.exist;
+            expect(res.body.rows[0].title).to.exist;
+            expect(res.body.rows[0].authors).to.exist;
+            expect(res.body.rows[0].venues).to.exist;
+            expect(res.body.rows[0].cites).to.exist;
+            expect(res.body.rows[0].cites).to.equal(0);
+            expect(res.body.rows[0].year).to.exist;
+            done();
+          });
+      });
+
       specify('Unsuccessful GET/paged: missing parameters', (done) => {
         chai
           .request(apiServer.app)
