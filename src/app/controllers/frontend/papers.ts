@@ -17,7 +17,7 @@ export function initialize(
   const route = `${options.server.baseRoute}/fe/papers`;
 
   router.get(
-    route + '/stats',
+    route + '/years',
     passport.authenticate('user', { session: false }),
     async (req: express.Request<{}, {}, {}, FilterQuery>, res: express.Response) => {
       try {
@@ -26,13 +26,9 @@ export function initialize(
           matchObject,
           {
             $group: {
-              _id: {
-                $year: '$datePublished',
-              },
+              _id: '$yearPublished',
               cites: {
-                $sum: {
-                  $size: '$cites',
-                },
+                $sum: '$inCitationsCount',
               },
             },
           },
@@ -92,8 +88,7 @@ export function initialize(
       const page = parseInt(req.query.page);
       if ((page != 0 && !page) || !pageSize) {
         res.status(422).json({
-          message:
-            'The request is missing the required parameter "page", "pageSize", "sortField", or "sortDirection".',
+          message: 'The request is missing the required parameter "page", "pageSize".',
         });
       } else {
         try {
@@ -103,9 +98,9 @@ export function initialize(
             {
               $lookup: {
                 from: 'venues',
-                localField: 'venues',
+                localField: 'venue',
                 foreignField: '_id',
-                as: 'venues',
+                as: 'venue',
               },
             },
             {
@@ -118,15 +113,11 @@ export function initialize(
             },
             {
               $project: {
-                year: {
-                  $year: '$datePublished',
-                },
-                cites: {
-                  $size: '$cites',
-                },
+                yearPublished: 1,
+                inCitationsCount: 1,
                 title: 1,
                 authors: { $ifNull: ['$authors.fullname', NA] },
-                venues: {
+                venue: {
                   $ifNull: [{ $arrayElemAt: ['$venues.names', 0] }, [NA]],
                 },
               },

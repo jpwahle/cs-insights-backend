@@ -6,10 +6,11 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "test": "nyc ts-mocha --no-deprecation -t 60000 --exit test/**/*.ts test/**/**/*.ts",
+    "test2": "ts-mocha --exit test/**/*.ts test/**/**/*.ts",
     "build": "tsc -p .",
     "start": "node ./lib/main.js",
     "cluster": "node ./lib/cluster.js",
-    "dev": "docker start mongodev && tsnd ./src/cluster.ts"
+    "dev": "docker start mongodev_schemas && tsnd ./src/cluster.ts"
   },
   "repository": {
     "type": "git",

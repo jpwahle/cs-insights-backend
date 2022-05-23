@@ -39,7 +39,7 @@ export const options: APIOptions = {
   // MongoDB connection
   database: {
     url: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}`,
-    db: 'nlpland',
+    db: 'nlpland_schemas',
     autoIndex: true,
   },
 

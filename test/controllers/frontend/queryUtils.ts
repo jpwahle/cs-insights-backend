@@ -21,12 +21,12 @@ describe('queryUtils', () => {
       };
       const findObj = buildFindObject(queryParameters);
       const expected = {
-        datePublished: {
-          $gte: new Date('2010-01-01T00:00:00.000Z'),
-          $lt: new Date('2013-01-01T00:00:00.000Z'),
+        yearPublished: {
+          $gte: 2010,
+          $lte: 2012,
         },
         authors: { $in: [new mongoose.Types.ObjectId('1234567890ABCD0123456789')] },
-        venues: { $in: [new mongoose.Types.ObjectId('1234567890ABCDEF01234567')] },
+        venue: { $in: [new mongoose.Types.ObjectId('1234567890ABCDEF01234567')] },
       };
       assert.deepEqual(findObj, expected);
     });
@@ -41,8 +41,8 @@ describe('queryUtils', () => {
       };
       const findObj = buildFindObject(queryParameters);
       const expected = {
-        datePublished: {
-          $lt: new Date('2011-01-01T00:00:00.000Z'),
+        yearPublished: {
+          $lte: 2010,
         },
       };
       assert.deepEqual(findObj, expected);
@@ -66,9 +66,9 @@ describe('queryUtils', () => {
       const matchObj = buildMatchObject(queryParameters);
       const expected = {
         $match: {
-          datePublished: {
-            $gte: new Date('2010-01-01T00:00:00.000Z'),
-            $lt: new Date('2013-01-01T00:00:00.000Z'),
+          yearPublished: {
+            $gte: 2010,
+            $lte: 2012,
           },
         },
       };
@@ -77,10 +77,10 @@ describe('queryUtils', () => {
   });
   describe('sort', () => {
     specify('buildSortObject() asc', () => {
-      const sortObj = buildSortObject('cites', 'asc');
+      const sortObj = buildSortObject('inCitationsCount', 'asc');
       const expected = {
         $sort: {
-          cites: 1,
+          inCitationsCount: 1,
         },
       };
       assert.deepEqual(sortObj, expected);

@@ -3,80 +3,55 @@ import mongoose from 'mongoose';
 export const paperSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    abstractText: { type: String, required: true, select: false },
-    abstractExtractor: {
+    abstractText: {
       type: String,
-      enum: ['grobid', 'anthology', 'rulebased'],
-      required: true,
+      // required(this: { abstractText: any }): boolean { //TODO
+      //   return typeof this.abstractText !== 'string';
+      // },
     },
     typeOfPaper: {
       type: String,
-      enum: [
-        'journal',
-        'conference',
-        'demo',
-        'workshop',
-        'poster',
-        'tutorial',
-        'doctoralconsortium',
-        'masterthesis',
-        'phdthesis',
-        'other',
-      ],
+      enum: ['article', 'inproceedings', 'book', 'incollection', 'proceedings', 'phdthesis'],
       required: true,
     },
-    shortOrLong: {
-      type: String,
-      enum: ['short', 'long', 'unknown'],
-      required: true,
-    },
-
-    atMainConference: {
-      type: Boolean,
-      required: true,
-    },
-    isSharedTask: {
-      type: Boolean,
-      required: true,
-    },
-    isStudentPaper: {
-      type: Boolean,
-      required: true,
-    },
-
     doi: { type: String, required: true },
-    preProcessingGitHash: { type: String, required: true },
-    pdfUrl: { type: String, required: true },
+    pdfUrls: [{ type: String, required: true }],
     absUrl: { type: String, required: true },
 
-    datePublished: { type: Date, required: true },
-    citationInfoTimestamp: { type: Date, required: true },
-    cites: [
+    yearPublished: { type: Number, required: true },
+    inCitations: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Paper',
       },
     ],
-
+    inCitationsCount: { type: Number, required: true },
+    inCitationsRef: [{ type: String, required: true }], //TODO remove
+    outCitations: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Paper',
+      },
+    ],
+    outCitationsCount: { type: Number, required: true },
+    outCitationsRef: [{ type: String, required: true }], //TODO remove
     authors: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Author',
       },
     ],
-    firstAuthor: {
+    venue: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Author',
+      ref: 'Venue',
     },
-    venues: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Venue',
-      },
-    ],
+    fieldsOfStudy: [{ type: String, required: true }],
+    publisher: { type: String },
+
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
-    dblpId: { type: String, required: true },
+    dblpId: { type: String, unique: true, required: true }, // TODO unique keyword ignored
+    csvId: { type: String, unique: true, required: true }, //TODO remove
   },
   { collection: 'papers' }
 );
@@ -84,7 +59,7 @@ export const paperSchema = new mongoose.Schema(
 export const venueSchema = new mongoose.Schema(
   {
     names: [{ type: String, required: true }],
-    acronyms: [{ type: String, required: true }],
+    acronyms: [{ type: String, required: true }], // TODO required attributed is ignored in arrays
     venueCodes: [{ type: String, required: true }],
     venueDetails: [
       {
@@ -94,7 +69,7 @@ export const venueSchema = new mongoose.Schema(
     ],
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
-    dblpId: { type: String, required: true },
+    // dblpId: { type: String, required: true },
   },
   { collection: 'venues' }
 );
@@ -109,10 +84,10 @@ export const authorSchema = new mongoose.Schema(
       },
     ],
     timestamp: { type: Date },
-    email: { type: String, required: true },
+    email: { type: String },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
-    dblpId: { type: String, required: true },
+    dblpId: { type: String },
   },
   { collection: 'authors' }
 );

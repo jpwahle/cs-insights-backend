@@ -7,12 +7,12 @@ import { FilterMongo, FilterQuery } from '../../../types';
 export function buildFindObject(query: FilterQuery) {
   const findObject: FilterMongo = {};
   if (query.yearStart) {
-    findObject.datePublished = findObject.datePublished || {};
-    findObject.datePublished.$gte = new Date(query.yearStart);
+    findObject.yearPublished = findObject.yearPublished || {};
+    findObject.yearPublished.$gte = parseInt(query.yearStart);
   }
   if (query.yearEnd) {
-    findObject.datePublished = findObject.datePublished || {};
-    findObject.datePublished.$lt = new Date('' + (parseInt(query.yearEnd) + 1));
+    findObject.yearPublished = findObject.yearPublished || {};
+    findObject.yearPublished.$lte = parseInt(query.yearEnd);
   }
   if (query.authors) {
     findObject.authors = {
@@ -20,7 +20,7 @@ export function buildFindObject(query: FilterQuery) {
     };
   }
   if (query.venues) {
-    findObject.venues = {
+    findObject.venue = {
       $in: JSON.parse(query.venues).map((venue: string) => new mongoose.Types.ObjectId(venue)),
     };
   }

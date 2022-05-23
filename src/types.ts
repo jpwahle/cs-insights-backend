@@ -20,10 +20,10 @@ export interface FilterQuery {
 }
 
 export interface FilterMongo {
-  datePublished?: {
-    $gte?: Date;
-    $lt?: Date;
+  yearPublished?: {
+    $gte?: number;
+    $lte?: number;
   };
-  authors?: mongoose.Types.ObjectId;
-  venues?: mongoose.Types.ObjectId;
+  authors?: { $in: mongoose.Types.ObjectId[] };
+  venue?: { $in: mongoose.Types.ObjectId[] };
 }

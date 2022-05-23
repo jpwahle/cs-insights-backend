@@ -33,6 +33,7 @@ export interface Venue extends mongoose.Document {
   dblpId: string;
 }
 
+//TODO
 export interface Paper extends mongoose.Document {
   title: string;
   abstractText: string;

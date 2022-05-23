@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import restify from 'express-restify-mongoose';
 import * as DocumentTypes from '../models/interfaces';
 import { APIOptions } from '../../config/interfaces';
+import { addCreated } from './index';
 
 const passport = require('passport');
 
@@ -20,8 +21,7 @@ export function initialize(
     preCreate: (req: any, res: express.Response, next: NextFunction) => {
       if (req.user.isAdmin) {
         // Add who created the author and when
-        req.body.createdBy = req.user._id;
-        req.body.createdAt = new Date();
+        addCreated(req);
         return next();
       }
 

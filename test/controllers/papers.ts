@@ -23,23 +23,17 @@ describe('/papers', () => {
   const dummyPaper = {
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
-    abstractExtractor: 'grobid',
-    typeOfPaper: 'conference',
-    shortOrLong: 'long',
-    atMainConference: true,
-    isSharedTask: false,
-    isStudentPaper: false,
+    typeOfPaper: 'article',
     doi: 'doi/1.23.123',
-    preProcessingGitHash: 'f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6',
-    pdfUrl: 'https://dummy-url.de/pdf.pdf',
+    pdfUrls: ['https://dummy-url.de/pdf.pdf'],
     absUrl: 'https://dummy-url.de/',
-    datePublished: new Date(),
-    citationInfoTimestamp: new Date(),
-    cites: [new mongoose.Types.ObjectId()],
+    yearPublished: 2022,
+    inCitationsCount: 1,
+    outCitationsCount: 0,
     authors: [new mongoose.Types.ObjectId()],
-    firstAuthor: new mongoose.Types.ObjectId(),
-    venues: [new mongoose.Types.ObjectId()],
+    venue: new mongoose.Types.ObjectId(),
     dblpId: 'some-id-127',
+    csvId: '1',
   };
 
   const dummyUpdate = {
@@ -255,6 +249,29 @@ describe('/papers', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send(dummyPaper)
         .end((err, res) => {
+          console.log(res);
+          console.log(res.body);
+          should().not.exist(err);
+          expect(res).to.have.status(201);
+          expect(res.body.createdBy).to.exist;
+          expect(res.body.createdAt).to.exist;
+          expect(res.body.__v).to.exist;
+          expect(res.body._id).to.exist;
+          expect(res.body.createdBy.id == adminUser._id);
+          done();
+        });
+    });
+
+    specify('Successful POST (multiple)', (done) => {
+      const dummyPaper2 = { ...dummyPaper, csvId: '2', dblpId: '2' };
+      chai
+        .request(apiServer.app)
+        .post(`${apiOptions.server.baseRoute}${route}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send([dummyPaper, dummyPaper2])
+        .end((err, res) => {
+          console.log(res);
+          console.log(res.body);
           should().not.exist(err);
           expect(res).to.have.status(201);
           expect(res.body.createdBy).to.exist;
