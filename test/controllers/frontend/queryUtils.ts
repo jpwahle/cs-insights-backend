@@ -16,8 +16,8 @@ describe('queryUtils', () => {
       const queryParameters = {
         yearStart: '2010',
         yearEnd: '2012',
-        author: '1234567890ABCDEF01234568',
-        venue: '1234567890ABCDEF01234567',
+        authors: '["1234567890ABCD0123456789"]',
+        venues: '["1234567890ABCDEF01234567"]',
       };
       const findObj = buildFindObject(queryParameters);
       const expected = {
@@ -25,8 +25,8 @@ describe('queryUtils', () => {
           $gte: new Date('2010-01-01T00:00:00.000Z'),
           $lt: new Date('2013-01-01T00:00:00.000Z'),
         },
-        authors: new mongoose.Types.ObjectId('1234567890ABCDEF01234568'),
-        venues: new mongoose.Types.ObjectId('1234567890ABCDEF01234567'),
+        authors: { $in: [new mongoose.Types.ObjectId('1234567890ABCD0123456789')] },
+        venues: { $in: [new mongoose.Types.ObjectId('1234567890ABCDEF01234567')] },
       };
       assert.deepEqual(findObj, expected);
     });

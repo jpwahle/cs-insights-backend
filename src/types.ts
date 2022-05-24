@@ -15,8 +15,8 @@ export type PagedParameters = {
 export interface FilterQuery {
   yearStart?: string;
   yearEnd?: string;
-  author?: string;
-  venue?: string;
+  authors?: string;
+  venues?: string;
 }
 
 export interface FilterMongo {
