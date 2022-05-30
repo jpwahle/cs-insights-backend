@@ -46,7 +46,7 @@ export const options: APIOptions = {
   // API server
   server: {
     port: 3000,
-    jsonParserLimit: '10mb',
+    jsonParserLimit: '50mb',
     prefix: '/api',
     version: `/v${process.env.npm_package_version?.split('.', 1)[0]}`,
     get baseRoute() {

@@ -80,9 +80,9 @@ export function initialize(
     passport.authenticate('user', { session: false }),
     async (
       req: express.Request<{}, {}, {}, FilterQuery & PagedParameters>,
-
       res: express.Response
     ) => {
+      console.log(req.query);
       const findObject = buildFindObject(req.query);
       const pageSize = parseInt(req.query.pageSize);
       const page = parseInt(req.query.page);
@@ -130,6 +130,7 @@ export function initialize(
             rowCount: rowCount,
             rows: rows,
           };
+          console.log(data);
           res.json(data);
         } catch (error: any) {
           /* istanbul ignore next */

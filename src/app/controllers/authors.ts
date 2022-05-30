@@ -22,6 +22,18 @@ export function initialize(
       if (req.user.isAdmin) {
         // Add who created the author and when
         addCreated(req);
+        // TODO better solution needed
+        if (Array.isArray(req.body)) {
+          for (const i in req.body) {
+            if (req.body[i].orcid === null) {
+              delete req.body[i].orcid;
+            }
+          }
+        } else {
+          if (req.body.orcid === null) {
+            delete req.body.orcid;
+          }
+        }
         return next();
       }
 

@@ -11,22 +11,30 @@ export const paperSchema = new mongoose.Schema(
     },
     typeOfPaper: {
       type: String,
-      enum: ['article', 'inproceedings', 'book', 'incollection', 'proceedings', 'phdthesis'],
+      enum: [
+        'article',
+        'inproceedings',
+        'book',
+        'incollection',
+        'proceedings',
+        'phdthesis',
+        'mastersthesis',
+      ],
       required: true,
     },
-    doi: { type: String, required: true },
-    pdfUrls: [{ type: String, required: true }],
-    absUrl: { type: String, required: true },
+    doi: { type: String }, // missing in very rare cases, so not required
+    pdfUrls: [{ type: String }], // missing in very rare cases, so not required
+    absUrl: { type: String }, // missing in very rare cases, so not required
 
-    yearPublished: { type: Number, required: true },
+    yearPublished: { type: Number }, // missing in very rare cases, so not required
     inCitations: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Paper',
       },
     ],
-    inCitationsCount: { type: Number, required: true },
-    inCitationsRef: [{ type: String, required: true }], //TODO remove
+    inCitationsCount: { type: Number, required: true, index: true },
+    // inCitationsRef: [{ type: String, required: true }], //TODO remove
     outCitations: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -34,7 +42,7 @@ export const paperSchema = new mongoose.Schema(
       },
     ],
     outCitationsCount: { type: Number, required: true },
-    outCitationsRef: [{ type: String, required: true }], //TODO remove
+    // outCitationsRef: [{ type: String, required: true }], //TODO remove
     authors: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -50,11 +58,12 @@ export const paperSchema = new mongoose.Schema(
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
-    dblpId: { type: String, unique: true, required: true }, // TODO unique keyword ignored
-    csvId: { type: String, unique: true, required: true }, //TODO remove
+    dblpId: { type: String, unique: true, required: true },
+    openAccess: { type: Boolean, required: true, default: false },
+    // csvId: { type: String, unique: true, required: true }, //TODO remove
   },
   { collection: 'papers' }
-);
+).index({ inCitationsCount: -1 });
 
 export const venueSchema = new mongoose.Schema(
   {
@@ -77,6 +86,8 @@ export const venueSchema = new mongoose.Schema(
 export const authorSchema = new mongoose.Schema(
   {
     fullname: { type: String, required: true },
+    number: { type: String },
+    orcid: { type: String, unique: true, sparse: true },
     affiliations: [
       {
         type: mongoose.Schema.Types.ObjectId,
