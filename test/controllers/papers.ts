@@ -26,13 +26,13 @@ describe('/papers', () => {
     typeOfPaper: 'article',
     doi: 'doi/1.23.123',
     pdfUrls: ['https://dummy-url.de/pdf.pdf'],
-    absUrl: 'https://dummy-url.de/',
+    url: 'https://dummy-url.de/',
     yearPublished: 2022,
     inCitationsCount: 1,
     outCitationsCount: 0,
     authors: [new mongoose.Types.ObjectId()],
     venue: new mongoose.Types.ObjectId(),
-    dblpId: 'some-id-127',
+    dblpId: '1',
     csvId: '1',
   };
 
@@ -243,14 +243,13 @@ describe('/papers', () => {
     });
 
     specify('Successful POST', (done) => {
+      const dummyPaper2 = { ...dummyPaper, csvId: '2', dblpId: '2' };
       chai
         .request(apiServer.app)
         .post(`${apiOptions.server.baseRoute}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send(dummyPaper)
+        .send(dummyPaper2)
         .end((err, res) => {
-          console.log(res);
-          console.log(res.body);
           should().not.exist(err);
           expect(res).to.have.status(201);
           expect(res.body.createdBy).to.exist;
@@ -263,22 +262,22 @@ describe('/papers', () => {
     });
 
     specify('Successful POST (multiple)', (done) => {
-      const dummyPaper2 = { ...dummyPaper, csvId: '2', dblpId: '2' };
+      const dummyPaper3 = { ...dummyPaper, csvId: '3', dblpId: '3' };
+      const dummyPaper4 = { ...dummyPaper, csvId: '4', dblpId: '4' };
       chai
         .request(apiServer.app)
         .post(`${apiOptions.server.baseRoute}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send([dummyPaper, dummyPaper2])
+        .send([dummyPaper3, dummyPaper4])
         .end((err, res) => {
-          console.log(res);
-          console.log(res.body);
           should().not.exist(err);
+
           expect(res).to.have.status(201);
-          expect(res.body.createdBy).to.exist;
-          expect(res.body.createdAt).to.exist;
-          expect(res.body.__v).to.exist;
-          expect(res.body._id).to.exist;
-          expect(res.body.createdBy.id == adminUser._id);
+          expect(res.body[0].createdBy).to.exist;
+          expect(res.body[0].createdAt).to.exist;
+          expect(res.body[0].__v).to.exist;
+          expect(res.body[0]._id).to.exist;
+          expect(res.body[0].createdBy.id == adminUser._id);
           done();
         });
     });

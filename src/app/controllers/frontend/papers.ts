@@ -2,7 +2,13 @@ import express from 'express';
 import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
-import { buildFindObject, buildMatchObject, buildSortObject, getMatchObject } from './queryUtils';
+import {
+  buildFindObject,
+  buildMatchObject,
+  buildSortObject,
+  fixYearData,
+  getMatchObject,
+} from './queryUtils';
 import { NA } from '../../../config/consts';
 import { DatapointsOverTime, FilterQuery, PagedParameters } from '../../../types';
 
@@ -41,6 +47,7 @@ export function initialize(
             $group: {
               _id: '',
               years: {
+                // $push: { $ifNull: ['$_id', NA] },
                 $push: '$_id',
               },
               counts: {
@@ -53,20 +60,7 @@ export function initialize(
           },
         ]);
         let data: DatapointsOverTime = timeData[0] || { years: [], counts: [] };
-        // fill missing years with 0s
-        const min = 1936;
-        const max = 2022;
-        const start = req.query.yearStart ? parseInt(req.query.yearStart) : min;
-        const end = req.query.yearEnd ? parseInt(req.query.yearEnd) : max;
-        const entries = end - start;
-        for (let i = 0; i <= entries; i++) {
-          const year = start + i;
-          if (data.years[i] !== year) {
-            data.years.splice(i, 0, year);
-            data.counts.splice(i, 0, 0);
-          }
-        }
-
+        fixYearData(data, req.query.yearStart, req.query.yearEnd);
         res.json(data);
       } catch (error: any) {
         /* istanbul ignore next */
@@ -82,7 +76,6 @@ export function initialize(
       req: express.Request<{}, {}, {}, FilterQuery & PagedParameters>,
       res: express.Response
     ) => {
-      console.log(req.query);
       const findObject = buildFindObject(req.query);
       const pageSize = parseInt(req.query.pageSize);
       const page = parseInt(req.query.page);
@@ -97,14 +90,6 @@ export function initialize(
             getMatchObject(findObject),
             {
               $lookup: {
-                from: 'venues',
-                localField: 'venue',
-                foreignField: '_id',
-                as: 'venue',
-              },
-            },
-            {
-              $lookup: {
                 from: 'authors',
                 localField: 'authors',
                 foreignField: '_id',
@@ -112,25 +97,32 @@ export function initialize(
               },
             },
             {
+              $lookup: {
+                from: 'venues',
+                localField: 'venue',
+                foreignField: '_id',
+                as: 'venue',
+              },
+            },
+            buildSortObject(req.query.sortField, req.query.sortDirection),
+            { $skip: page * pageSize },
+            { $limit: pageSize },
+            {
               $project: {
                 yearPublished: 1,
                 inCitationsCount: 1,
                 title: 1,
                 authors: { $ifNull: ['$authors.fullname', NA] },
                 venue: {
-                  $ifNull: [{ $arrayElemAt: ['$venues.names', 0] }, [NA]],
+                  $ifNull: [{ $arrayElemAt: ['$venue.names', 0] }, NA],
                 },
               },
             },
-            buildSortObject(req.query.sortField, req.query.sortDirection),
-            { $skip: page * pageSize },
-            { $limit: pageSize },
           ]);
           const data = {
             rowCount: rowCount,
             rows: rows,
           };
-          console.log(data);
           res.json(data);
         } catch (error: any) {
           /* istanbul ignore next */

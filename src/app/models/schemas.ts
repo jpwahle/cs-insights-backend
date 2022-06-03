@@ -5,10 +5,21 @@ export const paperSchema = new mongoose.Schema(
     title: { type: String, required: true },
     abstractText: {
       type: String,
-      // required(this: { abstractText: any }): boolean { //TODO
-      //   return typeof this.abstractText !== 'string';
-      // },
     },
+    yearPublished: { type: Number },
+
+    authors: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Author',
+      },
+    ],
+    venue: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Venue',
+    },
+    publisher: { type: String },
+
     typeOfPaper: {
       type: String,
       enum: [
@@ -22,53 +33,69 @@ export const paperSchema = new mongoose.Schema(
       ],
       required: true,
     },
-    doi: { type: String }, // missing in very rare cases, so not required
-    pdfUrls: [{ type: String }], // missing in very rare cases, so not required
-    absUrl: { type: String }, // missing in very rare cases, so not required
+    fieldsOfStudy: [
+      {
+        type: String,
+        enum: [
+          'Art',
+          'Biology',
+          'Business',
+          'Chemistry',
+          'Computer Science',
+          'Economics',
+          'Engineering',
+          'Environmental Science',
+          'Geography',
+          'Geology',
+          'History',
+          'Materials Science',
+          'Mathematics',
+          'Medicine',
+          'Philosophy',
+          'Physics',
+          'Political Science',
+          'Psychology',
+          'Sociology',
+        ],
+      },
+    ],
 
-    yearPublished: { type: Number }, // missing in very rare cases, so not required
     inCitations: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Paper',
       },
     ],
-    inCitationsCount: { type: Number, required: true, index: true },
-    // inCitationsRef: [{ type: String, required: true }], //TODO remove
+    inCitationsCount: { type: Number, required: true, default: 0 },
+    // inCitationsRef: [{ type: String, required: true }], //TODO add
     outCitations: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Paper',
       },
     ],
-    outCitationsCount: { type: Number, required: true },
-    // outCitationsRef: [{ type: String, required: true }], //TODO remove
-    authors: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Author',
-      },
-    ],
-    venue: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Venue',
-    },
-    fieldsOfStudy: [{ type: String, required: true }],
-    publisher: { type: String },
+    outCitationsCount: { type: Number, required: true, default: 0 },
+    // outCitationsRef: [{ type: String, required: true }], //TODO add
+
+    openAccess: { type: Boolean, required: true, default: false },
+
+    dblpId: { type: String, unique: true, sparse: true },
+    doi: { type: String },
+    pdfUrls: [{ type: String }],
+    url: { type: String },
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
-    dblpId: { type: String, unique: true, required: true },
-    openAccess: { type: Boolean, required: true, default: false },
-    // csvId: { type: String, unique: true, required: true }, //TODO remove
+
+    // datasetId: { type: String, unique: true, required: true }, //TODO add
   },
   { collection: 'papers' }
-).index({ inCitationsCount: -1 });
+);
 
 export const venueSchema = new mongoose.Schema(
   {
     names: [{ type: String, required: true }],
-    acronyms: [{ type: String, required: true }], // TODO required attributed is ignored in arrays
+    acronyms: [{ type: String, required: true }],
     venueCodes: [{ type: String, required: true }],
     venueDetails: [
       {
@@ -78,7 +105,6 @@ export const venueSchema = new mongoose.Schema(
     ],
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
-    // dblpId: { type: String, required: true },
   },
   { collection: 'venues' }
 );
@@ -98,7 +124,6 @@ export const authorSchema = new mongoose.Schema(
     email: { type: String },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
-    dblpId: { type: String },
   },
   { collection: 'authors' }
 );

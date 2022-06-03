@@ -5,8 +5,10 @@ import {
   buildFindObject,
   buildMatchObject,
   buildSortObject,
+  fixYearData,
 } from '../../../src/app/controllers/frontend/queryUtils';
 import mongoose from 'mongoose';
+import { NA } from '../../../src/config/consts';
 
 process.env.NODE_ENV = 'test';
 
@@ -108,6 +110,29 @@ describe('queryUtils', () => {
 
       const sortObj3 = buildSortObject('', '');
       assert.deepEqual(sortObj3, expected);
+    });
+  });
+
+  describe('fixYearData', () => {
+    specify('No changes', () => {
+      const data = { years: [1990, 1991, 1992], counts: [0, 1, 2] };
+      const fixedData = fixYearData(data, '1990', '1992');
+      assert.deepEqual(fixedData, data);
+    });
+
+    specify('Fill years (with filter)', () => {
+      const data = { years: [1990, 1992], counts: [0, 2] };
+      const fixedData = fixYearData(data, '1990', '1992');
+      const expected = { years: [1990, 1991, 1992], counts: [0, 0, 2] };
+      assert.deepEqual(fixedData, expected);
+    });
+
+    specify('Remove incorrect years', () => {
+      const data = { years: [null, 1863, 1990, 1991, 1992], counts: [3, 1, 0, 1, 2] };
+      const fixedData = fixYearData(data, undefined, undefined);
+      assert.equal(fixedData.years.length, 2022 - 1936 + 2);
+      assert.equal(fixedData.years[0], NA);
+      assert.equal(fixedData.counts[0], 4);
     });
   });
 });
