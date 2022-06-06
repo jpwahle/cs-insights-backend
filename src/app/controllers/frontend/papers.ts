@@ -2,7 +2,13 @@ import express from 'express';
 import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
-import { buildFindObject, buildMatchObject, buildSortObject, getMatchObject } from './queryUtils';
+import {
+  buildFindObject,
+  buildMatchObject,
+  buildSortObject,
+  fixYearData,
+  getMatchObject,
+} from './queryUtils';
 import { NA } from '../../../config/consts';
 import { DatapointsOverTime, FilterQuery, PagedParameters } from '../../../types';
 
@@ -17,7 +23,7 @@ export function initialize(
   const route = `${options.server.baseRoute}/fe/papers`;
 
   router.get(
-    route + '/stats',
+    route + '/years',
     passport.authenticate('user', { session: false }),
     async (req: express.Request<{}, {}, {}, FilterQuery>, res: express.Response) => {
       try {
@@ -26,13 +32,9 @@ export function initialize(
           matchObject,
           {
             $group: {
-              _id: {
-                $year: '$datePublished',
-              },
+              _id: '$yearPublished',
               cites: {
-                $sum: {
-                  $size: '$cites',
-                },
+                $sum: '$inCitationsCount',
               },
             },
           },
@@ -45,6 +47,7 @@ export function initialize(
             $group: {
               _id: '',
               years: {
+                // $push: { $ifNull: ['$_id', NA] },
                 $push: '$_id',
               },
               counts: {
@@ -57,20 +60,7 @@ export function initialize(
           },
         ]);
         let data: DatapointsOverTime = timeData[0] || { years: [], counts: [] };
-        // fill missing years with 0s
-        const min = 1936;
-        const max = 2022;
-        const start = req.query.yearStart ? parseInt(req.query.yearStart) : min;
-        const end = req.query.yearEnd ? parseInt(req.query.yearEnd) : max;
-        const entries = end - start;
-        for (let i = 0; i <= entries; i++) {
-          const year = start + i;
-          if (data.years[i] !== year) {
-            data.years.splice(i, 0, year);
-            data.counts.splice(i, 0, 0);
-          }
-        }
-
+        fixYearData(data, req.query.yearStart, req.query.yearEnd);
         res.json(data);
       } catch (error: any) {
         /* istanbul ignore next */
@@ -84,7 +74,6 @@ export function initialize(
     passport.authenticate('user', { session: false }),
     async (
       req: express.Request<{}, {}, {}, FilterQuery & PagedParameters>,
-
       res: express.Response
     ) => {
       const findObject = buildFindObject(req.query);
@@ -92,22 +81,13 @@ export function initialize(
       const page = parseInt(req.query.page);
       if ((page != 0 && !page) || !pageSize) {
         res.status(422).json({
-          message:
-            'The request is missing the required parameter "page", "pageSize", "sortField", or "sortDirection".',
+          message: 'The request is missing the required parameter "page", "pageSize".',
         });
       } else {
         try {
           const rowCount = await model.find(findObject).countDocuments();
           const rows = await model.aggregate([
             getMatchObject(findObject),
-            {
-              $lookup: {
-                from: 'venues',
-                localField: 'venues',
-                foreignField: '_id',
-                as: 'venues',
-              },
-            },
             {
               $lookup: {
                 from: 'authors',
@@ -117,23 +97,27 @@ export function initialize(
               },
             },
             {
-              $project: {
-                year: {
-                  $year: '$datePublished',
-                },
-                cites: {
-                  $size: '$cites',
-                },
-                title: 1,
-                authors: { $ifNull: ['$authors.fullname', NA] },
-                venues: {
-                  $ifNull: [{ $arrayElemAt: ['$venues.names', 0] }, [NA]],
-                },
+              $lookup: {
+                from: 'venues',
+                localField: 'venue',
+                foreignField: '_id',
+                as: 'venue',
               },
             },
             buildSortObject(req.query.sortField, req.query.sortDirection),
             { $skip: page * pageSize },
             { $limit: pageSize },
+            {
+              $project: {
+                yearPublished: 1,
+                inCitationsCount: 1,
+                title: 1,
+                authors: { $ifNull: ['$authors.fullname', NA] },
+                venue: {
+                  $ifNull: [{ $arrayElemAt: ['$venue.names', 0] }, NA],
+                },
+              },
+            },
           ]);
           const data = {
             rowCount: rowCount,

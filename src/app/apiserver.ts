@@ -24,7 +24,8 @@ export class APIServer {
   }
 
   init = () => {
-    this.app.use(express.json());
+    this.app.use(express.json({ limit: this.options.server.jsonParserLimit }));
+    // this.app.use(express.urlencoded({limit: '50mb'}));
     this.app.use(cors());
   };
 

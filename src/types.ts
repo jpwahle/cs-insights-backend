@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export type DatapointsOverTime = {
-  years: number[];
+  years: (number | string | null)[];
   counts: number[];
 };
 
@@ -17,13 +17,17 @@ export interface FilterQuery {
   yearEnd?: string;
   authors?: string;
   venues?: string;
+  accessType?: string;
+  fieldsOfStudy?: string;
 }
 
 export interface FilterMongo {
-  datePublished?: {
-    $gte?: Date;
-    $lt?: Date;
+  yearPublished?: {
+    $gte?: number;
+    $lte?: number;
   };
-  authors?: mongoose.Types.ObjectId;
-  venues?: mongoose.Types.ObjectId;
+  authors?: { $in: mongoose.Types.ObjectId[] };
+  venue?: { $in: mongoose.Types.ObjectId[] };
+  openAccess?: boolean;
+  fieldsOfStudy?: { $in: string[] };
 }

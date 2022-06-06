@@ -39,14 +39,14 @@ export const options: APIOptions = {
   // MongoDB connection
   database: {
     url: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}`,
-    db: 'nlpland',
+    db: 'nlpland_schemas',
     autoIndex: true,
   },
 
   // API server
   server: {
     port: 3000,
-    jsonParserLimit: '10mb',
+    jsonParserLimit: '50mb',
     prefix: '/api',
     version: `/v${process.env.npm_package_version?.split('.', 1)[0]}`,
     get baseRoute() {

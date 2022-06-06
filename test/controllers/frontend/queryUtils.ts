@@ -5,8 +5,10 @@ import {
   buildFindObject,
   buildMatchObject,
   buildSortObject,
+  fixYearData,
 } from '../../../src/app/controllers/frontend/queryUtils';
 import mongoose from 'mongoose';
+import { NA } from '../../../src/config/consts';
 
 process.env.NODE_ENV = 'test';
 
@@ -21,12 +23,12 @@ describe('queryUtils', () => {
       };
       const findObj = buildFindObject(queryParameters);
       const expected = {
-        datePublished: {
-          $gte: new Date('2010-01-01T00:00:00.000Z'),
-          $lt: new Date('2013-01-01T00:00:00.000Z'),
+        yearPublished: {
+          $gte: 2010,
+          $lte: 2012,
         },
         authors: { $in: [new mongoose.Types.ObjectId('1234567890ABCD0123456789')] },
-        venues: { $in: [new mongoose.Types.ObjectId('1234567890ABCDEF01234567')] },
+        venue: { $in: [new mongoose.Types.ObjectId('1234567890ABCDEF01234567')] },
       };
       assert.deepEqual(findObj, expected);
     });
@@ -41,8 +43,8 @@ describe('queryUtils', () => {
       };
       const findObj = buildFindObject(queryParameters);
       const expected = {
-        datePublished: {
-          $lt: new Date('2011-01-01T00:00:00.000Z'),
+        yearPublished: {
+          $lte: 2010,
         },
       };
       assert.deepEqual(findObj, expected);
@@ -66,9 +68,9 @@ describe('queryUtils', () => {
       const matchObj = buildMatchObject(queryParameters);
       const expected = {
         $match: {
-          datePublished: {
-            $gte: new Date('2010-01-01T00:00:00.000Z'),
-            $lt: new Date('2013-01-01T00:00:00.000Z'),
+          yearPublished: {
+            $gte: 2010,
+            $lte: 2012,
           },
         },
       };
@@ -77,10 +79,10 @@ describe('queryUtils', () => {
   });
   describe('sort', () => {
     specify('buildSortObject() asc', () => {
-      const sortObj = buildSortObject('cites', 'asc');
+      const sortObj = buildSortObject('inCitationsCount', 'asc');
       const expected = {
         $sort: {
-          cites: 1,
+          inCitationsCount: 1,
         },
       };
       assert.deepEqual(sortObj, expected);
@@ -108,6 +110,29 @@ describe('queryUtils', () => {
 
       const sortObj3 = buildSortObject('', '');
       assert.deepEqual(sortObj3, expected);
+    });
+  });
+
+  describe('fixYearData', () => {
+    specify('No changes', () => {
+      const data = { years: [1990, 1991, 1992], counts: [0, 1, 2] };
+      const fixedData = fixYearData(data, '1990', '1992');
+      assert.deepEqual(fixedData, data);
+    });
+
+    specify('Fill years (with filter)', () => {
+      const data = { years: [1990, 1992], counts: [0, 2] };
+      const fixedData = fixYearData(data, '1990', '1992');
+      const expected = { years: [1990, 1991, 1992], counts: [0, 0, 2] };
+      assert.deepEqual(fixedData, expected);
+    });
+
+    specify('Remove incorrect years', () => {
+      const data = { years: [null, 1863, 1990, 1991, 1992], counts: [3, 1, 0, 1, 2] };
+      const fixedData = fixYearData(data, undefined, undefined);
+      assert.equal(fixedData.years.length, 2022 - 1936 + 2);
+      assert.equal(fixedData.years[0], NA);
+      assert.equal(fixedData.counts[0], 4);
     });
   });
 });

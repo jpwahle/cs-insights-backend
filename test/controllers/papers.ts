@@ -23,23 +23,17 @@ describe('/papers', () => {
   const dummyPaper = {
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
-    abstractExtractor: 'grobid',
-    typeOfPaper: 'conference',
-    shortOrLong: 'long',
-    atMainConference: true,
-    isSharedTask: false,
-    isStudentPaper: false,
+    typeOfPaper: 'article',
     doi: 'doi/1.23.123',
-    preProcessingGitHash: 'f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6',
-    pdfUrl: 'https://dummy-url.de/pdf.pdf',
-    absUrl: 'https://dummy-url.de/',
-    datePublished: new Date(),
-    citationInfoTimestamp: new Date(),
-    cites: [new mongoose.Types.ObjectId()],
+    pdfUrls: ['https://dummy-url.de/pdf.pdf'],
+    url: 'https://dummy-url.de/',
+    yearPublished: 2022,
+    inCitationsCount: 1,
+    outCitationsCount: 0,
     authors: [new mongoose.Types.ObjectId()],
-    firstAuthor: new mongoose.Types.ObjectId(),
-    venues: [new mongoose.Types.ObjectId()],
-    dblpId: 'some-id-127',
+    venue: new mongoose.Types.ObjectId(),
+    dblpId: '1',
+    csvId: '1',
   };
 
   const dummyUpdate = {
@@ -249,11 +243,12 @@ describe('/papers', () => {
     });
 
     specify('Successful POST', (done) => {
+      const dummyPaper2 = { ...dummyPaper, csvId: '2', dblpId: '2' };
       chai
         .request(apiServer.app)
         .post(`${apiOptions.server.baseRoute}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send(dummyPaper)
+        .send(dummyPaper2)
         .end((err, res) => {
           should().not.exist(err);
           expect(res).to.have.status(201);
@@ -262,6 +257,27 @@ describe('/papers', () => {
           expect(res.body.__v).to.exist;
           expect(res.body._id).to.exist;
           expect(res.body.createdBy.id == adminUser._id);
+          done();
+        });
+    });
+
+    specify('Successful POST (multiple)', (done) => {
+      const dummyPaper3 = { ...dummyPaper, csvId: '3', dblpId: '3' };
+      const dummyPaper4 = { ...dummyPaper, csvId: '4', dblpId: '4' };
+      chai
+        .request(apiServer.app)
+        .post(`${apiOptions.server.baseRoute}${route}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send([dummyPaper3, dummyPaper4])
+        .end((err, res) => {
+          should().not.exist(err);
+
+          expect(res).to.have.status(201);
+          expect(res.body[0].createdBy).to.exist;
+          expect(res.body[0].createdAt).to.exist;
+          expect(res.body[0].__v).to.exist;
+          expect(res.body[0]._id).to.exist;
+          expect(res.body[0].createdBy.id == adminUser._id);
           done();
         });
     });

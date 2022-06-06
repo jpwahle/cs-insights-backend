@@ -33,81 +33,60 @@ describe('/fe/papers', () => {
   const dummyAuthor = {
     _id: new mongoose.Types.ObjectId(),
     fullname: 'test',
-    email: 'test@test.com',
-    dblpId: 'some-id-125',
   };
 
   const dummyAuthor2 = {
     _id: new mongoose.Types.ObjectId(),
     fullname: 'test',
-    email: 'test@test.com',
-    dblpId: 'some-id-126',
   };
 
   const dummyPaper = {
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
-    abstractExtractor: 'grobid',
-    typeOfPaper: 'conference',
-    shortOrLong: 'long',
-    atMainConference: true,
-    isSharedTask: false,
-    isStudentPaper: false,
+    typeOfPaper: 'article',
     doi: 'doi/1.23.123',
-    preProcessingGitHash: 'f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6',
-    pdfUrl: 'https://dummy-url.de/pdf.pdf',
+    pdfUrls: ['https://dummy-url.de/pdf.pdf'],
     absUrl: 'https://dummy-url.de/',
-    datePublished: new Date('2022-01-02'),
-    citationInfoTimestamp: new Date(),
-    cites: [new mongoose.Types.ObjectId(), new mongoose.Types.ObjectId()],
+    yearPublished: 2022,
+    inCitationsCount: 2,
+    outCitationsCount: 0,
     authors: [dummyAuthor._id, dummyAuthor2._id],
-    firstAuthor: new mongoose.Types.ObjectId(),
-    venues: [dummyVenue._id, dummyVenue2._id],
+    venue: dummyVenue._id,
     dblpId: 'some-id-127',
+    csvId: '1',
   };
 
   const dummyPaper2 = {
     _id: new mongoose.Types.ObjectId(),
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
-    abstractExtractor: 'grobid',
-    typeOfPaper: 'conference',
-    shortOrLong: 'long',
-    atMainConference: true,
-    isSharedTask: false,
-    isStudentPaper: false,
+    typeOfPaper: 'article',
     doi: 'doi/1.23.123',
-    preProcessingGitHash: 'f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6',
-    pdfUrl: 'https://dummy-url.de/pdf.pdf',
+    pdfUrls: ['https://dummy-url.de/pdf.pdf'],
     absUrl: 'https://dummy-url.de/',
-    datePublished: new Date('2020-01-02'),
-    citationInfoTimestamp: new Date(),
-    cites: [],
-    authors: [],
-    venues: [],
+    yearPublished: 2020,
+    inCitationsCount: 0,
+    outCitationsCount: 0,
+    authors: null,
+    venue: null,
     dblpId: 'some-id-12',
+    csvId: '2',
   };
 
   const dummyPaper3 = {
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
-    abstractExtractor: 'grobid',
-    typeOfPaper: 'conference',
-    shortOrLong: 'long',
-    atMainConference: true,
-    isSharedTask: false,
-    isStudentPaper: false,
+    typeOfPaper: 'article',
     doi: 'doi/1.23.123',
-    preProcessingGitHash: 'f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6',
-    pdfUrl: 'https://dummy-url.de/pdf.pdf',
+    pdfUrls: ['https://dummy-url.de/pdf.pdf'],
     absUrl: 'https://dummy-url.de/',
-    datePublished: new Date('2022-01-02'),
-    citationInfoTimestamp: new Date(),
-    cites: [dummyPaper2._id],
+    yearPublished: 2022,
+    inCitationsCount: 1,
+    outCitationsCount: 0,
     authors: [dummyAuthor._id],
-    firstAuthor: new mongoose.Types.ObjectId(),
-    venues: [new mongoose.Types.ObjectId()],
+    venue: new mongoose.Types.ObjectId(),
     dblpId: 'some-id-129',
+    csvId: '3',
   };
 
   before(async () => {
@@ -165,10 +144,10 @@ describe('/fe/papers', () => {
 
   describe('No access', () => {
     describe('Unauthorized access', () => {
-      specify('Unauthorized GET/stats', (done) => {
+      specify('Unauthorized GET/years', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/stats`)
+          .get(`${apiOptions.server.baseRoute}${route}/years`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -190,11 +169,11 @@ describe('/fe/papers', () => {
   });
 
   describe('Successful access', () => {
-    describe('GET/stats', () => {
-      specify('Successful GET/stats', (done) => {
+    describe('GET/years', () => {
+      specify('Successful GET/years', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/stats`)
+          .get(`${apiOptions.server.baseRoute}${route}/years`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -209,10 +188,10 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/stats filter yearStart', (done) => {
+      specify('GET/years filter yearStart', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/stats?yearStart=2021`)
+          .get(`${apiOptions.server.baseRoute}${route}/years?yearStart=2021`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -225,10 +204,10 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/stats filter yearEnd', (done) => {
+      specify('GET/years filter yearEnd', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/stats?yearEnd=2021`)
+          .get(`${apiOptions.server.baseRoute}${route}/years?yearEnd=2021`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -241,10 +220,10 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/stats filter author', (done) => {
+      specify('GET/years filter author', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/stats?authors=["${dummyAuthor._id}"]`)
+          .get(`${apiOptions.server.baseRoute}${route}/years?authors=["${dummyAuthor._id}"]`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -257,10 +236,10 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/stats filter venue', (done) => {
+      specify('GET/years filter venue', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/stats?venues=["${dummyVenue._id}"]`)
+          .get(`${apiOptions.server.baseRoute}${route}/years?venues=["${dummyVenue._id}"]`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -273,10 +252,10 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/stats filter no results', (done) => {
+      specify('GET/years filter no results', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/stats?yearStart=2022&yearEnd=2020`)
+          .get(`${apiOptions.server.baseRoute}${route}/years?yearStart=2022&yearEnd=2020`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -303,10 +282,10 @@ describe('/fe/papers', () => {
             expect(res.body.rows[0]._id).to.exist;
             expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
-            expect(res.body.rows[0].venues).to.exist;
-            expect(res.body.rows[0].cites).to.exist;
-            expect(res.body.rows[0].cites).to.equal(2);
-            expect(res.body.rows[0].year).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(2);
+            expect(res.body.rows[0].yearPublished).to.exist;
             done();
           });
       });
@@ -315,7 +294,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&sortField=cites&sortDirection=asc`
+            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&sortField=inCitationsCount&sortDirection=asc`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -326,10 +305,10 @@ describe('/fe/papers', () => {
             expect(res.body.rows[0]._id).to.exist;
             expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
-            expect(res.body.rows[0].venues).to.exist;
-            expect(res.body.rows[0].cites).to.exist;
-            expect(res.body.rows[0].cites).to.equal(0);
-            expect(res.body.rows[0].year).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(0);
+            expect(res.body.rows[0].yearPublished).to.exist;
             done();
           });
       });
@@ -359,10 +338,10 @@ describe('/fe/papers', () => {
             expect(res.body.rows[0]._id).to.exist;
             expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
-            expect(res.body.rows[0].venues).to.exist;
-            expect(res.body.rows[0].cites).to.exist;
-            expect(res.body.rows[0].cites).to.equal(2);
-            expect(res.body.rows[0].year).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(2);
+            expect(res.body.rows[0].yearPublished).to.exist;
             done();
           });
       });
@@ -380,10 +359,10 @@ describe('/fe/papers', () => {
             expect(res.body.rows[0]._id).to.exist;
             expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
-            expect(res.body.rows[0].venues).to.exist;
-            expect(res.body.rows[0].cites).to.exist;
-            expect(res.body.rows[0].cites).to.equal(0);
-            expect(res.body.rows[0].year).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(0);
+            expect(res.body.rows[0].yearPublished).to.exist;
             done();
           });
       });
@@ -401,10 +380,10 @@ describe('/fe/papers', () => {
             expect(res.body.rows[0]._id).to.exist;
             expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
-            expect(res.body.rows[0].venues).to.exist;
-            expect(res.body.rows[0].cites).to.exist;
-            expect(res.body.rows[0].cites).to.equal(0);
-            expect(res.body.rows[0].year).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(0);
+            expect(res.body.rows[0].yearPublished).to.exist;
             done();
           });
       });
@@ -424,10 +403,10 @@ describe('/fe/papers', () => {
             expect(res.body.rows[0]._id).to.exist;
             expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
-            expect(res.body.rows[0].venues).to.exist;
-            expect(res.body.rows[0].cites).to.exist;
-            expect(res.body.rows[0].cites).to.equal(2);
-            expect(res.body.rows[0].year).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(2);
+            expect(res.body.rows[0].yearPublished).to.exist;
             done();
           });
       });
@@ -447,10 +426,10 @@ describe('/fe/papers', () => {
             expect(res.body.rows[0]._id).to.exist;
             expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
-            expect(res.body.rows[0].venues).to.exist;
-            expect(res.body.rows[0].cites).to.exist;
-            expect(res.body.rows[0].cites).to.equal(2);
-            expect(res.body.rows[0].year).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(2);
+            expect(res.body.rows[0].yearPublished).to.exist;
             done();
           });
       });
@@ -470,10 +449,10 @@ describe('/fe/papers', () => {
             expect(res.body.rows[0]._id).to.exist;
             expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
-            expect(res.body.rows[0].venues).to.exist;
-            expect(res.body.rows[0].cites).to.exist;
-            expect(res.body.rows[0].cites).to.equal(2);
-            expect(res.body.rows[0].year).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(2);
+            expect(res.body.rows[0].yearPublished).to.exist;
             done();
           });
       });

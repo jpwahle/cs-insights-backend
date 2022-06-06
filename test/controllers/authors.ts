@@ -23,9 +23,9 @@ describe('/authors', () => {
   const dummyAuthor = {
     fullname: 'Author Name',
     affiliations: [new mongoose.Types.ObjectId()],
+    orcid: null,
     timestamp: new Date(),
     email: 'test@test.net',
-    dblpId: 'something',
   };
 
   const dummyUpdate = {
@@ -256,6 +256,42 @@ describe('/authors', () => {
           expect(res.body.__v).to.exist;
           expect(res.body._id).to.exist;
           expect(res.body.createdBy.id == adminUser._id);
+          done();
+        });
+    });
+
+    specify('Successful POST (with orcid)', (done) => {
+      chai
+        .request(apiServer.app)
+        .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ ...dummyAuthor, orcid: '1' })
+        .end((err, res) => {
+          should().not.exist(err);
+          expect(res).to.have.status(201);
+          expect(res.body.createdBy).to.exist;
+          expect(res.body.createdAt).to.exist;
+          expect(res.body.__v).to.exist;
+          expect(res.body._id).to.exist;
+          expect(res.body.createdBy.id == adminUser._id);
+          done();
+        });
+    });
+
+    specify('Successful POST (multiple)', (done) => {
+      chai
+        .request(apiServer.app)
+        .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send([dummyAuthor, { ...dummyAuthor, orcid: '3' }])
+        .end((err, res) => {
+          should().not.exist(err);
+          expect(res).to.have.status(201);
+          expect(res.body[0].createdBy).to.exist;
+          expect(res.body[0].createdAt).to.exist;
+          expect(res.body[0].__v).to.exist;
+          expect(res.body[0]._id).to.exist;
+          expect(res.body[0].createdBy.id == adminUser._id);
           done();
         });
     });
