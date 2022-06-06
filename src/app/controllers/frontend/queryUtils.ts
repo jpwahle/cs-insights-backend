@@ -25,14 +25,24 @@ export function buildFindObject(query: FilterQuery) {
       $in: JSON.parse(query.venues).map((venue: string) => new mongoose.Types.ObjectId(venue)),
     };
   }
-  // if (query.accessType) {
-  //   findObject.openAccess = query.accessType === 'true';
-  // }
-  // if (query.fieldsOfStudy) {
-  //   findObject.fieldsOfStudy = {
-  //     $in: JSON.parse(query.fieldsOfStudy),
-  //   };
-  // }
+  if (query.openAccess) {
+    findObject.openAccess = query.openAccess === 'true';
+  }
+  if (query.typesOfPaper) {
+    findObject.typeOfPaper = {
+      $in: JSON.parse(query.typesOfPaper),
+    };
+  }
+  if (query.fieldsOfStudy) {
+    findObject.fieldsOfStudy = {
+      $in: JSON.parse(query.fieldsOfStudy),
+    };
+  }
+  if (query.publishers) {
+    findObject.publisher = {
+      $in: JSON.parse(query.publishers),
+    };
+  }
   return findObject;
 }
 

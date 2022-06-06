@@ -20,6 +20,10 @@ describe('queryUtils', () => {
         yearEnd: '2012',
         authors: '["1234567890ABCD0123456789"]',
         venues: '["1234567890ABCDEF01234567"]',
+        typesOfPaper: '["article", "inproceedings"]',
+        fieldsOfStudy: '["Art", "History"]',
+        publishers: '["ACM"]',
+        openAccess: 'true',
       };
       const findObj = buildFindObject(queryParameters);
       const expected = {
@@ -29,6 +33,10 @@ describe('queryUtils', () => {
         },
         authors: { $in: [new mongoose.Types.ObjectId('1234567890ABCD0123456789')] },
         venue: { $in: [new mongoose.Types.ObjectId('1234567890ABCDEF01234567')] },
+        typeOfPaper: { $in: ['article', 'inproceedings'] },
+        fieldsOfStudy: { $in: ['Art', 'History'] },
+        publisher: { $in: ['ACM'] },
+        openAccess: true,
       };
       assert.deepEqual(findObj, expected);
     });
@@ -77,6 +85,7 @@ describe('queryUtils', () => {
       assert.deepEqual(matchObj, expected);
     });
   });
+
   describe('sort', () => {
     specify('buildSortObject() asc', () => {
       const sortObj = buildSortObject('inCitationsCount', 'asc');

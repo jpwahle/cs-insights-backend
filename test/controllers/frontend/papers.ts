@@ -43,7 +43,6 @@ describe('/fe/papers', () => {
   const dummyPaper = {
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
-    typeOfPaper: 'article',
     doi: 'doi/1.23.123',
     pdfUrls: ['https://dummy-url.de/pdf.pdf'],
     absUrl: 'https://dummy-url.de/',
@@ -52,6 +51,10 @@ describe('/fe/papers', () => {
     outCitationsCount: 0,
     authors: [dummyAuthor._id, dummyAuthor2._id],
     venue: dummyVenue._id,
+    typeOfPaper: 'article',
+    fieldsOfStudy: ['Computer Science', 'Art'],
+    publisher: 'ABC',
+    openAccess: true,
     dblpId: 'some-id-127',
     csvId: '1',
   };
@@ -60,7 +63,6 @@ describe('/fe/papers', () => {
     _id: new mongoose.Types.ObjectId(),
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
-    typeOfPaper: 'article',
     doi: 'doi/1.23.123',
     pdfUrls: ['https://dummy-url.de/pdf.pdf'],
     absUrl: 'https://dummy-url.de/',
@@ -69,6 +71,7 @@ describe('/fe/papers', () => {
     outCitationsCount: 0,
     authors: null,
     venue: null,
+    typeOfPaper: 'article',
     dblpId: 'some-id-12',
     csvId: '2',
   };
@@ -76,7 +79,6 @@ describe('/fe/papers', () => {
   const dummyPaper3 = {
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
-    typeOfPaper: 'article',
     doi: 'doi/1.23.123',
     pdfUrls: ['https://dummy-url.de/pdf.pdf'],
     absUrl: 'https://dummy-url.de/',
@@ -85,6 +87,10 @@ describe('/fe/papers', () => {
     outCitationsCount: 0,
     authors: [dummyAuthor._id],
     venue: new mongoose.Types.ObjectId(),
+    typeOfPaper: 'inproceedings',
+    fieldsOfStudy: ['Computer Science'],
+    publisher: 'CBA',
+    openAccess: false,
     dblpId: 'some-id-129',
     csvId: '3',
   };
@@ -165,6 +171,43 @@ describe('/fe/papers', () => {
             done();
           });
       });
+
+      specify('Unauthorized GET/list', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/list`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(401);
+            done();
+          });
+      });
+    });
+
+    describe('Missing parameters', () => {
+      specify('Missing parameters GET/paged', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/paged`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(422);
+            done();
+          });
+      });
+
+      specify('Missing parameters GET/list', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/list`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(422);
+            done();
+          });
+      });
     });
   });
 
@@ -188,71 +231,7 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/years filter yearStart', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/years?yearStart=2021`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(200);
-            expect(res.body.years).to.be.an('array');
-            expect(res.body.years[1]).to.equal(2022);
-            expect(res.body.counts).to.be.an('array');
-            expect(res.body.counts[1]).to.equal(3);
-            done();
-          });
-      });
-
-      specify('GET/years filter yearEnd', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/years?yearEnd=2021`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(200);
-            expect(res.body.years).to.be.an('array');
-            expect(res.body.years[84]).to.equal(2020);
-            expect(res.body.counts).to.be.an('array');
-            expect(res.body.counts[0]).to.equal(0);
-            done();
-          });
-      });
-
-      specify('GET/years filter author', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/years?authors=["${dummyAuthor._id}"]`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(200);
-            expect(res.body.years).to.be.an('array');
-            expect(res.body.years[84]).to.equal(2020);
-            expect(res.body.counts).to.be.an('array');
-            expect(res.body.counts[0]).to.equal(0);
-            done();
-          });
-      });
-
-      specify('GET/years filter venue', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/years?venues=["${dummyVenue._id}"]`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(200);
-            expect(res.body.years).to.be.an('array');
-            expect(res.body.years[86]).to.equal(2022);
-            expect(res.body.counts).to.be.an('array');
-            expect(res.body.counts[86]).to.equal(2);
-            done();
-          });
-      });
-
-      specify('GET/years filter no results', (done) => {
+      specify('Successful GET/years: no results', (done) => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/years?yearStart=2022&yearEnd=2020`)
@@ -312,20 +291,32 @@ describe('/fe/papers', () => {
             done();
           });
       });
+    });
 
-      specify('Unsuccessful GET/paged: missing parameters', (done) => {
+    describe('GET/list', () => {
+      specify('Successful GET/list', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged`)
+          .get(`${apiOptions.server.baseRoute}${route}/list?column=publisher&pattern=ABC`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.equal(1);
+            expect(res.body[0]._id).to.not.exist;
+            expect(res.body[0].title).to.not.exist;
+            expect(res.body[0].authors).to.not.exist;
+            expect(res.body[0].venue).to.not.exist;
+            expect(res.body[0].inCitationsCount).to.not.exist;
+            expect(res.body[0].yearPublished).to.not.exist;
             done();
           });
       });
+    });
 
-      specify('GET/paged filter yearStart', (done) => {
+    describe('Filters GET/paged', () => {
+      specify('Filter yearStart GET/paged', (done) => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&yearStart=${2021}`)
@@ -346,7 +337,7 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/paged filter yearEnd', (done) => {
+      specify('Filter yearEnd GET/paged', (done) => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&yearEnd=${2021}`)
@@ -367,28 +358,7 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/paged filter yearEnd', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&yearEnd=${2021}`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(200);
-            expect(res.body.rowCount).to.equal(1);
-            expect(res.body.rows).to.be.an('array');
-            expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].title).to.exist;
-            expect(res.body.rows[0].authors).to.exist;
-            expect(res.body.rows[0].venue).to.exist;
-            expect(res.body.rows[0].inCitationsCount).to.exist;
-            expect(res.body.rows[0].inCitationsCount).to.equal(0);
-            expect(res.body.rows[0].yearPublished).to.exist;
-            done();
-          });
-      });
-
-      specify('GET/paged filter authors', (done) => {
+      specify('Filter authors GET/paged', (done) => {
         chai
           .request(apiServer.app)
           .get(
@@ -411,7 +381,7 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/paged filter authors multiple', (done) => {
+      specify('Filter authors multiple GET/paged', (done) => {
         chai
           .request(apiServer.app)
           .get(
@@ -434,12 +404,100 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('GET/paged filter venue', (done) => {
+      specify('Filter venue GET/paged', (done) => {
         chai
           .request(apiServer.app)
           .get(
             `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&venues=["${dummyVenue._id}"]`
           )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(1);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]._id).to.exist;
+            expect(res.body.rows[0].title).to.exist;
+            expect(res.body.rows[0].authors).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(2);
+            expect(res.body.rows[0].yearPublished).to.exist;
+            done();
+          });
+      });
+
+      specify('Filter typeOfPaper GET/paged', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&typesOfPaper=["inproceedings"]`
+          )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(1);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]._id).to.exist;
+            expect(res.body.rows[0].title).to.exist;
+            expect(res.body.rows[0].authors).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(1);
+            expect(res.body.rows[0].yearPublished).to.exist;
+            done();
+          });
+      });
+
+      specify('Filter fieldsOfStudy GET/paged', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&fieldsOfStudy=["Computer Science"]`
+          )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(2);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]._id).to.exist;
+            expect(res.body.rows[0].title).to.exist;
+            expect(res.body.rows[0].authors).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.be.oneOf([2, 1]);
+            expect(res.body.rows[0].yearPublished).to.exist;
+            done();
+          });
+      });
+
+      specify('Filter publisher GET/paged', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&publishers=["CBA"]`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(1);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]._id).to.exist;
+            expect(res.body.rows[0].title).to.exist;
+            expect(res.body.rows[0].authors).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(1);
+            expect(res.body.rows[0].yearPublished).to.exist;
+            done();
+          });
+      });
+
+      specify('Filter openAccess GET/paged', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&openAccess=true`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);

@@ -17,8 +17,10 @@ export interface FilterQuery {
   yearEnd?: string;
   authors?: string;
   venues?: string;
-  accessType?: string;
+  openAccess?: string;
+  typesOfPaper?: string;
   fieldsOfStudy?: string;
+  publishers?: string;
 }
 
 export interface FilterMongo {
@@ -29,5 +31,7 @@ export interface FilterMongo {
   authors?: { $in: mongoose.Types.ObjectId[] };
   venue?: { $in: mongoose.Types.ObjectId[] };
   openAccess?: boolean;
+  typeOfPaper?: { $in: string[] };
   fieldsOfStudy?: { $in: string[] };
+  publisher?: { $in: string[] };
 }
