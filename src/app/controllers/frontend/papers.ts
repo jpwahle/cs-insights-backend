@@ -131,4 +131,28 @@ export function initialize(
       }
     }
   );
+
+  router.get(
+    route + '/list',
+    passport.authenticate('user', { session: false }),
+    async (req: express.Request, res: express.Response) => {
+      const pattern = req.query.pattern;
+      const column = req.query.column;
+      if (!column || !pattern) {
+        res.status(422).json({
+          message: 'The request is missing the required parameters "column" and/or "pattern".',
+        });
+      } else {
+        try {
+          const columnData = await model.distinct('' + column, {
+            publisher: { $regex: pattern },
+          });
+          res.json(columnData);
+        } catch (error: any) {
+          /* istanbul ignore next */
+          res.status(500).json({ message: error.message });
+        }
+      }
+    }
+  );
 }

@@ -90,6 +90,20 @@ describe('/fe/venues', () => {
           });
       });
     });
+
+    describe('Missing Parameters', () => {
+      specify('Unsuccessful GET/list: missing parameters', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/list`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(422);
+            done();
+          });
+      });
+    });
   });
 
   describe('Successful access', () => {
@@ -105,18 +119,6 @@ describe('/fe/venues', () => {
             expect(res.body).to.be.an('array');
             expect(res.body).to.be.length(1);
             expect(res.body[0].names).to.equal('hello');
-            done();
-          });
-      });
-
-      specify('Unsuccessful GET/list: missing parameters', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
             done();
           });
       });
