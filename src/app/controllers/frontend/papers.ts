@@ -33,9 +33,7 @@ export function initialize(
           {
             $group: {
               _id: '$yearPublished',
-              cites: {
-                $sum: '$inCitationsCount',
-              },
+              counts: { $count: {} },
             },
           },
           {
@@ -47,11 +45,10 @@ export function initialize(
             $group: {
               _id: '',
               years: {
-                // $push: { $ifNull: ['$_id', NA] },
                 $push: '$_id',
               },
               counts: {
-                $push: '$cites',
+                $push: '$counts',
               },
             },
           },
@@ -85,14 +82,30 @@ export function initialize(
         });
       } else {
         try {
+          // lookup stage for authors: https://stackoverflow.com/questions/55033804/aggregate-lookup-does-not-return-elements-original-array-order
           const rowCount = await model.find(findObject).countDocuments();
           const rows = await model.aggregate([
             getMatchObject(findObject),
             {
               $lookup: {
                 from: 'authors',
-                localField: 'authors',
-                foreignField: '_id',
+                let: { authorNames: '$authors' },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: { $in: ['$_id', '$$authorNames'] },
+                    },
+                  },
+                  {
+                    $addFields: {
+                      sort: {
+                        $indexOfArray: ['$$authorNames', '$_id'],
+                      },
+                    },
+                  },
+                  { $sort: { sort: 1 } },
+                  { $addFields: { sort: '$$REMOVE' } },
+                ],
                 as: 'authors',
               },
             },
