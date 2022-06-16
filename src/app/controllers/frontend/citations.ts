@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
-import { DatapointsOverTime, FilterQuery } from '../../../types';
+import { DatapointsOverTime, QueryFilters } from '../../../types';
 import { buildMatchObject, fixYearData } from './queryUtils';
 
 const passport = require('passport');
@@ -16,7 +16,7 @@ export function initialize(
   const route = `${options.server.baseRoute}/fe/citations`;
 
   async function citationsYears(
-    req: express.Request<{}, {}, {}, FilterQuery>,
+    req: express.Request<{}, {}, {}, QueryFilters>,
     res: express.Response,
     field: string
   ) {
@@ -65,7 +65,7 @@ export function initialize(
   router.get(
     route + 'In/years',
     passport.authenticate('user', { session: false }),
-    (req: express.Request<{}, {}, {}, FilterQuery>, res: express.Response) => {
+    (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       citationsYears(req, res, '$inCitationsCount');
     }
   );
@@ -73,7 +73,7 @@ export function initialize(
   router.get(
     route + 'Out/years',
     passport.authenticate('user', { session: false }),
-    (req: express.Request<{}, {}, {}, FilterQuery>, res: express.Response) => {
+    (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       citationsYears(req, res, '$outCitationsCount');
     }
   );

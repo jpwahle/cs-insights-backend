@@ -14,34 +14,34 @@
 
 ## Getting Started
 
-First, you need to copy the sample `.env.sample` file to `.env`
+After cloning the repository you need to change the directory. 
 
-```
+```console
 cd NLP-Land-backend
-cp .env.sample .env
 ```
 
 Then we are providing two ways to setup this project.
 
-    
 <details> <summary> Production </summary>
-<br/>
-In production mode an instance of mongo is created in Docker and the backend started and connected to it.
 
-To spin up the production version of this project, switch into the root directory of this project and run:
-
+First you need to create an `.env.production` file.
+You can copy the `.env.development` file, if you do not intent to change the default values:
 ```console
-docker-compose up --build
+cp .env.development .env.production
+```
+
+In production mode an instance of mongo is created in Docker and the backend started and connected to it.
+To spin up the production version of this project, switch into the root directory of this project and run:
+```console
+docker-compose --env-file=.env.production up --build
 ```
 </details>
 <details> <summary> Development </summary>
-<br/>
-If you want to actively develop this project, you need to install the project and dependencies locally.
-    
-To run the development environment locally, you need to create up a mongodb instance the first time you start the backend.
 
+If you want to actively develop this project, you need to install the project and dependencies locally.
+To run the development environment locally, you need to create up a mongodb instance the first time you start the backend.
 ```console
-source .env
+source .env.development
 set -o allexport
 docker run -d -p 27017:27017 --name mongodev \
     -e MONGO_INITDB_ROOT_USERNAME=$MONGO_USER \
@@ -50,16 +50,14 @@ docker run -d -p 27017:27017 --name mongodev \
     mongo
 ```
 
-Then you can start the backend using.
+Then you can start the backend using:
 ```console
 npm run dev
 ```
 It starts the docker container (if it is not started yet), uses auto-reload (whenever the code was changed), automatically compiles TypeScript files, and spawns multiple processes.
-
 </details>
 
 ## Tests
-    
 This repository follows clean code principles using static typing, linting, unit tests, semantic releases, and documentation. In the following you can find details for running these tests in the cloud and locally.
 
 <details> <summary> Continuous Integration (CI) </summary>

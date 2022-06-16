@@ -1,5 +1,5 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import mongoose, {FilterQuery} from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
 import {
@@ -10,7 +10,8 @@ import {
   getMatchObject,
 } from './queryUtils';
 import { NA } from '../../../config/consts';
-import { DatapointsOverTime, FilterQuery, PagedParameters } from '../../../types';
+import {DatapointsOverTime, QueryFilters, PagedParameters, Pattern} from '../../../types';
+import {Paper} from "../../models/interfaces";
 
 const passport = require('passport');
 
@@ -25,7 +26,7 @@ export function initialize(
   router.get(
     route + '/years',
     passport.authenticate('user', { session: false }),
-    async (req: express.Request<{}, {}, {}, FilterQuery>, res: express.Response) => {
+    async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
         const matchObject = buildMatchObject(req.query);
         const timeData = await model.aggregate([
@@ -70,7 +71,7 @@ export function initialize(
     route + '/paged',
     passport.authenticate('user', { session: false }),
     async (
-      req: express.Request<{}, {}, {}, FilterQuery & PagedParameters>,
+      req: express.Request<{}, {}, {}, QueryFilters & PagedParameters>,
       res: express.Response
     ) => {
       const findObject = buildFindObject(req.query);
@@ -83,29 +84,31 @@ export function initialize(
       } else {
         try {
           // lookup stage for authors: https://stackoverflow.com/questions/55033804/aggregate-lookup-does-not-return-elements-original-array-order
-          const rowCount = await model.find(findObject).countDocuments();
+          const rowCount = await model.find(findObject as FilterQuery<Paper>).countDocuments();
           const rows = await model.aggregate([
             getMatchObject(findObject),
             {
               $lookup: {
                 from: 'authors',
-                let: { authorNames: '$authors' },
-                pipeline: [
-                  {
-                    $match: {
-                      $expr: { $in: ['$_id', '$$authorNames'] },
-                    },
-                  },
-                  {
-                    $addFields: {
-                      sort: {
-                        $indexOfArray: ['$$authorNames', '$_id'],
-                      },
-                    },
-                  },
-                  { $sort: { sort: 1 } },
-                  { $addFields: { sort: '$$REMOVE' } },
-                ],
+                localField: 'authors',
+                foreignField: '_id',
+                // let: { authorNames: '$authors' },
+                // pipeline: [
+                //   {
+                //     $match: {
+                //       $expr: { $in: ['$_id', '$$authorNames'] },
+                //     },
+                //   },
+                //   {
+                //     $addFields: {
+                //       sort: {
+                //         $indexOfArray: ['$$authorNames', '$_id'],
+                //       },
+                //     },
+                //   },
+                //   { $sort: { sort: 1 } },
+                //   { $addFields: { sort: '$$REMOVE' } },
+                // ],
                 as: 'authors',
               },
             },
@@ -148,7 +151,7 @@ export function initialize(
   router.get(
     route + '/list',
     passport.authenticate('user', { session: false }),
-    async (req: express.Request, res: express.Response) => {
+    async (req: express.Request<{}, {}, {}, QueryFilters & PagedParameters & Pattern>, res: express.Response) => {
       const pattern = req.query.pattern;
       const column = req.query.column;
       if (!column || !pattern) {

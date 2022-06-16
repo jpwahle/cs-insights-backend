@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
-import { DatapointsOverTime, FilterMongo, FilterQuery } from '../../../types';
+import mongoose, { FilterQuery } from 'mongoose';
+import { DatapointsOverTime, FilterMongo, QueryFilters } from '../../../types';
 import { NA } from '../../../config/consts';
 
 // no endpoints in this file
 
 // For use in queries with find()
-export function buildFindObject(query: FilterQuery) {
-  const findObject: FilterMongo = {};
+export function buildFindObject(query: QueryFilters): FilterQuery<FilterMongo> {
+  const findObject: FilterQuery<FilterMongo> = {};
   if (query.yearStart) {
     findObject.yearPublished = findObject.yearPublished || {};
     findObject.yearPublished.$gte = parseInt(query.yearStart);
@@ -46,13 +46,13 @@ export function buildFindObject(query: FilterQuery) {
   return findObject;
 }
 
-export function getMatchObject(findObject: FilterMongo) {
+export function getMatchObject(findObject: FilterQuery<FilterMongo>) {
   return { $match: findObject };
 }
 
 // For use in the "aggregate" framework
-export function buildMatchObject(query: FilterQuery) {
-  const findObject: FilterMongo = buildFindObject(query);
+export function buildMatchObject(query: QueryFilters) {
+  const findObject: FilterQuery<FilterMongo> = buildFindObject(query);
   return getMatchObject(findObject);
 }
 

@@ -12,7 +12,7 @@ export type PagedParameters = {
   sortDirection: string;
 };
 
-export interface FilterQuery {
+export interface QueryFilters {
   yearStart?: string;
   yearEnd?: string;
   authors?: string;
@@ -21,6 +21,11 @@ export interface FilterQuery {
   typesOfPaper?: string;
   fieldsOfStudy?: string;
   publishers?: string;
+}
+
+export interface Pattern {
+  column?: string;
+  pattern?: string;
 }
 
 export interface FilterMongo {
