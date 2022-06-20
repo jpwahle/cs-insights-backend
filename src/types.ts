@@ -15,8 +15,8 @@ export type PagedParameters = {
 export interface QueryFilters {
   yearStart?: string;
   yearEnd?: string;
-  authors?: string;
-  venues?: string;
+  authorIds?: string;
+  venueIds?: string;
   openAccess?: string;
   typesOfPaper?: string;
   fieldsOfStudy?: string;
@@ -33,8 +33,8 @@ export interface FilterMongo {
     $gte?: number;
     $lte?: number;
   };
-  authors?: { $in: mongoose.Types.ObjectId[] };
-  venue?: { $in: mongoose.Types.ObjectId[] };
+  authorIds?: { $in: mongoose.Types.ObjectId[] };
+  venueId?: { $in: mongoose.Types.ObjectId[] };
   openAccess?: boolean;
   typeOfPaper?: { $in: string[] };
   fieldsOfStudy?: { $in: string[] };

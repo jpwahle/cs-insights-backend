@@ -15,14 +15,14 @@ export function buildFindObject(query: QueryFilters): FilterQuery<FilterMongo> {
     findObject.yearPublished = findObject.yearPublished || {};
     findObject.yearPublished.$lte = parseInt(query.yearEnd);
   }
-  if (query.authors) {
-    findObject.authors = {
-      $in: JSON.parse(query.authors).map((author: string) => new mongoose.Types.ObjectId(author)),
+  if (query.authorIds) {
+    findObject.authorIds = {
+      $in: JSON.parse(query.authorIds).map((author: string) => new mongoose.Types.ObjectId(author)),
     };
   }
-  if (query.venues) {
-    findObject.venue = {
-      $in: JSON.parse(query.venues).map((venue: string) => new mongoose.Types.ObjectId(venue)),
+  if (query.venueIds) {
+    findObject.venueId = {
+      $in: JSON.parse(query.venueIds).map((venue: string) => new mongoose.Types.ObjectId(venue)),
     };
   }
   if (query.openAccess) {
@@ -50,7 +50,7 @@ export function getMatchObject(findObject: FilterQuery<FilterMongo>) {
   return { $match: findObject };
 }
 
-// For use in the "aggregate" framework
+// For use in the aggregation framework
 export function buildMatchObject(query: QueryFilters) {
   const findObject: FilterQuery<FilterMongo> = buildFindObject(query);
   return getMatchObject(findObject);

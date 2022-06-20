@@ -12,9 +12,10 @@ export const paperSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Author',
+        required: true,
       },
     ],
-    authors: [{ type: String }],
+    authors: [{ type: String, required: true }],
     venueId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Venue',

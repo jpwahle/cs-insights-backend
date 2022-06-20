@@ -1,5 +1,5 @@
 import express from 'express';
-import mongoose, {FilterQuery} from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
 import {
@@ -10,8 +10,8 @@ import {
   getMatchObject,
 } from './queryUtils';
 import { NA } from '../../../config/consts';
-import {DatapointsOverTime, QueryFilters, PagedParameters, Pattern} from '../../../types';
-import {Paper} from "../../models/interfaces";
+import { DatapointsOverTime, QueryFilters, PagedParameters, Pattern } from '../../../types';
+import { Paper } from '../../models/interfaces';
 
 const passport = require('passport');
 
@@ -87,39 +87,6 @@ export function initialize(
           const rowCount = await model.find(findObject as FilterQuery<Paper>).countDocuments();
           const rows = await model.aggregate([
             getMatchObject(findObject),
-            {
-              $lookup: {
-                from: 'authors',
-                localField: 'authors',
-                foreignField: '_id',
-                // let: { authorNames: '$authors' },
-                // pipeline: [
-                //   {
-                //     $match: {
-                //       $expr: { $in: ['$_id', '$$authorNames'] },
-                //     },
-                //   },
-                //   {
-                //     $addFields: {
-                //       sort: {
-                //         $indexOfArray: ['$$authorNames', '$_id'],
-                //       },
-                //     },
-                //   },
-                //   { $sort: { sort: 1 } },
-                //   { $addFields: { sort: '$$REMOVE' } },
-                // ],
-                as: 'authors',
-              },
-            },
-            {
-              $lookup: {
-                from: 'venues',
-                localField: 'venue',
-                foreignField: '_id',
-                as: 'venue',
-              },
-            },
             buildSortObject(req.query.sortField, req.query.sortDirection),
             { $skip: page * pageSize },
             { $limit: pageSize },
@@ -128,10 +95,11 @@ export function initialize(
                 yearPublished: 1,
                 inCitationsCount: 1,
                 title: 1,
-                authors: { $ifNull: ['$authors.fullname', NA] },
-                venue: {
-                  $ifNull: [{ $arrayElemAt: ['$venue.names', 0] }, NA],
+                authors: {
+                  $cond: { if: { $arrayElemAt: ['$authors', 0] }, then: '$authors', else: [NA] },
                 },
+                venue: { $ifNull: ['$venue', NA] },
+                pdfUrl: { $arrayElemAt: ['$pdfUrls', 0] },
               },
             },
           ]);
@@ -151,7 +119,10 @@ export function initialize(
   router.get(
     route + '/list',
     passport.authenticate('user', { session: false }),
-    async (req: express.Request<{}, {}, {}, QueryFilters & PagedParameters & Pattern>, res: express.Response) => {
+    async (
+      req: express.Request<{}, {}, {}, QueryFilters & PagedParameters & Pattern>,
+      res: express.Response
+    ) => {
       const pattern = req.query.pattern;
       const column = req.query.column;
       if (!column || !pattern) {
