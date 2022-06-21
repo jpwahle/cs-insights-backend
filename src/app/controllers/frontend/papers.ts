@@ -83,9 +83,8 @@ export function initialize(
         });
       } else {
         try {
-          // lookup stage for authors: https://stackoverflow.com/questions/55033804/aggregate-lookup-does-not-return-elements-original-array-order
-          const rowCount = await model.find(findObject as FilterQuery<Paper>).countDocuments();
-          const rows = await model.aggregate([
+          const rowCountPromise = model.find(findObject as FilterQuery<Paper>).countDocuments();
+          const rowsPromise = model.aggregate([
             getMatchObject(findObject),
             buildSortObject(req.query.sortField, req.query.sortDirection),
             { $skip: page * pageSize },
@@ -103,11 +102,13 @@ export function initialize(
               },
             },
           ]);
-          const data = {
-            rowCount: rowCount,
-            rows: rows,
-          };
-          res.json(data);
+          Promise.all([rowCountPromise, rowsPromise]).then((values) => {
+            const data = {
+              rowCount: values[0],
+              rows: values[1],
+            };
+            res.json(data);
+          });
         } catch (error: any) {
           /* istanbul ignore next */
           res.status(500).json({ message: error.message });

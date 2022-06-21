@@ -15,7 +15,7 @@ export const paperSchema = new mongoose.Schema(
         required: true,
       },
     ],
-    authors: [{ type: String, required: true }],
+    authors: [{ type: String, required: true, index: true }],
     venueId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Venue',
@@ -130,7 +130,7 @@ export const authorSchema = new mongoose.Schema(
   },
   { collection: 'authors' }
   //@ts-ignore should be fixed by updating mongoose (https://github.com/Automattic/mongoose/issues/10590), but we can't because or express-restify-mongoose TODO
-).index({ fullname: 1, number: 1 }, { unique: true });
+);
 
 export const affiliationSchema = new mongoose.Schema(
   {

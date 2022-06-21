@@ -17,8 +17,8 @@ let apiServer: APIServer;
 let apiOptions: APIOptions;
 let userToken: string;
 
-describe('/fe/venues', () => {
-  const route = '/fe/venues';
+describe('/fe/citations', () => {
+  const route = '/fe/citations';
 
   const dummyVenue = {
     _id: new mongoose.Types.ObjectId(),
@@ -34,12 +34,12 @@ describe('/fe/venues', () => {
 
   const dummyAuthor = {
     _id: new mongoose.Types.ObjectId(),
-    fullname: 'Fullname',
+    fullname: 'hello',
   };
 
   const dummyAuthor2 = {
     _id: new mongoose.Types.ObjectId(),
-    fullname: 'testName',
+    fullname: 'test',
   };
 
   const dummyPaper = {
@@ -50,9 +50,11 @@ describe('/fe/venues', () => {
     absUrl: 'https://dummy-url.de/',
     yearPublished: 2022,
     inCitationsCount: 2,
-    outCitationsCount: 0,
-    authors: [dummyAuthor._id, dummyAuthor2._id],
-    venue: dummyVenue._id,
+    outCitationsCount: 2,
+    authors: ['hello', 'test'],
+    authorIds: [dummyAuthor._id, dummyAuthor2._id],
+    venue: 'hello',
+    venueId: dummyVenue._id,
     typeOfPaper: 'article',
     fieldsOfStudy: ['Computer Science', 'Art'],
     publisher: 'ABC',
@@ -71,8 +73,8 @@ describe('/fe/venues', () => {
     yearPublished: 2020,
     inCitationsCount: 0,
     outCitationsCount: 0,
-    authors: null,
-    venue: null,
+    authorIds: null,
+    venueId: null,
     typeOfPaper: 'article',
     dblpId: 'some-id-12',
     csvId: '2',
@@ -87,8 +89,10 @@ describe('/fe/venues', () => {
     yearPublished: 2022,
     inCitationsCount: 1,
     outCitationsCount: 0,
-    authors: [dummyAuthor._id],
-    venue: new mongoose.Types.ObjectId(),
+    authors: ['hello'],
+    authorIds: [dummyAuthor._id],
+    venue: 'hello',
+    venueId: new mongoose.Types.ObjectId(),
     typeOfPaper: 'inproceedings',
     fieldsOfStudy: ['Computer Science'],
     publisher: 'CBA',
@@ -108,7 +112,6 @@ describe('/fe/venues', () => {
         .post(`${options.server.baseRoute}/login`)
         .send(options.user.default)
     ).body.token;
-
     const adminUser = (
       await chai
         .request(app.app)
@@ -153,10 +156,10 @@ describe('/fe/venues', () => {
 
   describe('No access', () => {
     describe('Unauthorized access', () => {
-      specify('Unauthorized GET/years', (done) => {
+      specify('Unauthorized GET/In/years', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/years`)
+          .get(`${apiOptions.server.baseRoute}${route}In/years`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -164,50 +167,13 @@ describe('/fe/venues', () => {
           });
       });
 
-      specify('Unauthorized GET/paged', (done) => {
+      specify('Unauthorized GET/Out/years', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged`)
+          .get(`${apiOptions.server.baseRoute}${route}Out/years`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
-            done();
-          });
-      });
-
-      specify('Unauthorized GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(401);
-            done();
-          });
-      });
-    });
-
-    describe('Missing Parameters', () => {
-      specify('Missing parameters GET/paged', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
-            done();
-          });
-      });
-
-      specify('Missing Parameters GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
             done();
           });
       });
@@ -215,11 +181,11 @@ describe('/fe/venues', () => {
   });
 
   describe('Successful access', () => {
-    describe('GET/years', () => {
-      specify('Successful GET/years', (done) => {
+    describe('GET/In/years', () => {
+      specify('Successful GET/In/years', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/years`)
+          .get(`${apiOptions.server.baseRoute}${route}In/years`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -229,15 +195,15 @@ describe('/fe/venues', () => {
             expect(res.body.years[84]).to.equal(2020);
             expect(res.body.counts).to.be.an('array');
             expect(res.body.counts[0]).to.equal(0);
-            expect(res.body.counts[84]).to.equal(0);
+            expect(res.body.counts[86]).to.equal(3);
             done();
           });
       });
 
-      specify('Successful GET/years: no results', (done) => {
+      specify('Successful GET/In/years: no results', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/years?yearStart=2022&yearEnd=2020`)
+          .get(`${apiOptions.server.baseRoute}${route}In/years?yearStart=2022&yearEnd=2020`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -250,67 +216,36 @@ describe('/fe/venues', () => {
       });
     });
 
-    describe('GET/paged', () => {
-      specify('Successful GET/paged', (done) => {
+    describe('GET/Out/years', () => {
+      specify('Successful GET/Out/years', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50`)
+          .get(`${apiOptions.server.baseRoute}${route}Out/years`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.rowCount).to.equal(3);
-            expect(res.body.rows).to.be.an('array');
-            expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].venue).to.exist;
-            expect(res.body.rows[0].inCitationsCount).to.exist;
-            expect(res.body.rows[0].yearPublishedFirst).to.exist;
-            expect(res.body.rows[0].yearPublishedLast).to.exist;
-            expect(res.body.rows[0].papersCount).to.exist;
-            expect(res.body.rows[0].inCitationsPerPaper).to.exist;
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(1936);
+            expect(res.body.years[84]).to.equal(2020);
+            expect(res.body.counts).to.be.an('array');
+            expect(res.body.counts[0]).to.equal(0);
+            expect(res.body.counts[86]).to.equal(2);
             done();
           });
       });
 
-      specify('Successful GET/paged: sorted', (done) => {
+      specify('Successful GET/Out/years: no results', (done) => {
         chai
           .request(apiServer.app)
-          .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&sortField=inCitationsCount&sortDirection=asc`
-          )
+          .get(`${apiOptions.server.baseRoute}${route}Out/years?yearStart=2022&yearEnd=2020`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.rowCount).to.equal(3);
-            expect(res.body.rows).to.be.an('array');
-            expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].venue).to.exist;
-            expect(res.body.rows[0].inCitationsCount).to.exist;
-            expect(res.body.rows[2].inCitationsCount).to.equal(2);
-            expect(res.body.rows[0].yearPublishedFirst).to.exist;
-            expect(res.body.rows[0].yearPublishedLast).to.exist;
-            expect(res.body.rows[0].papersCount).to.exist;
-            expect(res.body.rows[0].inCitationsPerPaper).to.exist;
-            expect(res.body.rows[0].link).to.not.exist;
-            expect(res.body.rows[1].link).to.exist;
-            done();
-          });
-      });
-    });
-
-    describe('GET/list', () => {
-      specify('Successful GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list?pattern=hel`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(200);
-            expect(res.body).to.be.an('array');
-            expect(res.body).to.be.length(1);
-            expect(res.body[0].names).to.equal('hello');
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.counts).to.be.an('array');
+            expect(res.body.counts.every((count: number) => count === 0));
             done();
           });
       });

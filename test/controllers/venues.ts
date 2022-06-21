@@ -252,7 +252,7 @@ describe('/venues', () => {
         .request(apiServer.app)
         .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send(dummyVenue)
+        .send({ ...dummyVenue, names: ['Empirical'], dblpId: 'something2' })
         .end((err, res) => {
           should().not.exist(err);
           expect(res).to.have.status(201);

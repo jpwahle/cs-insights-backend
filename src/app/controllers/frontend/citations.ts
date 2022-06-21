@@ -27,7 +27,7 @@ export function initialize(
         {
           $group: {
             _id: '$yearPublished',
-            cites: {
+            count: {
               $sum: field,
             },
           },
@@ -41,11 +41,10 @@ export function initialize(
           $group: {
             _id: '',
             years: {
-              // $push: { $ifNull: ['$_id', NA] },
               $push: '$_id',
             },
             counts: {
-              $push: '$cites',
+              $push: '$count',
             },
           },
         },

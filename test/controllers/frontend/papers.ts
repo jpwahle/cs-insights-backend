@@ -22,17 +22,19 @@ describe('/fe/papers', () => {
 
   const dummyVenue = {
     _id: new mongoose.Types.ObjectId(),
+    names: ['hello', 'world'],
     dblpId: 'some-id-123',
   };
 
   const dummyVenue2 = {
     _id: new mongoose.Types.ObjectId(),
+    names: ['test'],
     dblpId: 'some-id-124',
   };
 
   const dummyAuthor = {
     _id: new mongoose.Types.ObjectId(),
-    fullname: 'test',
+    fullname: 'hello',
   };
 
   const dummyAuthor2 = {
@@ -49,8 +51,10 @@ describe('/fe/papers', () => {
     yearPublished: 2022,
     inCitationsCount: 2,
     outCitationsCount: 0,
-    authors: [dummyAuthor._id, dummyAuthor2._id],
-    venue: dummyVenue._id,
+    authors: ['hello', 'test'],
+    authorIds: [dummyAuthor._id, dummyAuthor2._id],
+    venue: 'hello',
+    venueId: dummyVenue._id,
     typeOfPaper: 'article',
     fieldsOfStudy: ['Computer Science', 'Art'],
     publisher: 'ABC',
@@ -69,8 +73,8 @@ describe('/fe/papers', () => {
     yearPublished: 2020,
     inCitationsCount: 0,
     outCitationsCount: 0,
-    authors: null,
-    venue: null,
+    authorIds: null,
+    venueId: null,
     typeOfPaper: 'article',
     dblpId: 'some-id-12',
     csvId: '2',
@@ -85,8 +89,10 @@ describe('/fe/papers', () => {
     yearPublished: 2022,
     inCitationsCount: 1,
     outCitationsCount: 0,
-    authors: [dummyAuthor._id],
-    venue: new mongoose.Types.ObjectId(),
+    authors: ['hello'],
+    authorIds: [dummyAuthor._id],
+    venue: 'hello',
+    venueId: new mongoose.Types.ObjectId(),
     typeOfPaper: 'inproceedings',
     fieldsOfStudy: ['Computer Science'],
     publisher: 'CBA',
@@ -226,7 +232,7 @@ describe('/fe/papers', () => {
             expect(res.body.years[84]).to.equal(2020);
             expect(res.body.counts).to.be.an('array');
             expect(res.body.counts[0]).to.equal(0);
-            expect(res.body.counts[84]).to.equal(0);
+            expect(res.body.counts[84]).to.equal(1);
             done();
           });
       });
@@ -362,7 +368,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&authors=["${dummyAuthor._id}"]`
+            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&authorIds=["${dummyAuthor._id}"]`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -385,7 +391,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&authors=["${dummyAuthor._id}", "${dummyAuthor2._id}"]`
+            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&authorIds=["${dummyAuthor._id}", "${dummyAuthor2._id}"]`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -408,7 +414,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&venues=["${dummyVenue._id}"]`
+            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&venueIds=["${dummyVenue._id}"]`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {

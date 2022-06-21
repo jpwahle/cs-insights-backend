@@ -247,7 +247,7 @@ describe('/authors', () => {
         .request(apiServer.app)
         .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send(dummyAuthor)
+        .send({ ...dummyAuthor, fullname: 'someone' })
         .end((err, res) => {
           should().not.exist(err);
           expect(res).to.have.status(201);
@@ -265,7 +265,7 @@ describe('/authors', () => {
         .request(apiServer.app)
         .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({ ...dummyAuthor, orcid: '1' })
+        .send({ ...dummyAuthor, orcid: '1', fullname: 'abc3' })
         .end((err, res) => {
           should().not.exist(err);
           expect(res).to.have.status(201);
@@ -283,7 +283,10 @@ describe('/authors', () => {
         .request(apiServer.app)
         .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send([dummyAuthor, { ...dummyAuthor, orcid: '3' }])
+        .send([
+          { ...dummyAuthor, fullname: 'abc1' },
+          { ...dummyAuthor, orcid: '3', fullname: 'abc2' },
+        ])
         .end((err, res) => {
           should().not.exist(err);
           expect(res).to.have.status(201);

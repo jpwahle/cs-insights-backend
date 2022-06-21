@@ -19,9 +19,9 @@ export class Controllers {
     venues.initialize(models.Venue, router, options);
     users.initialize(models.User, router, options);
 
-    authorsFE.initialize(models.Author, router, options);
+    authorsFE.initialize(models.Paper, models.Author, router, options);
     papersFE.initialize(models.Paper, router, options);
-    venuesFE.initialize(models.Venue, router, options);
+    venuesFE.initialize(models.Paper, models.Venue, router, options);
     citationsFE.initialize(models.Paper, router, options);
   }
 }
