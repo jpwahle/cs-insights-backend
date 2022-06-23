@@ -118,6 +118,47 @@ export function initialize(
   );
 
   router.get(
+    route + '/quartiles',
+    passport.authenticate('user', { session: false }),
+    async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
+      try {
+        const findObject = buildFindObject(req.query);
+        const rowCount = await model.countDocuments(findObject);
+        const quartileData = await model
+          .aggregate([
+            getMatchObject(findObject),
+            { $sort: { inCitationsCount: 1 } },
+            { $project: { inCitationsCount: 1 } },
+            {
+              $facet: {
+                min: [{ $limit: 1 }],
+                first: [{ $skip: Math.round(rowCount * 0.25) }, { $limit: 1 }],
+                median: [{ $skip: Math.round(rowCount * 0.5) }, { $limit: 1 }],
+                third: [{ $skip: Math.round(rowCount * 0.75) }, { $limit: 1 }],
+                max: [{ $skip: Math.round(rowCount - 1) }, { $limit: 1 }],
+              },
+            },
+          ])
+          .allowDiskUse(true);
+        // const response = quartileData;
+        console.log(quartileData, quartileData[0].min[0]);
+        const response = [
+          quartileData[0].min[0].inCitationsCount,
+          quartileData[0].first[0].inCitationsCount,
+          quartileData[0].median[0].inCitationsCount,
+          quartileData[0].third[0].inCitationsCount,
+          quartileData[0].max[0].inCitationsCount,
+        ];
+        console.log(response);
+        res.json(response);
+      } catch (error: any) {
+        /* istanbul ignore next */
+        res.status(500).json({ message: error.message });
+      }
+    }
+  );
+
+  router.get(
     route + '/list',
     passport.authenticate('user', { session: false }),
     async (

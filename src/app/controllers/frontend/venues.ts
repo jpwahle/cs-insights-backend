@@ -28,9 +28,8 @@ export function initialize(
     passport.authenticate('user', { session: false }),
     async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
-        const matchObject = buildMatchObject(req.query);
         const timeData = await model.aggregate([
-          matchObject,
+          buildMatchObject(req.query),
           {
             $group: {
               _id: '$yearPublished',
@@ -92,6 +91,7 @@ export function initialize(
           const rowCountPromise = model.aggregate([
             getMatchObject(findObject),
             { $group: { _id: '$venue' } },
+            { $count: 'count' },
           ]);
           const rowsPromise = model.aggregate([
             getMatchObject(findObject),
@@ -122,15 +122,85 @@ export function initialize(
           ]);
           Promise.all([rowCountPromise, rowsPromise]).then((values) => {
             const data = {
-              rowCount: values[0].length,
+              rowCount: values[0][0].count,
               rows: values[1],
             };
+            console.log(data.rowCount);
             res.json(data);
           });
         } catch (error: any) {
           /* istanbul ignore next */
           res.status(500).json({ message: error.message });
         }
+      }
+    }
+  );
+
+  router.get(
+    route + '/quartiles',
+    passport.authenticate('user', { session: false }),
+    async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
+      try {
+        const matchObject = buildMatchObject(req.query);
+
+        // let start;
+        // let end;
+        // start = performance.now();
+        // const rowCount = (
+        //   await model.aggregate([
+        //     matchObject,
+        //     { $group: { _id: '$venue' } },
+        //     {
+        //       $count: 'count',
+        //     },
+        //   ])
+        // )[0].count;
+
+        const quartileData = await model
+          .aggregate([
+            matchObject,
+            {
+              $group: {
+                _id: '$venue',
+                inCitationsCount: { $sum: '$inCitationsCount' },
+              },
+            },
+            { $sort: { inCitationsCount: 1 } },
+            // { $project: { inCitationsCount: 1 } },
+            // {
+            //   $facet: {
+            //     min: [{ $limit: 1 }],
+            //     first: [{ $skip: Math.round(rowCount * 0.25) }, { $limit: 1 }],
+            //     median: [{ $skip: Math.round(rowCount * 0.5) }, { $limit: 1 }],
+            //     third: [{ $skip: Math.round(rowCount * 0.75) }, { $limit: 1 }],
+            //     max: [{ $skip: rowCount - 1 }, { $limit: 1 }],
+            //   },
+            // },
+          ])
+          .allowDiskUse(true);
+
+        const rowCount = quartileData.length;
+        const response = [
+          quartileData[0].inCitationsCount,
+          quartileData[Math.round(rowCount * 0.25)].inCitationsCount,
+          quartileData[Math.round(rowCount * 0.5)].inCitationsCount,
+          quartileData[Math.round(rowCount * 0.75)].inCitationsCount,
+          quartileData[rowCount - 1].inCitationsCount,
+        ];
+
+        // const response = [
+        //   quartileData[0].min[0].inCitationsCount,
+        //   quartileData[0].first[0].inCitationsCount,
+        //   quartileData[0].median[0].inCitationsCount,
+        //   quartileData[0].third[0].inCitationsCount,
+        //   quartileData[0].max[0].inCitationsCount,
+        // ];
+        // end = performance.now();
+        // console.log(end - start);
+        res.json(response);
+      } catch (error: any) {
+        /* istanbul ignore next */
+        res.status(500).json({ message: error.message });
       }
     }
   );

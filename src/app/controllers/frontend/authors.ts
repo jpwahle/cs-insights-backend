@@ -28,10 +28,9 @@ export function initialize(
     passport.authenticate('user', { session: false }),
     async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
-        const matchObject = buildMatchObject(req.query);
         const timeData = await model
           .aggregate([
-            matchObject,
+            buildMatchObject(req.query),
             { $unwind: '$authorIds' },
             {
               $group: {
@@ -150,6 +149,87 @@ export function initialize(
           /* istanbul ignore next */
           res.status(500).json({ message: error.message });
         }
+      }
+    }
+  );
+
+  router.get(
+    route + '/quartiles',
+    passport.authenticate('user', { session: false }),
+    async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
+      try {
+        // let start;
+        // let end;
+        // start = performance.now();
+        // const rowCount = (
+        //   await model.aggregate([
+        //     buildMatchObject(req.query),
+        //     {
+        //       $unwind: {
+        //         path: '$authors',
+        //         preserveNullAndEmptyArrays: true,
+        //       },
+        //     },
+        //     { $group: { _id: '$authors' } },
+        //     { $count: 'count' },
+        //   ])
+        // )[0].count;
+        // console.log(rowCount);
+
+        const quartileData = await model
+          .aggregate([
+            buildMatchObject(req.query),
+            // { $project: { authors: 1, inCitationsCount: 1 } },
+            {
+              $unwind: {
+                path: '$authors',
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
+              $group: {
+                _id: '$authors',
+                inCitationsCount: { $sum: '$inCitationsCount' },
+              },
+            },
+            { $sort: { inCitationsCount: 1 } },
+            // { $project: { inCitationsCount: 1 } },
+            // {
+            //   $facet: {
+            //     min: [{ $limit: 1 }],
+            //     first: [{ $skip: Math.round(rowCount * 0.25) }, { $limit: 1 }],
+            //     median: [{ $skip: Math.round(rowCount * 0.5) }, { $limit: 1 }],
+            //     third: [{ $skip: Math.round(rowCount * 0.75) }, { $limit: 1 }],
+            //     max: [{ $skip: rowCount - 1 }, { $limit: 1 }],
+            //   },
+            // },
+          ])
+          .allowDiskUse(true);
+        // .explain();
+        // console.log(quartileData);
+
+        const rowCount = quartileData.length;
+        const response = [
+          quartileData[0].inCitationsCount,
+          quartileData[Math.round(rowCount * 0.25)].inCitationsCount,
+          quartileData[Math.round(rowCount * 0.5)].inCitationsCount,
+          quartileData[Math.round(rowCount * 0.75)].inCitationsCount,
+          quartileData[rowCount - 1].inCitationsCount,
+        ];
+        // const response = [
+        //   quartileData[0].min[0].inCitationsCount,
+        //   quartileData[0].first[0].inCitationsCount,
+        //   quartileData[0].median[0].inCitationsCount,
+        //   quartileData[0].third[0].inCitationsCount,
+        //   quartileData[0].max[0].inCitationsCount,
+        // ];
+        // end = performance.now();
+        // console.log(end - start);
+        // console.log(response);
+        res.json(response);
+      } catch (error: any) {
+        /* istanbul ignore next */
+        res.status(500).json({ message: error.message });
       }
     }
   );

@@ -15,7 +15,7 @@ export const paperSchema = new mongoose.Schema(
         required: true,
       },
     ],
-    authors: [{ type: String, required: true, index: true }],
+    authors: [{ type: String, required: true, index: true, default: [] }],
     venueId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Venue',
@@ -68,7 +68,7 @@ export const paperSchema = new mongoose.Schema(
         ref: 'Paper',
       },
     ],
-    inCitationsCount: { type: Number, required: true, default: 0 },
+    inCitationsCount: { type: Number, required: true, default: 0, index: true },
     // inCitationsRef: [{ type: String, required: true }], //TODO add
     outCitations: [
       {
