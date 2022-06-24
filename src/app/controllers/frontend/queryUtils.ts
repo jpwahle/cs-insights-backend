@@ -115,3 +115,28 @@ export function fixYearData(
   }
   return data;
 }
+
+// if there are only a handful of data points, the index can go out of bounds
+export function quartilePosition(rowCount: number, multiplier: number): number {
+  const rounded = Math.round(rowCount * multiplier);
+  if (rounded >= rowCount) {
+    return rowCount - 1;
+  } else {
+    return rounded;
+  }
+}
+
+export function computeQuartiles(quartileData: { inCitationsCount: number }[]): number[] {
+  const rowCount = quartileData.length;
+  if (rowCount === 0) {
+    return [0, 0, 0, 0, 0];
+  } else {
+    return [
+      quartileData[0].inCitationsCount,
+      quartileData[quartilePosition(rowCount, 0.25)].inCitationsCount,
+      quartileData[quartilePosition(rowCount, 0.5)].inCitationsCount,
+      quartileData[quartilePosition(rowCount, 0.75)].inCitationsCount,
+      quartileData[rowCount - 1].inCitationsCount,
+    ];
+  }
+}

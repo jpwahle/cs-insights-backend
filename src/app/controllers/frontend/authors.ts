@@ -3,13 +3,7 @@ import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
 import { DatapointsOverTime, PagedParameters, QueryFilters } from '../../../types';
-import {
-  buildFindObject,
-  buildMatchObject,
-  buildSortObject,
-  fixYearData,
-  getMatchObject,
-} from './queryUtils';
+import { buildMatchObject, buildSortObject, computeQuartiles, fixYearData } from './queryUtils';
 import { NA } from '../../../config/consts';
 
 const passport = require('passport');
@@ -76,13 +70,13 @@ export function initialize(
   );
 
   router.get(
-    route + '/paged',
+    route + '/info',
     passport.authenticate('user', { session: false }),
     async (
       req: express.Request<{}, {}, {}, QueryFilters & PagedParameters>,
       res: express.Response
     ) => {
-      const findObject = buildFindObject(req.query);
+      const matchObject = buildMatchObject(req.query);
       const pageSize = parseInt(req.query.pageSize);
       const page = parseInt(req.query.page);
       if ((page != 0 && !page) || !pageSize) {
@@ -93,7 +87,7 @@ export function initialize(
         try {
           const rowCountPromise = model
             .aggregate([
-              getMatchObject(findObject),
+              matchObject,
               {
                 $unwind: {
                   path: '$authors',
@@ -101,11 +95,12 @@ export function initialize(
                 },
               },
               { $group: { _id: '$authors' } },
+              { $count: 'count' },
             ])
             .allowDiskUse(true);
           const rowsPromise = model
             .aggregate([
-              getMatchObject(findObject),
+              matchObject,
               {
                 $unwind: {
                   path: '$authors',
@@ -140,7 +135,7 @@ export function initialize(
             .allowDiskUse(true);
           Promise.all([rowCountPromise, rowsPromise]).then((values) => {
             const data = {
-              rowCount: values[0].length,
+              rowCount: values[0][0] ? values[0][0].count : 0,
               rows: values[1],
             };
             res.json(data);
@@ -197,25 +192,17 @@ export function initialize(
             // {
             //   $facet: {
             //     min: [{ $limit: 1 }],
-            //     first: [{ $skip: Math.round(rowCount * 0.25) }, { $limit: 1 }],
-            //     median: [{ $skip: Math.round(rowCount * 0.5) }, { $limit: 1 }],
-            //     third: [{ $skip: Math.round(rowCount * 0.75) }, { $limit: 1 }],
+            //     first: [{ $skip: Math.floor(rowCount * 0.25) }, { $limit: 1 }],
+            //     median: [{ $skip: Math.floor(rowCount * 0.5) }, { $limit: 1 }],
+            //     third: [{ $skip: Math.floor(rowCount * 0.75) }, { $limit: 1 }],
             //     max: [{ $skip: rowCount - 1 }, { $limit: 1 }],
             //   },
             // },
           ])
           .allowDiskUse(true);
         // .explain();
-        // console.log(quartileData);
 
-        const rowCount = quartileData.length;
-        const response = [
-          quartileData[0].inCitationsCount,
-          quartileData[Math.round(rowCount * 0.25)].inCitationsCount,
-          quartileData[Math.round(rowCount * 0.5)].inCitationsCount,
-          quartileData[Math.round(rowCount * 0.75)].inCitationsCount,
-          quartileData[rowCount - 1].inCitationsCount,
-        ];
+        const response = computeQuartiles(quartileData);
         // const response = [
         //   quartileData[0].min[0].inCitationsCount,
         //   quartileData[0].first[0].inCitationsCount,

@@ -167,10 +167,21 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Unauthorized GET/paged', (done) => {
+      specify('Unauthorized GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged`)
+          .get(`${apiOptions.server.baseRoute}${route}/info`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(401);
+            done();
+          });
+      });
+
+      specify('Unauthorized GET/quartiles', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -191,10 +202,10 @@ describe('/fe/papers', () => {
     });
 
     describe('Missing parameters', () => {
-      specify('Missing parameters GET/paged', (done) => {
+      specify('Missing parameters GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged`)
+          .get(`${apiOptions.server.baseRoute}${route}/info`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -253,11 +264,11 @@ describe('/fe/papers', () => {
       });
     });
 
-    describe('GET/paged', () => {
-      specify('Successful GET/paged', (done) => {
+    describe('GET/info', () => {
+      specify('Successful GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50`)
+          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -275,11 +286,11 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Successful GET/paged: sorted', (done) => {
+      specify('Successful GET/info: sorted', (done) => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&sortField=inCitationsCount&sortDirection=asc`
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&sortField=inCitationsCount&sortDirection=asc`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -294,6 +305,39 @@ describe('/fe/papers', () => {
             expect(res.body.rows[0].inCitationsCount).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.equal(0);
             expect(res.body.rows[0].yearPublished).to.exist;
+            done();
+          });
+      });
+    });
+
+    describe('GET/quartiles', () => {
+      specify('Successful GET/quartiles', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(0);
+            expect(res.body[4]).to.equal(2);
+            done();
+          });
+      });
+
+      specify('Successful GET/quartiles: no data', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles?yearStart=2020&yearEnd=2010`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.deep.equal([0, 0, 0, 0, 0]);
             done();
           });
       });
@@ -321,11 +365,11 @@ describe('/fe/papers', () => {
       });
     });
 
-    describe('Filters GET/paged', () => {
-      specify('Filter yearStart GET/paged', (done) => {
+    describe('Filters GET/info', () => {
+      specify('Filter yearStart GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&yearStart=${2021}`)
+          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&yearStart=${2021}`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -343,10 +387,10 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Filter yearEnd GET/paged', (done) => {
+      specify('Filter yearEnd GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&yearEnd=${2021}`)
+          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&yearEnd=${2021}`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -364,11 +408,11 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Filter authors GET/paged', (done) => {
+      specify('Filter authors GET/info', (done) => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&authorIds=["${dummyAuthor._id}"]`
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&authorIds=["${dummyAuthor._id}"]`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -387,11 +431,11 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Filter authors multiple GET/paged', (done) => {
+      specify('Filter authors multiple GET/info', (done) => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&authorIds=["${dummyAuthor._id}", "${dummyAuthor2._id}"]`
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&authorIds=["${dummyAuthor._id}", "${dummyAuthor2._id}"]`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -410,11 +454,11 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Filter venue GET/paged', (done) => {
+      specify('Filter venue GET/info', (done) => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&venueIds=["${dummyVenue._id}"]`
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&venueIds=["${dummyVenue._id}"]`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -433,11 +477,11 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Filter typeOfPaper GET/paged', (done) => {
+      specify('Filter typeOfPaper GET/info', (done) => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&typesOfPaper=["inproceedings"]`
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&typesOfPaper=["inproceedings"]`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -456,11 +500,11 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Filter fieldsOfStudy GET/paged', (done) => {
+      specify('Filter fieldsOfStudy GET/info', (done) => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&fieldsOfStudy=["Computer Science"]`
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&fieldsOfStudy=["Computer Science"]`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -479,10 +523,10 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Filter publisher GET/paged', (done) => {
+      specify('Filter publisher GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&publishers=["CBA"]`)
+          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&publishers=["CBA"]`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -500,10 +544,10 @@ describe('/fe/papers', () => {
           });
       });
 
-      specify('Filter openAccess GET/paged', (done) => {
+      specify('Filter openAccess GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&openAccess=true`)
+          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&openAccess=true`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);

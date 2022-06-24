@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose, { FilterQuery } from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
+import { Paper } from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
 import {
   buildFindObject,
@@ -8,10 +9,10 @@ import {
   buildSortObject,
   fixYearData,
   getMatchObject,
+  quartilePosition,
 } from './queryUtils';
 import { NA } from '../../../config/consts';
-import { DatapointsOverTime, QueryFilters, PagedParameters, Pattern } from '../../../types';
-import { Paper } from '../../models/interfaces';
+import { DatapointsOverTime, PagedParameters, Pattern, QueryFilters } from '../../../types';
 
 const passport = require('passport');
 
@@ -68,7 +69,7 @@ export function initialize(
   );
 
   router.get(
-    route + '/paged',
+    route + '/info',
     passport.authenticate('user', { session: false }),
     async (
       req: express.Request<{}, {}, {}, QueryFilters & PagedParameters>,
@@ -124,32 +125,35 @@ export function initialize(
       try {
         const findObject = buildFindObject(req.query);
         const rowCount = await model.countDocuments(findObject);
-        const quartileData = await model
-          .aggregate([
-            getMatchObject(findObject),
-            { $sort: { inCitationsCount: 1 } },
-            { $project: { inCitationsCount: 1 } },
-            {
-              $facet: {
-                min: [{ $limit: 1 }],
-                first: [{ $skip: Math.round(rowCount * 0.25) }, { $limit: 1 }],
-                median: [{ $skip: Math.round(rowCount * 0.5) }, { $limit: 1 }],
-                third: [{ $skip: Math.round(rowCount * 0.75) }, { $limit: 1 }],
-                max: [{ $skip: Math.round(rowCount - 1) }, { $limit: 1 }],
+        let response: number[];
+        if (rowCount === 0) {
+          response = [0, 0, 0, 0, 0];
+        } else {
+          const quartileData = await model
+            .aggregate([
+              getMatchObject(findObject),
+              { $sort: { inCitationsCount: 1 } },
+              { $project: { inCitationsCount: 1 } },
+              {
+                $facet: {
+                  min: [{ $limit: 1 }],
+                  first: [{ $skip: quartilePosition(rowCount, 0.25) }, { $limit: 1 }],
+                  median: [{ $skip: quartilePosition(rowCount, 0.5) }, { $limit: 1 }],
+                  third: [{ $skip: quartilePosition(rowCount, 0.75) }, { $limit: 1 }],
+                  max: [{ $skip: rowCount - 1 }, { $limit: 1 }],
+                },
               },
-            },
-          ])
-          .allowDiskUse(true);
-        // const response = quartileData;
-        console.log(quartileData, quartileData[0].min[0]);
-        const response = [
-          quartileData[0].min[0].inCitationsCount,
-          quartileData[0].first[0].inCitationsCount,
-          quartileData[0].median[0].inCitationsCount,
-          quartileData[0].third[0].inCitationsCount,
-          quartileData[0].max[0].inCitationsCount,
-        ];
-        console.log(response);
+            ])
+            .allowDiskUse(true);
+
+          response = [
+            quartileData[0].min[0].inCitationsCount,
+            quartileData[0].first[0].inCitationsCount,
+            quartileData[0].median[0].inCitationsCount,
+            quartileData[0].third[0].inCitationsCount,
+            quartileData[0].max[0].inCitationsCount,
+          ];
+        }
         res.json(response);
       } catch (error: any) {
         /* istanbul ignore next */

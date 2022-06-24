@@ -170,10 +170,21 @@ describe('/fe/authors', () => {
           });
       });
 
-      specify('Unauthorized GET/paged', (done) => {
+      specify('Unauthorized GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged`)
+          .get(`${apiOptions.server.baseRoute}${route}/info`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(401);
+            done();
+          });
+      });
+
+      specify('Unauthorized GET/quartiles', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -193,10 +204,10 @@ describe('/fe/authors', () => {
       });
     });
     describe('Missing parameters', () => {
-      specify('Missing parameters GET/paged', (done) => {
+      specify('Missing parameters GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged`)
+          .get(`${apiOptions.server.baseRoute}${route}/info`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -255,11 +266,11 @@ describe('/fe/authors', () => {
       });
     });
 
-    describe('GET/paged', () => {
-      specify('Successful GET/paged', (done) => {
+    describe('GET/info', () => {
+      specify('Successful GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50`)
+          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -277,11 +288,11 @@ describe('/fe/authors', () => {
           });
       });
 
-      specify('Successful GET/paged: sorted', (done) => {
+      specify('Successful GET/info: sorted', (done) => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/paged?page=0&pageSize=50&sortField=inCitationsCount&sortDirection=asc`
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&sortField=inCitationsCount&sortDirection=asc`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -299,6 +310,56 @@ describe('/fe/authors', () => {
             expect(res.body.rows[0].inCitationsPerPaper).to.exist;
             expect(res.body.rows[0].link).to.not.exist;
             expect(res.body.rows[1].link).to.exist;
+            done();
+          });
+      });
+
+      specify('Successful GET/info: no data', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&yearStart=2020&yearEnd=2010`
+          )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(0);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]).to.not.exist;
+            done();
+          });
+      });
+    });
+
+    describe('GET/quartiles', () => {
+      specify('Successful GET/quartiles', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(0);
+            expect(res.body[4]).to.equal(3);
+            done();
+          });
+      });
+
+      specify('Successful GET/quartiles: no data', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles?yearStart=2020&yearEnd=2010`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.deep.equal([0, 0, 0, 0, 0]);
             done();
           });
       });

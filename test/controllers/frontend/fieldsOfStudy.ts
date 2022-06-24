@@ -17,8 +17,22 @@ let apiServer: APIServer;
 let apiOptions: APIOptions;
 let userToken: string;
 
-describe('/fe/venues', () => {
-  const route = '/fe/venues';
+describe('/fe/fields', () => {
+  const route = '/fe/fields';
+
+  const dummyAuthor = {
+    _id: new mongoose.Types.ObjectId(),
+    fullname: 'test',
+    email: 'test@test.com',
+    dblpId: 'some-id-125',
+  };
+
+  const dummyAuthor2 = {
+    _id: new mongoose.Types.ObjectId(),
+    fullname: 'hello',
+    email: 'test@test.com',
+    dblpId: 'some-id-126',
+  };
 
   const dummyVenue = {
     _id: new mongoose.Types.ObjectId(),
@@ -30,16 +44,6 @@ describe('/fe/venues', () => {
     _id: new mongoose.Types.ObjectId(),
     names: ['test'],
     dblpId: 'some-id-124',
-  };
-
-  const dummyAuthor = {
-    _id: new mongoose.Types.ObjectId(),
-    fullname: 'Fullname',
-  };
-
-  const dummyAuthor2 = {
-    _id: new mongoose.Types.ObjectId(),
-    fullname: 'testName',
   };
 
   const dummyPaper = {
@@ -102,6 +106,7 @@ describe('/fe/venues', () => {
     const { app, options } = await Setup.initApi();
     apiServer = app;
     apiOptions = options;
+
     const adminToken = (
       await chai
         .request(app.app)
@@ -120,6 +125,7 @@ describe('/fe/venues', () => {
       createdAt: new Date(),
       createdBy: adminUser._id,
     };
+
     await apiServer.models.Venue.create(
       lodash.merge(dummyVenue, dummyCreated),
       lodash.merge(dummyVenue2, dummyCreated)
@@ -185,43 +191,6 @@ describe('/fe/venues', () => {
             done();
           });
       });
-
-      specify('Unauthorized GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(401);
-            done();
-          });
-      });
-    });
-
-    describe('Missing Parameters', () => {
-      specify('Missing parameters GET/info', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/info`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
-            done();
-          });
-      });
-
-      specify('Missing Parameters GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
-            done();
-          });
-      });
     });
   });
 
@@ -273,7 +242,7 @@ describe('/fe/venues', () => {
             expect(res.body.rowCount).to.equal(3);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].fieldsOfStudy).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
             expect(res.body.rows[0].yearPublishedFirst).to.exist;
             expect(res.body.rows[0].yearPublishedLast).to.exist;
@@ -296,15 +265,13 @@ describe('/fe/venues', () => {
             expect(res.body.rowCount).to.equal(3);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].fieldsOfStudy).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
-            expect(res.body.rows[2].inCitationsCount).to.equal(2);
+            expect(res.body.rows[2].inCitationsCount).to.equal(3);
             expect(res.body.rows[0].yearPublishedFirst).to.exist;
             expect(res.body.rows[0].yearPublishedLast).to.exist;
             expect(res.body.rows[0].papersCount).to.exist;
             expect(res.body.rows[0].inCitationsPerPaper).to.exist;
-            expect(res.body.rows[0].link).to.not.exist;
-            expect(res.body.rows[1].link).to.exist;
             done();
           });
       });
@@ -339,7 +306,7 @@ describe('/fe/venues', () => {
             expect(res.body.length).to.equal(5);
             expect(res.body).to.be.an('array');
             expect(res.body[0]).to.equal(0);
-            expect(res.body[4]).to.equal(2);
+            expect(res.body[4]).to.equal(3);
             done();
           });
       });
@@ -355,23 +322,6 @@ describe('/fe/venues', () => {
             expect(res.body.length).to.equal(5);
             expect(res.body).to.be.an('array');
             expect(res.body).to.deep.equal([0, 0, 0, 0, 0]);
-            done();
-          });
-      });
-    });
-
-    describe('GET/list', () => {
-      specify('Successful GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list?pattern=hel`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(200);
-            expect(res.body).to.be.an('array');
-            expect(res.body).to.be.length(1);
-            expect(res.body[0].names).to.equal('hello');
             done();
           });
       });

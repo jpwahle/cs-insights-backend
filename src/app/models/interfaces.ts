@@ -74,8 +74,10 @@ export interface Paper extends mongoose.Document {
 
   inCitations: mongoose.Types.ObjectId[];
   inCitationsCount: number;
+  // inCitationsRef: string[]; //TODO add
   outCitations: mongoose.Types.ObjectId[];
   outCitationsCount: number;
+  // outCitationsRef: string[]; //TODO add
 
   openAccess: boolean;
 

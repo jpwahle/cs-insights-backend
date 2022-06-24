@@ -17,8 +17,8 @@ let apiServer: APIServer;
 let apiOptions: APIOptions;
 let userToken: string;
 
-describe('/fe/venues', () => {
-  const route = '/fe/venues';
+describe('/fe/types', () => {
+  const route = '/fe/types';
 
   const dummyVenue = {
     _id: new mongoose.Types.ObjectId(),
@@ -185,43 +185,6 @@ describe('/fe/venues', () => {
             done();
           });
       });
-
-      specify('Unauthorized GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(401);
-            done();
-          });
-      });
-    });
-
-    describe('Missing Parameters', () => {
-      specify('Missing parameters GET/info', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/info`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
-            done();
-          });
-      });
-
-      specify('Missing Parameters GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
-            done();
-          });
-      });
     });
   });
 
@@ -240,7 +203,7 @@ describe('/fe/venues', () => {
             expect(res.body.years[84]).to.equal(2020);
             expect(res.body.counts).to.be.an('array');
             expect(res.body.counts[0]).to.equal(0);
-            expect(res.body.counts[84]).to.equal(0);
+            expect(res.body.counts[84]).to.equal(1);
             done();
           });
       });
@@ -270,10 +233,10 @@ describe('/fe/venues', () => {
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.rowCount).to.equal(3);
+            expect(res.body.rowCount).to.equal(2);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].typeOfPaper).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
             expect(res.body.rows[0].yearPublishedFirst).to.exist;
             expect(res.body.rows[0].yearPublishedLast).to.exist;
@@ -293,18 +256,16 @@ describe('/fe/venues', () => {
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
-            expect(res.body.rowCount).to.equal(3);
+            expect(res.body.rowCount).to.equal(2);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].typeOfPaper).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
-            expect(res.body.rows[2].inCitationsCount).to.equal(2);
+            expect(res.body.rows[1].inCitationsCount).to.equal(2);
             expect(res.body.rows[0].yearPublishedFirst).to.exist;
             expect(res.body.rows[0].yearPublishedLast).to.exist;
             expect(res.body.rows[0].papersCount).to.exist;
             expect(res.body.rows[0].inCitationsPerPaper).to.exist;
-            expect(res.body.rows[0].link).to.not.exist;
-            expect(res.body.rows[1].link).to.exist;
             done();
           });
       });
@@ -338,7 +299,7 @@ describe('/fe/venues', () => {
             expect(res).to.have.status(200);
             expect(res.body.length).to.equal(5);
             expect(res.body).to.be.an('array');
-            expect(res.body[0]).to.equal(0);
+            expect(res.body[0]).to.equal(1);
             expect(res.body[4]).to.equal(2);
             done();
           });
@@ -355,23 +316,6 @@ describe('/fe/venues', () => {
             expect(res.body.length).to.equal(5);
             expect(res.body).to.be.an('array');
             expect(res.body).to.deep.equal([0, 0, 0, 0, 0]);
-            done();
-          });
-      });
-    });
-
-    describe('GET/list', () => {
-      specify('Successful GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list?pattern=hel`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(200);
-            expect(res.body).to.be.an('array');
-            expect(res.body).to.be.length(1);
-            expect(res.body[0].names).to.equal('hello');
             done();
           });
       });
