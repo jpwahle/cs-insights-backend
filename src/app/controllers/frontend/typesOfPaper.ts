@@ -143,4 +143,46 @@ export function initialize(
       }
     }
   );
+
+  router.get(
+    route + '/topk',
+    passport.authenticate('user', { session: false }),
+    async (
+      req: express.Request<{}, {}, {}, QueryFilters & PagedParameters>,
+      res: express.Response
+    ) => {
+      const pageSize = parseInt(req.query.pageSize);
+      const page = parseInt(req.query.page);
+      if ((page != 0 && !page) || !pageSize) {
+        res.status(422).json({
+          message: 'The request is missing the required parameter "page", "pageSize".',
+        });
+      } else {
+        try {
+          const topkData = await model.aggregate([
+            buildMatchObject(req.query),
+            {
+              $group: {
+                _id: '$typeOfPaper',
+                inCitationsCount: { $sum: '$inCitationsCount' },
+              },
+            },
+            buildSortObject(req.query.sortField, 'desc'),
+            { $limit: pageSize },
+            {
+              $project: {
+                x: '$_id',
+                y: '$inCitationsCount',
+                _id: 0,
+              },
+            },
+          ]);
+          res.json(topkData);
+        } catch (error: any) {
+          /* istanbul ignore next */
+          res.status(500).json({ message: error.message });
+        }
+      }
+    }
+  );
 }
