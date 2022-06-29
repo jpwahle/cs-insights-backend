@@ -12,6 +12,15 @@ export type PagedParameters = {
   sortDirection: string;
 };
 
+export interface Pattern {
+  column?: string;
+  pattern?: string;
+}
+
+export type Metric = { metric: string };
+
+export type TopKParameters = { k: string } & Metric;
+
 export interface QueryFilters {
   yearStart?: string;
   yearEnd?: string;
@@ -21,11 +30,8 @@ export interface QueryFilters {
   typesOfPaper?: string;
   fieldsOfStudy?: string;
   publishers?: string;
-}
-
-export interface Pattern {
-  column?: string;
-  pattern?: string;
+  citationsMin?: string;
+  citationsMax?: string;
 }
 
 export interface FilterMongo {
@@ -39,4 +45,8 @@ export interface FilterMongo {
   typeOfPaper?: { $in: string[] };
   fieldsOfStudy?: { $in: string[] };
   publisher?: { $in: string[] };
+  inCitationsCount?: {
+    $gte?: number;
+    $lte?: number;
+  };
 }

@@ -129,7 +129,6 @@ export const authorSchema = new mongoose.Schema(
     createdAt: { type: Date, required: true },
   },
   { collection: 'authors' }
-  //@ts-ignore should be fixed by updating mongoose (https://github.com/Automattic/mongoose/issues/10590), but we can't because or express-restify-mongoose TODO
 );
 
 export const affiliationSchema = new mongoose.Schema(

@@ -1,6 +1,6 @@
 import mongoose, { FilterQuery } from 'mongoose';
 import { DatapointsOverTime, FilterMongo, QueryFilters } from '../../../types';
-import { NA } from '../../../config/consts';
+import { NA_GROUPS } from '../../../config/consts';
 
 // no endpoints in this file
 
@@ -42,6 +42,14 @@ export function buildFindObject(query: QueryFilters): FilterQuery<FilterMongo> {
     findObject.publisher = {
       $in: JSON.parse(query.publishers),
     };
+  }
+  if (query.citationsMin) {
+    findObject.inCitationsCount = findObject.inCitationsCount || {};
+    findObject.inCitationsCount.$gte = parseInt(query.citationsMin);
+  }
+  if (query.citationsMax) {
+    findObject.inCitationsCount = findObject.inCitationsCount || {};
+    findObject.inCitationsCount.$lte = parseInt(query.citationsMax);
   }
   return findObject;
 }
@@ -110,7 +118,7 @@ export function fixYearData(
     }
   }
   if (offset > 0) {
-    data.years.splice(0, 0, NA);
+    data.years.splice(0, 0, NA_GROUPS);
     data.counts.splice(0, 0, naValue);
   }
   return data;
@@ -126,17 +134,17 @@ export function quartilePosition(rowCount: number, multiplier: number): number {
   }
 }
 
-export function computeQuartiles(quartileData: { inCitationsCount: number }[]): number[] {
+export function computeQuartiles(quartileData: { count: number }[]): number[] {
   const rowCount = quartileData.length;
   if (rowCount === 0) {
     return [0, 0, 0, 0, 0];
   } else {
     return [
-      quartileData[0].inCitationsCount,
-      quartileData[quartilePosition(rowCount, 0.25)].inCitationsCount,
-      quartileData[quartilePosition(rowCount, 0.5)].inCitationsCount,
-      quartileData[quartilePosition(rowCount, 0.75)].inCitationsCount,
-      quartileData[rowCount - 1].inCitationsCount,
+      quartileData[0].count,
+      quartileData[quartilePosition(rowCount, 0.25)].count,
+      quartileData[quartilePosition(rowCount, 0.5)].count,
+      quartileData[quartilePosition(rowCount, 0.75)].count,
+      quartileData[rowCount - 1].count,
     ];
   }
 }

@@ -2,9 +2,15 @@ import express from 'express';
 import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
-import { DatapointsOverTime, PagedParameters, QueryFilters } from '../../../types';
+import {
+  DatapointsOverTime,
+  Metric,
+  PagedParameters,
+  QueryFilters,
+  TopKParameters,
+} from '../../../types';
 import { buildMatchObject, buildSortObject, computeQuartiles, fixYearData } from './queryUtils';
-import { NA } from '../../../config/consts';
+import { NA_GROUPS } from '../../../config/consts';
 
 const passport = require('passport');
 
@@ -100,13 +106,15 @@ export function initialize(
             },
             {
               $project: {
-                _id: { $ifNull: ['$_id', NA] },
-                venue: { $ifNull: ['$_id', NA] },
+                _id: { $ifNull: ['$_id', NA_GROUPS] },
+                venue: { $ifNull: ['$_id', NA_GROUPS] },
                 yearPublishedFirst: 1,
                 yearPublishedLast: 1,
                 papersCount: 1,
                 inCitationsCount: 1,
-                inCitationsPerPaper: { $divide: ['$inCitationsCount', '$papersCount'] },
+                inCitationsPerPaper: {
+                  $divide: ['$inCitationsCount', '$papersCount'],
+                },
                 link: { $concat: ['https://dblp.org/search?q=', '$_id'] },
               },
             },
@@ -132,59 +140,44 @@ export function initialize(
   router.get(
     route + '/quartiles',
     passport.authenticate('user', { session: false }),
-    async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
-      try {
-        // let start;
-        // let end;
-        // start = performance.now();
-        // const rowCount = (
-        //   await model.aggregate([
-        //     matchObject,
-        //     { $group: { _id: '$venue' } },
-        //     {
-        //       $count: 'count',
-        //     },
-        //   ])
-        // )[0].count;
-
-        const quartileData = await model
-          .aggregate([
-            buildMatchObject(req.query),
-            {
-              $group: {
-                _id: '$venue',
-                inCitationsCount: { $sum: '$inCitationsCount' },
+    async (req: express.Request<{}, {}, {}, QueryFilters & Metric>, res: express.Response) => {
+      const metric = req.query.metric;
+      if (!metric) {
+        res.status(422).json({
+          message: 'The request is missing the required parameter "metric".',
+        });
+      } else {
+        try {
+          let matchObject = buildMatchObject(req.query);
+          if (!matchObject.$match.venueId) {
+            matchObject.$match.venueId = { $ne: null };
+          }
+          const quartileData = await model
+            .aggregate([
+              matchObject,
+              {
+                $group: {
+                  _id: '$venue',
+                  count: {
+                    $sum: req.query.metric === 'inCitationsCount' ? '$inCitationsCount' : 1,
+                  },
+                },
               },
-            },
-            { $sort: { inCitationsCount: 1 } },
-            // { $project: { inCitationsCount: 1 } },
-            // {
-            //   $facet: {
-            //     min: [{ $limit: 1 }],
-            //     first: [{ $skip: Math.floor(rowCount * 0.25) }, { $limit: 1 }],
-            //     median: [{ $skip: Math.floor(rowCount * 0.5) }, { $limit: 1 }],
-            //     third: [{ $skip: Math.floor(rowCount * 0.75) }, { $limit: 1 }],
-            //     max: [{ $skip: rowCount - 1 }, { $limit: 1 }],
-            //   },
-            // },
-          ])
-          .allowDiskUse(true);
+              {
+                $sort: {
+                  count: 1,
+                },
+              },
+            ])
+            .allowDiskUse(true);
 
-        const response = computeQuartiles(quartileData);
+          const response = computeQuartiles(quartileData);
 
-        // const response = [
-        //   quartileData[0].min[0].inCitationsCount,
-        //   quartileData[0].first[0].inCitationsCount,
-        //   quartileData[0].median[0].inCitationsCount,
-        //   quartileData[0].third[0].inCitationsCount,
-        //   quartileData[0].max[0].inCitationsCount,
-        // ];
-        // end = performance.now();
-        // console.log(end - start);
-        res.json(response);
-      } catch (error: any) {
-        /* istanbul ignore next */
-        res.status(500).json({ message: error.message });
+          res.json(response);
+        } catch (error: any) {
+          /* istanbul ignore next */
+          res.status(500).json({ message: error.message });
+        }
       }
     }
   );
@@ -193,32 +186,41 @@ export function initialize(
     route + '/topk',
     passport.authenticate('user', { session: false }),
     async (
-      req: express.Request<{}, {}, {}, QueryFilters & PagedParameters>,
+      req: express.Request<{}, {}, {}, QueryFilters & TopKParameters>,
       res: express.Response
     ) => {
-      // const pageSize = parseInt(req.query.pageSize);
-      const page = parseInt(req.query.page);
-      const pageSize = 2000;
-      if ((page != 0 && !page) || !pageSize) {
+      const k = parseInt(req.query.k);
+      const metric = req.query.metric;
+      if (!k || !metric) {
         res.status(422).json({
-          message: 'The request is missing the required parameter "page", "pageSize".',
+          message: 'The request is missing the required parameter "k" and/or "metric".',
         });
       } else {
         try {
+          let matchObject = buildMatchObject(req.query);
+          if (!matchObject.$match.venueId) {
+            matchObject.$match.venueId = { $ne: null };
+          }
           const topkData = await model.aggregate([
-            buildMatchObject(req.query),
+            matchObject,
             {
               $group: {
                 _id: '$venue',
-                inCitationsCount: { $sum: '$inCitationsCount' },
+                count: {
+                  $sum: metric === 'inCitationsCount' ? '$inCitationsCount' : 1,
+                },
               },
             },
-            buildSortObject(req.query.sortField, 'desc'),
-            { $limit: pageSize },
+            {
+              $sort: {
+                count: -1,
+              },
+            },
+            { $limit: k },
             {
               $project: {
-                x: { $ifNull: ['$_id', NA] },
-                y: '$inCitationsCount',
+                x: '$_id',
+                y: '$count',
                 _id: 0,
               },
             },

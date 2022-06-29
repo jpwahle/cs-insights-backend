@@ -2,9 +2,15 @@ import express from 'express';
 import mongoose from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
-import { DatapointsOverTime, PagedParameters, QueryFilters } from '../../../types';
+import {
+  DatapointsOverTime,
+  Metric,
+  PagedParameters,
+  QueryFilters,
+  TopKParameters,
+} from '../../../types';
 import { buildMatchObject, buildSortObject, computeQuartiles, fixYearData } from './queryUtils';
-import { NA } from '../../../config/consts';
+import { NA_GROUPS } from '../../../config/consts';
 
 const passport = require('passport');
 
@@ -99,8 +105,8 @@ export function initialize(
             },
             {
               $project: {
-                _id: { $ifNull: ['$_id', NA] },
-                publisher: { $ifNull: ['$_id', NA] },
+                _id: { $ifNull: ['$_id', NA_GROUPS] },
+                publisher: { $ifNull: ['$_id', NA_GROUPS] },
                 yearPublishedFirst: 1,
                 yearPublishedLast: 1,
                 papersCount: 1,
@@ -130,25 +136,42 @@ export function initialize(
   router.get(
     route + '/quartiles',
     passport.authenticate('user', { session: false }),
-    async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
-      try {
-        const quartileData = await model
-          .aggregate([
-            buildMatchObject(req.query),
-            {
-              $group: {
-                _id: '$publisher',
-                inCitationsCount: { $sum: '$inCitationsCount' },
+    async (req: express.Request<{}, {}, {}, QueryFilters & Metric>, res: express.Response) => {
+      const metric = req.query.metric;
+      if (!metric) {
+        res.status(422).json({
+          message: 'The request is missing the required parameter "metric".',
+        });
+      } else {
+        try {
+          const matchObject = buildMatchObject(req.query);
+          if (!matchObject.$match.title) {
+            matchObject.$match.title = { $ne: null };
+          }
+          const quartileData = await model
+            .aggregate([
+              matchObject,
+              {
+                $group: {
+                  _id: '$publisher',
+                  count: {
+                    $sum: req.query.metric === 'inCitationsCount' ? '$inCitationsCount' : 1,
+                  },
+                },
               },
-            },
-            { $sort: { inCitationsCount: 1 } },
-          ])
-          .allowDiskUse(true);
-        const response = computeQuartiles(quartileData);
-        res.json(response);
-      } catch (error: any) {
-        /* istanbul ignore next */
-        res.status(500).json({ message: error.message });
+              {
+                $sort: {
+                  count: 1,
+                },
+              },
+            ])
+            .allowDiskUse(true);
+          const response = computeQuartiles(quartileData);
+          res.json(response);
+        } catch (error: any) {
+          /* istanbul ignore next */
+          res.status(500).json({ message: error.message });
+        }
       }
     }
   );
@@ -157,31 +180,41 @@ export function initialize(
     route + '/topk',
     passport.authenticate('user', { session: false }),
     async (
-      req: express.Request<{}, {}, {}, QueryFilters & PagedParameters>,
+      req: express.Request<{}, {}, {}, QueryFilters & TopKParameters>,
       res: express.Response
     ) => {
-      const pageSize = parseInt(req.query.pageSize);
-      const page = parseInt(req.query.page);
-      if ((page != 0 && !page) || !pageSize) {
+      const k = parseInt(req.query.k);
+      const metric = req.query.metric;
+      if (!k || !metric) {
         res.status(422).json({
-          message: 'The request is missing the required parameter "page", "pageSize".',
+          message: 'The request is missing the required parameter "k" and/or "metric".',
         });
       } else {
         try {
+          const matchObject = buildMatchObject(req.query);
+          if (!matchObject.$match.publisher) {
+            matchObject.$match.publisher = { $ne: null };
+          }
           const topkData = await model.aggregate([
-            buildMatchObject(req.query),
+            matchObject,
             {
               $group: {
                 _id: '$publisher',
-                inCitationsCount: { $sum: '$inCitationsCount' },
+                count: {
+                  $sum: metric === 'inCitationsCount' ? '$inCitationsCount' : 1,
+                },
               },
             },
-            buildSortObject(req.query.sortField, 'desc'),
-            { $limit: pageSize },
+            {
+              $sort: {
+                count: -1,
+              },
+            },
+            { $limit: k },
             {
               $project: {
-                x: { $ifNull: ['$_id', NA] },
-                y: '$inCitationsCount',
+                x: '$_id',
+                y: '$count',
                 _id: 0,
               },
             },

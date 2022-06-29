@@ -11,8 +11,14 @@ import {
   getMatchObject,
   quartilePosition,
 } from './queryUtils';
-import { NA } from '../../../config/consts';
-import { DatapointsOverTime, PagedParameters, Pattern, QueryFilters } from '../../../types';
+import { NA, NA_GROUPS } from '../../../config/consts';
+import {
+  DatapointsOverTime,
+  PagedParameters,
+  Pattern,
+  QueryFilters,
+  TopKParameters,
+} from '../../../types';
 
 const passport = require('passport');
 
@@ -96,9 +102,13 @@ export function initialize(
                 inCitationsCount: 1,
                 title: 1,
                 authors: {
-                  $cond: { if: { $arrayElemAt: ['$authors', 0] }, then: '$authors', else: [NA] },
+                  $cond: {
+                    if: { $arrayElemAt: ['$authors', 0] },
+                    then: '$authors',
+                    else: [NA_GROUPS],
+                  },
                 },
-                venue: { $ifNull: ['$venue', NA] },
+                venue: { $ifNull: ['$venue', NA_GROUPS] },
                 pdfUrl: { $arrayElemAt: ['$pdfUrls', 0] },
               },
             },
@@ -124,6 +134,9 @@ export function initialize(
     async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
         const findObject = buildFindObject(req.query);
+        if (!findObject.title) {
+          findObject.title = { $ne: null };
+        }
         const rowCount = await model.countDocuments(findObject);
         let response: number[];
         if (rowCount === 0) {
@@ -166,28 +179,37 @@ export function initialize(
     route + '/topk',
     passport.authenticate('user', { session: false }),
     async (
-      req: express.Request<{}, {}, {}, QueryFilters & PagedParameters>,
+      req: express.Request<{}, {}, {}, QueryFilters & TopKParameters>,
       res: express.Response
     ) => {
-      const pageSize = parseInt(req.query.pageSize);
-      const page = parseInt(req.query.page);
-      if ((page != 0 && !page) || !pageSize) {
+      const k = parseInt(req.query.k);
+      if (!k) {
         res.status(422).json({
-          message: 'The request is missing the required parameter "page", "pageSize".',
+          message: 'The request is missing the required parameter "k".',
         });
       } else {
         try {
+          let matchObject = buildMatchObject(req.query);
+          if (!matchObject.$match.title) {
+            matchObject.$match.title = { $ne: null };
+          }
           const topkData = await model.aggregate([
-            buildMatchObject(req.query),
-            buildSortObject(req.query.sortField, 'desc'),
-            { $limit: pageSize },
+            matchObject,
+            {
+              $sort: {
+                inCitationsCount: -1,
+              },
+            },
+            { $limit: k },
             {
               $project: {
                 x: { $ifNull: ['$title', NA] },
                 y: '$inCitationsCount',
+                _id: 0,
               },
             },
           ]);
+          console.log(topkData);
           res.json(topkData);
         } catch (error: any) {
           /* istanbul ignore next */
