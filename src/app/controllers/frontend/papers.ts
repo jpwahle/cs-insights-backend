@@ -134,9 +134,6 @@ export function initialize(
     async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
         const findObject = buildFindObject(req.query);
-        if (!findObject.title) {
-          findObject.title = { $ne: null };
-        }
         const rowCount = await model.countDocuments(findObject);
         let response: number[];
         if (rowCount === 0) {
@@ -190,9 +187,6 @@ export function initialize(
       } else {
         try {
           let matchObject = buildMatchObject(req.query);
-          if (!matchObject.$match.title) {
-            matchObject.$match.title = { $ne: null };
-          }
           const topkData = await model.aggregate([
             matchObject,
             {
@@ -209,7 +203,6 @@ export function initialize(
               },
             },
           ]);
-          console.log(topkData);
           res.json(topkData);
         } catch (error: any) {
           /* istanbul ignore next */

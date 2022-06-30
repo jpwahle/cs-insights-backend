@@ -135,9 +135,13 @@ export function initialize(
         });
       } else {
         try {
+          const matchObject = buildMatchObject(req.query);
+          if (!matchObject.$match.typeOfPaper) {
+            matchObject.$match.typeOfPaper = { $ne: null };
+          }
           const quartileData = await model
             .aggregate([
-              buildMatchObject(req.query),
+              matchObject,
               {
                 $group: {
                   _id: '$typeOfPaper',

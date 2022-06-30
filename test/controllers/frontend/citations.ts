@@ -5,11 +5,9 @@ import chaiHttp from 'chai-http';
 import { APIServer } from '../../../src/app/apiserver';
 import { APIOptions } from '../../../src/config/interfaces';
 import * as Setup from '../../setup';
-import mongoose from 'mongoose';
+import { createTestdata, createUser, getAdmin } from './testdata';
 
 process.env.NODE_ENV = 'test';
-
-const lodash = require('lodash');
 
 chai.use(chaiHttp);
 
@@ -20,134 +18,13 @@ let userToken: string;
 describe('/fe/citations', () => {
   const route = '/fe/citations';
 
-  const dummyVenue = {
-    _id: new mongoose.Types.ObjectId(),
-    names: ['hello', 'world'],
-    dblpId: 'some-id-123',
-  };
-
-  const dummyVenue2 = {
-    _id: new mongoose.Types.ObjectId(),
-    names: ['test'],
-    dblpId: 'some-id-124',
-  };
-
-  const dummyAuthor = {
-    _id: new mongoose.Types.ObjectId(),
-    fullname: 'hello',
-  };
-
-  const dummyAuthor2 = {
-    _id: new mongoose.Types.ObjectId(),
-    fullname: 'test',
-  };
-
-  const dummyPaper = {
-    title: 'Some Paper Title',
-    abstractText: 'This paper is about a really interesting topic',
-    doi: 'doi/1.23.123',
-    pdfUrls: ['https://dummy-url.de/pdf.pdf'],
-    absUrl: 'https://dummy-url.de/',
-    yearPublished: 2022,
-    inCitationsCount: 2,
-    outCitationsCount: 2,
-    authors: ['hello', 'test'],
-    authorIds: [dummyAuthor._id, dummyAuthor2._id],
-    venue: 'hello',
-    venueId: dummyVenue._id,
-    typeOfPaper: 'article',
-    fieldsOfStudy: ['Computer Science', 'Art'],
-    publisher: 'ABC',
-    openAccess: true,
-    dblpId: 'some-id-127',
-    csvId: '1',
-  };
-
-  const dummyPaper2 = {
-    _id: new mongoose.Types.ObjectId(),
-    title: 'Some Paper Title',
-    abstractText: 'This paper is about a really interesting topic',
-    doi: 'doi/1.23.123',
-    pdfUrls: ['https://dummy-url.de/pdf.pdf'],
-    absUrl: 'https://dummy-url.de/',
-    yearPublished: 2020,
-    inCitationsCount: 0,
-    outCitationsCount: 0,
-    authorIds: null,
-    venueId: null,
-    typeOfPaper: 'article',
-    dblpId: 'some-id-12',
-    csvId: '2',
-  };
-
-  const dummyPaper3 = {
-    title: 'Some Paper Title',
-    abstractText: 'This paper is about a really interesting topic',
-    doi: 'doi/1.23.123',
-    pdfUrls: ['https://dummy-url.de/pdf.pdf'],
-    absUrl: 'https://dummy-url.de/',
-    yearPublished: 2022,
-    inCitationsCount: 1,
-    outCitationsCount: 0,
-    authors: ['hello'],
-    authorIds: [dummyAuthor._id],
-    venue: 'hello',
-    venueId: new mongoose.Types.ObjectId(),
-    typeOfPaper: 'inproceedings',
-    fieldsOfStudy: ['Computer Science'],
-    publisher: 'CBA',
-    openAccess: false,
-    dblpId: 'some-id-129',
-    csvId: '3',
-  };
-
   before(async () => {
     await Setup.initDb();
-    const { app, options } = await Setup.initApi();
-    apiServer = app;
-    apiOptions = options;
-    const adminToken = (
-      await chai
-        .request(app.app)
-        .post(`${options.server.baseRoute}/login`)
-        .send(options.user.default)
-    ).body.token;
-    const adminUser = (
-      await chai
-        .request(app.app)
-        .get(`${options.server.baseRoute}/users?query={"email":"${options.user.default.email}"}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-    ).body[0];
+    ({ apiServer, apiOptions } = await Setup.initApi());
 
-    const dummyCreated = {
-      createdAt: new Date(),
-      createdBy: adminUser._id,
-    };
-    await apiServer.models.Venue.create(
-      lodash.merge(dummyVenue, dummyCreated),
-      lodash.merge(dummyVenue2, dummyCreated)
-    );
-    await apiServer.models.Author.create(
-      lodash.merge(dummyAuthor, dummyCreated),
-      lodash.merge(dummyAuthor2, dummyCreated)
-    );
-    await apiServer.models.Paper.create(
-      lodash.merge(dummyPaper, dummyCreated),
-      lodash.merge(dummyPaper2, dummyCreated),
-      lodash.merge(dummyPaper3, dummyCreated)
-    );
-
-    await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/register`).send({
-      email: 'dummy@user.de',
-      password: 'insecure',
-      fullname: 'Your Name',
-    });
-    userToken = (
-      await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/login`).send({
-        email: 'dummy@user.de',
-        password: 'insecure',
-      })
-    ).body.token;
+    const adminUser = await getAdmin(apiServer, apiOptions);
+    await createTestdata(apiServer, adminUser);
+    userToken = await createUser(apiServer, apiOptions);
   });
 
   after(async () => {
@@ -230,7 +107,7 @@ describe('/fe/citations', () => {
             expect(res.body.years[84]).to.equal(2020);
             expect(res.body.counts).to.be.an('array');
             expect(res.body.counts[0]).to.equal(0);
-            expect(res.body.counts[86]).to.equal(2);
+            expect(res.body.counts[84]).to.equal(1);
             done();
           });
       });

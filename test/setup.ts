@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import { initServer } from '../src/app';
 
 let mongod: MongoMemoryServer;
-export let app: APIServer;
+export let apiServer: APIServer;
 
 export async function initDb() {
   mongod = await MongoMemoryServer.create();
@@ -30,18 +30,18 @@ export async function clearDatabase(dropDatabases: string[] = []) {
 }
 
 export async function initApi(): Promise<{
-  app: APIServer;
-  options: APIOptions;
+  apiServer: APIServer;
+  apiOptions: APIOptions;
 }> {
-  const options = await loadOptions('./test', 'options.js');
-  options.database.url = mongod.getUri();
+  const apiOptions = await loadOptions('./test', 'options.js');
+  apiOptions.database.url = mongod.getUri();
 
-  if (app) {
-    return { app, options };
+  if (apiServer) {
+    return { apiServer, apiOptions };
   }
 
-  options.server.port = 3002;
-  app = await initServer(options);
+  apiOptions.server.port = 3002;
+  apiServer = await initServer(apiOptions);
 
-  return { app, options };
+  return { apiServer, apiOptions };
 }

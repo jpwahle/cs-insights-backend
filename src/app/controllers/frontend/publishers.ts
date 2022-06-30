@@ -145,8 +145,8 @@ export function initialize(
       } else {
         try {
           const matchObject = buildMatchObject(req.query);
-          if (!matchObject.$match.title) {
-            matchObject.$match.title = { $ne: null };
+          if (!matchObject.$match.publisher) {
+            matchObject.$match.publisher = { $ne: null };
           }
           const quartileData = await model
             .aggregate([

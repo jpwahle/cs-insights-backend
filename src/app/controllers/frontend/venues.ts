@@ -170,9 +170,7 @@ export function initialize(
               },
             ])
             .allowDiskUse(true);
-
           const response = computeQuartiles(quartileData);
-
           res.json(response);
         } catch (error: any) {
           /* istanbul ignore next */
