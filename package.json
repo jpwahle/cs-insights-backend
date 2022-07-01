@@ -10,7 +10,7 @@
     "build": "tsc -p .",
     "start": "NODE_ENV=production node ./lib/main.js",
     "cluster": "NODE_ENV=production node ./lib/cluster.js",
-    "dev": "docker start mongodev_schemas && NODE_ENV=development tsnd ./src/cluster.ts"
+    "dev": "docker start mongodev && NODE_ENV=development tsnd ./src/cluster.ts"
   },
   "repository": {
     "type": "git",
