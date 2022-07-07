@@ -15,8 +15,8 @@ let apiServer: APIServer;
 let apiOptions: APIOptions;
 let userToken: string;
 
-describe('/fe/authors', () => {
-  const route = '/fe/authors';
+describe('/fe/fields', () => {
+  const route = '/fe/fields';
 
   before(async () => {
     await Setup.initDb();
@@ -76,44 +76,9 @@ describe('/fe/authors', () => {
             done();
           });
       });
-
-      specify('Unauthorized GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(401);
-            done();
-          });
-      });
     });
 
     describe('Missing Parameters', () => {
-      specify('Missing parameters GET/info: page', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/info?pageSize=100`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
-            done();
-          });
-      });
-
-      specify('Missing parameters GET/info: pageSize', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/info?page=0`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
-            done();
-          });
-      });
-
       specify('Missing parameters GET/quartiles: metric', (done) => {
         chai
           .request(apiServer.app)
@@ -142,18 +107,6 @@ describe('/fe/authors', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/topk?metric=papersCount`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
-            done();
-          });
-      });
-
-      specify('Missing Parameters GET/list: pattern ', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -212,7 +165,7 @@ describe('/fe/authors', () => {
             expect(res.body.rowCount).to.equal(3);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].author).to.exist;
+            expect(res.body.rows[0].fieldsOfStudy).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
             expect(res.body.rows[0].yearPublishedFirst).to.exist;
             expect(res.body.rows[0].yearPublishedLast).to.exist;
@@ -235,15 +188,13 @@ describe('/fe/authors', () => {
             expect(res.body.rowCount).to.equal(3);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].author).to.exist;
+            expect(res.body.rows[0].fieldsOfStudy).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
             expect(res.body.rows[2].inCitationsCount).to.equal(3);
             expect(res.body.rows[0].yearPublishedFirst).to.exist;
             expect(res.body.rows[0].yearPublishedLast).to.exist;
             expect(res.body.rows[0].papersCount).to.exist;
             expect(res.body.rows[0].inCitationsPerPaper).to.exist;
-            expect(res.body.rows[0].link).to.not.exist;
-            expect(res.body.rows[1].link).to.exist;
             done();
           });
       });
@@ -350,23 +301,6 @@ describe('/fe/authors', () => {
             expect(res.body[0].x).to.exist;
             expect(res.body[0].y).to.equal(3);
             expect(res.body[1].y).to.equal(2);
-            done();
-          });
-      });
-    });
-
-    describe('GET/list', () => {
-      specify('Successful GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list?pattern=auThor1`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(200);
-            expect(res.body).to.be.an('array');
-            expect(res.body).to.be.length(1);
-            expect(res.body[0].fullname).to.equal('author1');
             done();
           });
       });

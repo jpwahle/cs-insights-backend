@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
-import { DatapointsOverTime, FilterMongo, FilterQuery } from '../../../types';
-import { NA } from '../../../config/consts';
+import mongoose, { FilterQuery } from 'mongoose';
+import { DatapointsOverTime, FilterMongo, QueryFilters } from '../../../types';
+import { NA_GROUPS } from '../../../config/consts';
 
 // no endpoints in this file
 
 // For use in queries with find()
-export function buildFindObject(query: FilterQuery) {
-  const findObject: FilterMongo = {};
+export function buildFindObject(query: QueryFilters): FilterQuery<FilterMongo> {
+  const findObject: FilterQuery<FilterMongo> = {};
   if (query.yearStart) {
     findObject.yearPublished = findObject.yearPublished || {};
     findObject.yearPublished.$gte = parseInt(query.yearStart);
@@ -15,14 +15,14 @@ export function buildFindObject(query: FilterQuery) {
     findObject.yearPublished = findObject.yearPublished || {};
     findObject.yearPublished.$lte = parseInt(query.yearEnd);
   }
-  if (query.authors) {
-    findObject.authors = {
-      $in: JSON.parse(query.authors).map((author: string) => new mongoose.Types.ObjectId(author)),
+  if (query.authorIds) {
+    findObject.authorIds = {
+      $in: JSON.parse(query.authorIds).map((author: string) => new mongoose.Types.ObjectId(author)),
     };
   }
-  if (query.venues) {
-    findObject.venue = {
-      $in: JSON.parse(query.venues).map((venue: string) => new mongoose.Types.ObjectId(venue)),
+  if (query.venueIds) {
+    findObject.venueId = {
+      $in: JSON.parse(query.venueIds).map((venue: string) => new mongoose.Types.ObjectId(venue)),
     };
   }
   if (query.openAccess) {
@@ -43,16 +43,24 @@ export function buildFindObject(query: FilterQuery) {
       $in: JSON.parse(query.publishers),
     };
   }
+  if (query.citationsMin) {
+    findObject.inCitationsCount = findObject.inCitationsCount || {};
+    findObject.inCitationsCount.$gte = parseInt(query.citationsMin);
+  }
+  if (query.citationsMax) {
+    findObject.inCitationsCount = findObject.inCitationsCount || {};
+    findObject.inCitationsCount.$lte = parseInt(query.citationsMax);
+  }
   return findObject;
 }
 
-export function getMatchObject(findObject: FilterMongo) {
+export function getMatchObject(findObject: FilterQuery<FilterMongo>) {
   return { $match: findObject };
 }
 
-// For use in the "aggregate" framework
-export function buildMatchObject(query: FilterQuery) {
-  const findObject: FilterMongo = buildFindObject(query);
+// For use in the aggregation framework
+export function buildMatchObject(query: QueryFilters) {
+  const findObject: FilterQuery<FilterMongo> = buildFindObject(query);
   return getMatchObject(findObject);
 }
 
@@ -110,8 +118,33 @@ export function fixYearData(
     }
   }
   if (offset > 0) {
-    data.years.splice(0, 0, NA);
+    data.years.splice(0, 0, NA_GROUPS);
     data.counts.splice(0, 0, naValue);
   }
   return data;
+}
+
+// if there are only a handful of data points, the index can go out of bounds
+export function quartilePosition(rowCount: number, multiplier: number): number {
+  const rounded = Math.round(rowCount * multiplier);
+  if (rounded >= rowCount) {
+    return rowCount - 1;
+  } else {
+    return rounded;
+  }
+}
+
+export function computeQuartiles(quartileData: { count: number }[]): number[] {
+  const rowCount = quartileData.length;
+  if (rowCount === 0) {
+    return [0, 0, 0, 0, 0];
+  } else {
+    return [
+      quartileData[0].count,
+      quartileData[quartilePosition(rowCount, 0.25)].count,
+      quartileData[quartilePosition(rowCount, 0.5)].count,
+      quartileData[quartilePosition(rowCount, 0.75)].count,
+      quartileData[rowCount - 1].count,
+    ];
+  }
 }

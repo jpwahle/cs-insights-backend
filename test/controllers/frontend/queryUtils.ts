@@ -8,7 +8,7 @@ import {
   fixYearData,
 } from '../../../src/app/controllers/frontend/queryUtils';
 import mongoose from 'mongoose';
-import { NA } from '../../../src/config/consts';
+import { NA_GROUPS } from '../../../src/config/consts';
 
 process.env.NODE_ENV = 'test';
 
@@ -18,12 +18,14 @@ describe('queryUtils', () => {
       const queryParameters = {
         yearStart: '2010',
         yearEnd: '2012',
-        authors: '["1234567890ABCD0123456789"]',
-        venues: '["1234567890ABCDEF01234567"]',
+        authorIds: '["1234567890ABCD0123456789"]',
+        venueIds: '["1234567890ABCDEF01234567"]',
         typesOfPaper: '["article", "inproceedings"]',
         fieldsOfStudy: '["Art", "History"]',
         publishers: '["ACM"]',
         openAccess: 'true',
+        citationsMin: '1',
+        citationsMax: '10000',
       };
       const findObj = buildFindObject(queryParameters);
       const expected = {
@@ -31,12 +33,16 @@ describe('queryUtils', () => {
           $gte: 2010,
           $lte: 2012,
         },
-        authors: { $in: [new mongoose.Types.ObjectId('1234567890ABCD0123456789')] },
-        venue: { $in: [new mongoose.Types.ObjectId('1234567890ABCDEF01234567')] },
+        authorIds: { $in: [new mongoose.Types.ObjectId('1234567890ABCD0123456789')] },
+        venueId: { $in: [new mongoose.Types.ObjectId('1234567890ABCDEF01234567')] },
         typeOfPaper: { $in: ['article', 'inproceedings'] },
         fieldsOfStudy: { $in: ['Art', 'History'] },
         publisher: { $in: ['ACM'] },
         openAccess: true,
+        inCitationsCount: {
+          $gte: 1,
+          $lte: 10000,
+        },
       };
       assert.deepEqual(findObj, expected);
     });
@@ -140,7 +146,7 @@ describe('queryUtils', () => {
       const data = { years: [null, 1863, 1990, 1991, 1992], counts: [3, 1, 0, 1, 2] };
       const fixedData = fixYearData(data, undefined, undefined);
       assert.equal(fixedData.years.length, 2022 - 1936 + 2);
-      assert.equal(fixedData.years[0], NA);
+      assert.equal(fixedData.years[0], NA_GROUPS);
       assert.equal(fixedData.counts[0], 4);
     });
   });

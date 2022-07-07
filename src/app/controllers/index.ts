@@ -7,6 +7,10 @@ import * as venues from './venues';
 import * as venuesFE from './frontend/venues';
 import * as authors from './authors';
 import * as authorsFE from './frontend/authors';
+import * as fieldsOfStudyFE from './frontend/fieldsOfStudy';
+import * as typesOfPaperFE from './frontend/typesOfPaper';
+import * as publishersFE from './frontend/publishers';
+import * as citationsFE from './frontend/citations';
 import * as users from './users';
 import { APIOptions } from '../../config/interfaces';
 
@@ -18,9 +22,13 @@ export class Controllers {
     venues.initialize(models.Venue, router, options);
     users.initialize(models.User, router, options);
 
-    authorsFE.initialize(models.Author, router, options);
+    authorsFE.initialize(models.Paper, models.Author, router, options);
     papersFE.initialize(models.Paper, router, options);
-    venuesFE.initialize(models.Venue, router, options);
+    venuesFE.initialize(models.Paper, models.Venue, router, options);
+    typesOfPaperFE.initialize(models.Paper, router, options);
+    fieldsOfStudyFE.initialize(models.Paper, router, options);
+    publishersFE.initialize(models.Paper, router, options);
+    citationsFE.initialize(models.Paper, router, options);
   }
 }
 

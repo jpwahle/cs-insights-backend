@@ -15,8 +15,8 @@ let apiServer: APIServer;
 let apiOptions: APIOptions;
 let userToken: string;
 
-describe('/fe/authors', () => {
-  const route = '/fe/authors';
+describe('/fe/publishers', () => {
+  const route = '/fe/publishers';
 
   before(async () => {
     await Setup.initDb();
@@ -70,17 +70,6 @@ describe('/fe/authors', () => {
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/topk`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(401);
-            done();
-          });
-      });
-
-      specify('Unauthorized GET/list', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -149,18 +138,6 @@ describe('/fe/authors', () => {
             done();
           });
       });
-
-      specify('Missing Parameters GET/list: pattern ', (done) => {
-        chai
-          .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list`)
-          .set('Authorization', `Bearer ${userToken}`)
-          .end((err, res) => {
-            should().not.exist(err);
-            expect(res).to.have.status(422);
-            done();
-          });
-      });
     });
   });
 
@@ -212,7 +189,7 @@ describe('/fe/authors', () => {
             expect(res.body.rowCount).to.equal(3);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].author).to.exist;
+            expect(res.body.rows[0].publisher).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
             expect(res.body.rows[0].yearPublishedFirst).to.exist;
             expect(res.body.rows[0].yearPublishedLast).to.exist;
@@ -235,15 +212,13 @@ describe('/fe/authors', () => {
             expect(res.body.rowCount).to.equal(3);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].author).to.exist;
+            expect(res.body.rows[0].publisher).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
-            expect(res.body.rows[2].inCitationsCount).to.equal(3);
+            expect(res.body.rows[2].inCitationsCount).to.equal(2);
             expect(res.body.rows[0].yearPublishedFirst).to.exist;
             expect(res.body.rows[0].yearPublishedLast).to.exist;
             expect(res.body.rows[0].papersCount).to.exist;
             expect(res.body.rows[0].inCitationsPerPaper).to.exist;
-            expect(res.body.rows[0].link).to.not.exist;
-            expect(res.body.rows[1].link).to.exist;
             done();
           });
       });
@@ -278,7 +253,7 @@ describe('/fe/authors', () => {
             expect(res.body.length).to.equal(5);
             expect(res.body).to.be.an('array');
             expect(res.body[0]).to.equal(1);
-            expect(res.body[4]).to.equal(2);
+            expect(res.body[4]).to.equal(1);
             done();
           });
       });
@@ -293,8 +268,26 @@ describe('/fe/authors', () => {
             expect(res).to.have.status(200);
             expect(res.body.length).to.equal(5);
             expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(1);
+            expect(res.body[4]).to.equal(2);
+            done();
+          });
+      });
+
+      specify('Successful GET/quartiles: filter', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/quartiles?metric=inCitationsCount&publishers=["ABC"]`
+          )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
             expect(res.body[0]).to.equal(2);
-            expect(res.body[4]).to.equal(3);
+            expect(res.body[4]).to.equal(2);
             done();
           });
       });
@@ -330,7 +323,7 @@ describe('/fe/authors', () => {
             expect(res.body).to.be.an('array');
             expect(res.body[0]._id).to.not.exist;
             expect(res.body[0].x).to.exist;
-            expect(res.body[0].y).to.equal(2);
+            expect(res.body[0].y).to.equal(1);
             expect(res.body[1].y).to.equal(1);
             done();
           });
@@ -348,25 +341,27 @@ describe('/fe/authors', () => {
             expect(res.body).to.be.an('array');
             expect(res.body[0]._id).to.not.exist;
             expect(res.body[0].x).to.exist;
-            expect(res.body[0].y).to.equal(3);
-            expect(res.body[1].y).to.equal(2);
+            expect(res.body[0].y).to.equal(2);
+            expect(res.body[1].y).to.equal(1);
             done();
           });
       });
-    });
 
-    describe('GET/list', () => {
-      specify('Successful GET/list', (done) => {
+      specify('Successful GET/topk: filter', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/list?pattern=auThor1`)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/topk?k=10&metric=inCitationsCount&publishers=["ABC"]`
+          )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(1);
             expect(res.body).to.be.an('array');
-            expect(res.body).to.be.length(1);
-            expect(res.body[0].fullname).to.equal('author1');
+            expect(res.body[0]._id).to.not.exist;
+            expect(res.body[0].x).to.exist;
+            expect(res.body[0].y).to.equal(2);
             done();
           });
       });

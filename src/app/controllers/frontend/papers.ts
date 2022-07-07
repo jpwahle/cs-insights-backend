@@ -1,6 +1,7 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
+import { Paper } from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
 import {
   buildFindObject,
@@ -8,9 +9,16 @@ import {
   buildSortObject,
   fixYearData,
   getMatchObject,
+  quartilePosition,
 } from './queryUtils';
-import { NA } from '../../../config/consts';
-import { DatapointsOverTime, FilterQuery, PagedParameters } from '../../../types';
+import { NA, NA_GROUPS } from '../../../config/consts';
+import {
+  DatapointsOverTime,
+  PagedParameters,
+  Pattern,
+  QueryFilters,
+  TopKParameters,
+} from '../../../types';
 
 const passport = require('passport');
 
@@ -25,7 +33,7 @@ export function initialize(
   router.get(
     route + '/years',
     passport.authenticate('user', { session: false }),
-    async (req: express.Request<{}, {}, {}, FilterQuery>, res: express.Response) => {
+    async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
         const matchObject = buildMatchObject(req.query);
         const timeData = await model.aggregate([
@@ -33,9 +41,7 @@ export function initialize(
           {
             $group: {
               _id: '$yearPublished',
-              cites: {
-                $sum: '$inCitationsCount',
-              },
+              counts: { $count: {} },
             },
           },
           {
@@ -47,11 +53,10 @@ export function initialize(
             $group: {
               _id: '',
               years: {
-                // $push: { $ifNull: ['$_id', NA] },
                 $push: '$_id',
               },
               counts: {
-                $push: '$cites',
+                $push: '$counts',
               },
             },
           },
@@ -70,10 +75,10 @@ export function initialize(
   );
 
   router.get(
-    route + '/paged',
+    route + '/info',
     passport.authenticate('user', { session: false }),
     async (
-      req: express.Request<{}, {}, {}, FilterQuery & PagedParameters>,
+      req: express.Request<{}, {}, {}, QueryFilters & PagedParameters>,
       res: express.Response
     ) => {
       const findObject = buildFindObject(req.query);
@@ -85,25 +90,9 @@ export function initialize(
         });
       } else {
         try {
-          const rowCount = await model.find(findObject).countDocuments();
-          const rows = await model.aggregate([
+          const rowCountPromise = model.find(findObject as FilterQuery<Paper>).countDocuments();
+          const rowsPromise = model.aggregate([
             getMatchObject(findObject),
-            {
-              $lookup: {
-                from: 'authors',
-                localField: 'authors',
-                foreignField: '_id',
-                as: 'authors',
-              },
-            },
-            {
-              $lookup: {
-                from: 'venues',
-                localField: 'venue',
-                foreignField: '_id',
-                as: 'venue',
-              },
-            },
             buildSortObject(req.query.sortField, req.query.sortDirection),
             { $skip: page * pageSize },
             { $limit: pageSize },
@@ -112,18 +101,109 @@ export function initialize(
                 yearPublished: 1,
                 inCitationsCount: 1,
                 title: 1,
-                authors: { $ifNull: ['$authors.fullname', NA] },
-                venue: {
-                  $ifNull: [{ $arrayElemAt: ['$venue.names', 0] }, NA],
+                authors: {
+                  $cond: {
+                    if: { $arrayElemAt: ['$authors', 0] },
+                    then: '$authors',
+                    else: [NA_GROUPS],
+                  },
                 },
+                venue: { $ifNull: ['$venue', NA_GROUPS] },
+                pdfUrl: { $arrayElemAt: ['$pdfUrls', 0] },
               },
             },
           ]);
-          const data = {
-            rowCount: rowCount,
-            rows: rows,
-          };
-          res.json(data);
+          Promise.all([rowCountPromise, rowsPromise]).then((values) => {
+            const data = {
+              rowCount: values[0],
+              rows: values[1],
+            };
+            res.json(data);
+          });
+        } catch (error: any) {
+          /* istanbul ignore next */
+          res.status(500).json({ message: error.message });
+        }
+      }
+    }
+  );
+
+  router.get(
+    route + '/quartiles',
+    passport.authenticate('user', { session: false }),
+    async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
+      try {
+        const findObject = buildFindObject(req.query);
+        const rowCount = await model.countDocuments(findObject);
+        let response: number[];
+        if (rowCount === 0) {
+          response = [0, 0, 0, 0, 0];
+        } else {
+          const quartileData = await model
+            .aggregate([
+              getMatchObject(findObject),
+              { $sort: { inCitationsCount: 1 } },
+              { $project: { inCitationsCount: 1 } },
+              {
+                $facet: {
+                  min: [{ $limit: 1 }],
+                  first: [{ $skip: quartilePosition(rowCount, 0.25) }, { $limit: 1 }],
+                  median: [{ $skip: quartilePosition(rowCount, 0.5) }, { $limit: 1 }],
+                  third: [{ $skip: quartilePosition(rowCount, 0.75) }, { $limit: 1 }],
+                  max: [{ $skip: rowCount - 1 }, { $limit: 1 }],
+                },
+              },
+            ])
+            .allowDiskUse(true);
+
+          response = [
+            quartileData[0].min[0].inCitationsCount,
+            quartileData[0].first[0].inCitationsCount,
+            quartileData[0].median[0].inCitationsCount,
+            quartileData[0].third[0].inCitationsCount,
+            quartileData[0].max[0].inCitationsCount,
+          ];
+        }
+        res.json(response);
+      } catch (error: any) {
+        /* istanbul ignore next */
+        res.status(500).json({ message: error.message });
+      }
+    }
+  );
+
+  router.get(
+    route + '/topk',
+    passport.authenticate('user', { session: false }),
+    async (
+      req: express.Request<{}, {}, {}, QueryFilters & TopKParameters>,
+      res: express.Response
+    ) => {
+      const k = parseInt(req.query.k);
+      if (!k) {
+        res.status(422).json({
+          message: 'The request is missing the required parameter "k".',
+        });
+      } else {
+        try {
+          let matchObject = buildMatchObject(req.query);
+          const topkData = await model.aggregate([
+            matchObject,
+            {
+              $sort: {
+                inCitationsCount: -1,
+              },
+            },
+            { $limit: k },
+            {
+              $project: {
+                x: { $ifNull: ['$title', NA] },
+                y: '$inCitationsCount',
+                _id: 0,
+              },
+            },
+          ]);
+          res.json(topkData);
         } catch (error: any) {
           /* istanbul ignore next */
           res.status(500).json({ message: error.message });
@@ -135,7 +215,10 @@ export function initialize(
   router.get(
     route + '/list',
     passport.authenticate('user', { session: false }),
-    async (req: express.Request, res: express.Response) => {
+    async (
+      req: express.Request<{}, {}, {}, QueryFilters & PagedParameters & Pattern>,
+      res: express.Response
+    ) => {
       const pattern = req.query.pattern;
       const column = req.query.column;
       if (!column || !pattern) {

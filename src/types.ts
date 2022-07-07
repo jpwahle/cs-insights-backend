@@ -12,15 +12,26 @@ export type PagedParameters = {
   sortDirection: string;
 };
 
-export interface FilterQuery {
+export interface Pattern {
+  column?: string;
+  pattern?: string;
+}
+
+export type Metric = { metric: string };
+
+export type TopKParameters = { k: string } & Metric;
+
+export interface QueryFilters {
   yearStart?: string;
   yearEnd?: string;
-  authors?: string;
-  venues?: string;
+  authorIds?: string;
+  venueIds?: string;
   openAccess?: string;
   typesOfPaper?: string;
   fieldsOfStudy?: string;
   publishers?: string;
+  citationsMin?: string;
+  citationsMax?: string;
 }
 
 export interface FilterMongo {
@@ -28,10 +39,14 @@ export interface FilterMongo {
     $gte?: number;
     $lte?: number;
   };
-  authors?: { $in: mongoose.Types.ObjectId[] };
-  venue?: { $in: mongoose.Types.ObjectId[] };
+  authorIds?: { $in: mongoose.Types.ObjectId[] };
+  venueId?: { $in: mongoose.Types.ObjectId[] };
   openAccess?: boolean;
   typeOfPaper?: { $in: string[] };
   fieldsOfStudy?: { $in: string[] };
   publisher?: { $in: string[] };
+  inCitationsCount?: {
+    $gte?: number;
+    $lte?: number;
+  };
 }

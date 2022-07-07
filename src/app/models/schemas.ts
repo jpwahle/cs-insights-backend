@@ -2,22 +2,25 @@ import mongoose from 'mongoose';
 
 export const paperSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
+    title: { type: String },
     abstractText: {
       type: String,
     },
     yearPublished: { type: Number },
 
-    authors: [
+    authorIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Author',
+        required: true,
       },
     ],
-    venue: {
+    authors: [{ type: String, required: true, index: true, default: [] }],
+    venueId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Venue',
     },
+    venue: { type: String },
     publisher: { type: String },
 
     typeOfPaper: {
@@ -31,7 +34,6 @@ export const paperSchema = new mongoose.Schema(
         'phdthesis',
         'mastersthesis',
       ],
-      required: true,
     },
     fieldsOfStudy: [
       {
@@ -66,7 +68,7 @@ export const paperSchema = new mongoose.Schema(
         ref: 'Paper',
       },
     ],
-    inCitationsCount: { type: Number, required: true, default: 0 },
+    inCitationsCount: { type: Number, required: true, default: 0, index: true },
     // inCitationsRef: [{ type: String, required: true }], //TODO add
     outCitations: [
       {
@@ -79,6 +81,7 @@ export const paperSchema = new mongoose.Schema(
 
     openAccess: { type: Boolean, required: true, default: false },
 
+    // datasetId: { type: String, unique: true, required: true }, //TODO add
     dblpId: { type: String, unique: true, sparse: true },
     doi: { type: String },
     pdfUrls: [{ type: String }],
@@ -86,15 +89,13 @@ export const paperSchema = new mongoose.Schema(
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
-
-    // datasetId: { type: String, unique: true, required: true }, //TODO add
   },
   { collection: 'papers' }
 );
 
 export const venueSchema = new mongoose.Schema(
   {
-    names: [{ type: String, required: true }],
+    names: [{ type: String, required: true, unique: true }],
     acronyms: [{ type: String, required: true }],
     venueCodes: [{ type: String, required: true }],
     venueDetails: [
@@ -103,6 +104,7 @@ export const venueSchema = new mongoose.Schema(
         timePublished: Date,
       },
     ],
+    dblpId: { type: String, unique: true, sparse: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
   },
@@ -111,7 +113,7 @@ export const venueSchema = new mongoose.Schema(
 
 export const authorSchema = new mongoose.Schema(
   {
-    fullname: { type: String, required: true },
+    fullname: { type: String, required: true, unique: true },
     number: { type: String },
     orcid: { type: String, unique: true, sparse: true },
     affiliations: [
@@ -122,6 +124,7 @@ export const authorSchema = new mongoose.Schema(
     ],
     timestamp: { type: Date },
     email: { type: String },
+    dblpId: { type: String, unique: true, sparse: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
   },
@@ -137,6 +140,7 @@ export const affiliationSchema = new mongoose.Schema(
     city: { type: String },
     lat: { type: Number },
     lng: { type: Number },
+    dblpId: { type: String, unique: true, sparse: true },
   },
   { collection: 'affiliations' }
 );

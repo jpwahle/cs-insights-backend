@@ -16,52 +16,54 @@ const passport = require('passport');
 
 export function initialize(
   model: mongoose.Model<DocumentTypes.Paper>,
-  modelVenue: mongoose.Model<DocumentTypes.Venue>,
   router: express.Router,
   options: APIOptions
 ) {
-  // venues endpoint
-  const route = `${options.server.baseRoute}/fe/venues`;
+  // fieldsOfStudy endpoint
+  const route = `${options.server.baseRoute}/fe/fields`;
 
   router.get(
     route + '/years',
     passport.authenticate('user', { session: false }),
     async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
-        const timeData = await model.aggregate([
-          buildMatchObject(req.query),
-          {
-            $group: {
-              _id: '$yearPublished',
-              venues: { $addToSet: '$venueId' },
-            },
-          },
-          {
-            $project: {
-              _id: 1,
-              count: { $size: '$venues' },
-            },
-          },
-          {
-            $sort: {
-              _id: 1,
-            },
-          },
-          {
-            $group: {
-              _id: '',
-              years: {
-                $push: '$_id',
-              },
-              counts: {
-                $push: '$count',
+        const timeData = await model
+          .aggregate([
+            buildMatchObject(req.query),
+            { $unwind: '$fieldsOfStudy' },
+            {
+              $group: {
+                _id: '$yearPublished',
+                fieldsOfStudy: { $addToSet: '$fieldsOfStudy' },
               },
             },
-          },
-          {
-            $unset: '_id',
-          },
-        ]);
+            {
+              $project: {
+                _id: 1,
+                count: { $size: '$fieldsOfStudy' },
+              },
+            },
+            {
+              $sort: {
+                _id: 1,
+              },
+            },
+            {
+              $group: {
+                _id: '',
+                years: {
+                  $push: '$_id',
+                },
+                counts: {
+                  $push: '$count',
+                },
+              },
+            },
+            {
+              $unset: '_id',
+            },
+          ])
+          .allowDiskUse(true);
         let data: DatapointsOverTime = timeData[0] || { years: [], counts: [] };
         fixYearData(data, req.query.yearStart, req.query.yearEnd);
         res.json(data);
@@ -80,24 +82,32 @@ export function initialize(
       res: express.Response
     ) => {
       const matchObject = buildMatchObject(req.query);
-      const pageSize = parseInt(req.query.pageSize);
-      const page = parseInt(req.query.page);
-      if ((page != 0 && !page) || !pageSize) {
-        res.status(422).json({
-          message: 'The request is missing the required parameter "page", "pageSize".',
-        });
-      } else {
-        try {
-          const rowCountPromise = model.aggregate([
-            matchObject,
-            { $group: { _id: '$venue' } },
-            { $count: 'count' },
-          ]);
-          const rowsPromise = model.aggregate([
+      try {
+        const rowCountPromise = model
+          .aggregate([
             matchObject,
             {
+              $unwind: {
+                path: '$fieldsOfStudy',
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            { $group: { _id: '$fieldsOfStudy' } },
+            { $count: 'count' },
+          ])
+          .allowDiskUse(true);
+        const rowsPromise = model
+          .aggregate([
+            matchObject,
+            {
+              $unwind: {
+                path: '$fieldsOfStudy',
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
               $group: {
-                _id: '$venue',
+                _id: '$fieldsOfStudy',
                 papersCount: { $sum: 1 },
                 inCitationsCount: { $sum: '$inCitationsCount' },
                 yearPublishedFirst: { $min: '$yearPublished' },
@@ -107,32 +117,27 @@ export function initialize(
             {
               $project: {
                 _id: { $ifNull: ['$_id', NA_GROUPS] },
-                venue: { $ifNull: ['$_id', NA_GROUPS] },
+                fieldsOfStudy: { $ifNull: ['$_id', NA_GROUPS] },
                 yearPublishedFirst: 1,
                 yearPublishedLast: 1,
                 papersCount: 1,
                 inCitationsCount: 1,
-                inCitationsPerPaper: {
-                  $divide: ['$inCitationsCount', '$papersCount'],
-                },
-                link: { $concat: ['https://dblp.org/search?q=', '$_id'] },
+                inCitationsPerPaper: { $divide: ['$inCitationsCount', '$papersCount'] },
               },
             },
             buildSortObject(req.query.sortField, req.query.sortDirection),
-            { $skip: page * pageSize },
-            { $limit: pageSize },
-          ]);
-          Promise.all([rowCountPromise, rowsPromise]).then((values) => {
-            const data = {
-              rowCount: values[0][0] ? values[0][0].count : 0,
-              rows: values[1],
-            };
-            res.json(data);
-          });
-        } catch (error: any) {
-          /* istanbul ignore next */
-          res.status(500).json({ message: error.message });
-        }
+          ])
+          .allowDiskUse(true);
+        Promise.all([rowCountPromise, rowsPromise]).then((values) => {
+          const data = {
+            rowCount: values[0][0] ? values[0][0].count : 0,
+            rows: values[1],
+          };
+          res.json(data);
+        });
+      } catch (error: any) {
+        /* istanbul ignore next */
+        res.status(500).json({ message: error.message });
       }
     }
   );
@@ -148,16 +153,18 @@ export function initialize(
         });
       } else {
         try {
-          let matchObject = buildMatchObject(req.query);
-          if (!matchObject.$match.venueId) {
-            matchObject.$match.venueId = { $ne: null };
-          }
           const quartileData = await model
             .aggregate([
-              matchObject,
+              buildMatchObject(req.query),
+              {
+                $unwind: {
+                  path: '$fieldsOfStudy',
+                },
+              },
               {
                 $group: {
-                  _id: '$venue',
+                  _id: '$fieldsOfStudy',
+                  inCitationsCount: { $sum: '$inCitationsCount' },
                   count: {
                     $sum: req.query.metric === 'inCitationsCount' ? '$inCitationsCount' : 1,
                   },
@@ -170,6 +177,7 @@ export function initialize(
               },
             ])
             .allowDiskUse(true);
+
           const response = computeQuartiles(quartileData);
           res.json(response);
         } catch (error: any) {
@@ -195,15 +203,16 @@ export function initialize(
         });
       } else {
         try {
-          let matchObject = buildMatchObject(req.query);
-          if (!matchObject.$match.venueId) {
-            matchObject.$match.venueId = { $ne: null };
-          }
           const topkData = await model.aggregate([
-            matchObject,
+            buildMatchObject(req.query),
+            {
+              $unwind: {
+                path: '$fieldsOfStudy',
+              },
+            },
             {
               $group: {
-                _id: '$venue',
+                _id: '$fieldsOfStudy',
                 count: {
                   $sum: metric === 'inCitationsCount' ? '$inCitationsCount' : 1,
                 },
@@ -224,36 +233,6 @@ export function initialize(
             },
           ]);
           res.json(topkData);
-        } catch (error: any) {
-          /* istanbul ignore next */
-          res.status(500).json({ message: error.message });
-        }
-      }
-    }
-  );
-
-  router.get(
-    route + '/list',
-    passport.authenticate('user', { session: false }),
-    async (req: express.Request, res: express.Response) => {
-      const pattern = req.query.pattern;
-      if (!pattern) {
-        res.status(422).json({
-          message: 'The request is missing the required parameter "pattern".',
-        });
-      } else {
-        try {
-          // if the schema gets changed to only one name, this is faster
-          // const venueData = await model.find(
-          //   { names: { $regex: pattern } },
-          // { names: { $first: '$names' } }
-          // );
-          const venueData = await modelVenue.aggregate([
-            { $match: { names: { $regex: pattern } } },
-            { $project: { names: { $first: '$names' } } },
-          ]);
-
-          res.json(venueData);
         } catch (error: any) {
           /* istanbul ignore next */
           res.status(500).json({ message: error.message });

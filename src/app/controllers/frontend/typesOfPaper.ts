@@ -16,12 +16,11 @@ const passport = require('passport');
 
 export function initialize(
   model: mongoose.Model<DocumentTypes.Paper>,
-  modelVenue: mongoose.Model<DocumentTypes.Venue>,
   router: express.Router,
   options: APIOptions
 ) {
-  // venues endpoint
-  const route = `${options.server.baseRoute}/fe/venues`;
+  // typesOfPaper endpoint
+  const route = `${options.server.baseRoute}/fe/types`;
 
   router.get(
     route + '/years',
@@ -33,13 +32,13 @@ export function initialize(
           {
             $group: {
               _id: '$yearPublished',
-              venues: { $addToSet: '$venueId' },
+              typeOfPaper: { $addToSet: '$typeOfPaper' },
             },
           },
           {
             $project: {
               _id: 1,
-              count: { $size: '$venues' },
+              count: { $size: '$typeOfPaper' },
             },
           },
           {
@@ -80,59 +79,47 @@ export function initialize(
       res: express.Response
     ) => {
       const matchObject = buildMatchObject(req.query);
-      const pageSize = parseInt(req.query.pageSize);
-      const page = parseInt(req.query.page);
-      if ((page != 0 && !page) || !pageSize) {
-        res.status(422).json({
-          message: 'The request is missing the required parameter "page", "pageSize".',
+      try {
+        const rowCountPromise = model.aggregate([
+          matchObject,
+          { $group: { _id: '$typeOfPaper' } },
+          { $count: 'count' },
+        ]);
+        const rowsPromise = model.aggregate([
+          matchObject,
+          {
+            $group: {
+              _id: '$typeOfPaper',
+              papersCount: { $sum: 1 },
+              inCitationsCount: { $sum: '$inCitationsCount' },
+              yearPublishedFirst: { $min: '$yearPublished' },
+              yearPublishedLast: { $max: '$yearPublished' },
+            },
+          },
+          {
+            $project: {
+              _id: { $ifNull: ['$_id', NA_GROUPS] },
+              typeOfPaper: { $ifNull: ['$_id', NA_GROUPS] },
+              yearPublishedFirst: 1,
+              yearPublishedLast: 1,
+              papersCount: 1,
+              inCitationsCount: 1,
+              inCitationsPerPaper: { $divide: ['$inCitationsCount', '$papersCount'] },
+            },
+          },
+          buildSortObject(req.query.sortField, req.query.sortDirection),
+        ]);
+
+        Promise.all([rowCountPromise, rowsPromise]).then((values) => {
+          const data = {
+            rowCount: values[0][0] ? values[0][0].count : 0,
+            rows: values[1],
+          };
+          res.json(data);
         });
-      } else {
-        try {
-          const rowCountPromise = model.aggregate([
-            matchObject,
-            { $group: { _id: '$venue' } },
-            { $count: 'count' },
-          ]);
-          const rowsPromise = model.aggregate([
-            matchObject,
-            {
-              $group: {
-                _id: '$venue',
-                papersCount: { $sum: 1 },
-                inCitationsCount: { $sum: '$inCitationsCount' },
-                yearPublishedFirst: { $min: '$yearPublished' },
-                yearPublishedLast: { $max: '$yearPublished' },
-              },
-            },
-            {
-              $project: {
-                _id: { $ifNull: ['$_id', NA_GROUPS] },
-                venue: { $ifNull: ['$_id', NA_GROUPS] },
-                yearPublishedFirst: 1,
-                yearPublishedLast: 1,
-                papersCount: 1,
-                inCitationsCount: 1,
-                inCitationsPerPaper: {
-                  $divide: ['$inCitationsCount', '$papersCount'],
-                },
-                link: { $concat: ['https://dblp.org/search?q=', '$_id'] },
-              },
-            },
-            buildSortObject(req.query.sortField, req.query.sortDirection),
-            { $skip: page * pageSize },
-            { $limit: pageSize },
-          ]);
-          Promise.all([rowCountPromise, rowsPromise]).then((values) => {
-            const data = {
-              rowCount: values[0][0] ? values[0][0].count : 0,
-              rows: values[1],
-            };
-            res.json(data);
-          });
-        } catch (error: any) {
-          /* istanbul ignore next */
-          res.status(500).json({ message: error.message });
-        }
+      } catch (error: any) {
+        /* istanbul ignore next */
+        res.status(500).json({ message: error.message });
       }
     }
   );
@@ -148,18 +135,18 @@ export function initialize(
         });
       } else {
         try {
-          let matchObject = buildMatchObject(req.query);
-          if (!matchObject.$match.venueId) {
-            matchObject.$match.venueId = { $ne: null };
+          const matchObject = buildMatchObject(req.query);
+          if (!matchObject.$match.typeOfPaper) {
+            matchObject.$match.typeOfPaper = { $ne: null };
           }
           const quartileData = await model
             .aggregate([
               matchObject,
               {
                 $group: {
-                  _id: '$venue',
+                  _id: '$typeOfPaper',
                   count: {
-                    $sum: req.query.metric === 'inCitationsCount' ? '$inCitationsCount' : 1,
+                    $sum: metric === 'inCitationsCount' ? '$inCitationsCount' : 1,
                   },
                 },
               },
@@ -195,15 +182,15 @@ export function initialize(
         });
       } else {
         try {
-          let matchObject = buildMatchObject(req.query);
-          if (!matchObject.$match.venueId) {
-            matchObject.$match.venueId = { $ne: null };
+          const matchObject = buildMatchObject(req.query);
+          if (!matchObject.$match.typeOfPaper) {
+            matchObject.$match.typeOfPaper = { $ne: null };
           }
           const topkData = await model.aggregate([
             matchObject,
             {
               $group: {
-                _id: '$venue',
+                _id: '$typeOfPaper',
                 count: {
                   $sum: metric === 'inCitationsCount' ? '$inCitationsCount' : 1,
                 },
@@ -224,36 +211,6 @@ export function initialize(
             },
           ]);
           res.json(topkData);
-        } catch (error: any) {
-          /* istanbul ignore next */
-          res.status(500).json({ message: error.message });
-        }
-      }
-    }
-  );
-
-  router.get(
-    route + '/list',
-    passport.authenticate('user', { session: false }),
-    async (req: express.Request, res: express.Response) => {
-      const pattern = req.query.pattern;
-      if (!pattern) {
-        res.status(422).json({
-          message: 'The request is missing the required parameter "pattern".',
-        });
-      } else {
-        try {
-          // if the schema gets changed to only one name, this is faster
-          // const venueData = await model.find(
-          //   { names: { $regex: pattern } },
-          // { names: { $first: '$names' } }
-          // );
-          const venueData = await modelVenue.aggregate([
-            { $match: { names: { $regex: pattern } } },
-            { $project: { names: { $first: '$names' } } },
-          ]);
-
-          res.json(venueData);
         } catch (error: any) {
           /* istanbul ignore next */
           res.status(500).json({ message: error.message });
