@@ -95,7 +95,7 @@ npm run lint
 </details>
 
 ## Documentation
-The auto-generated redoc documentation can be found [here]([https://ag-gipp.github.io/NLP-Land-backend](https://gipplab.github.io/NLP-Land-backend/).
+The auto-generated redoc documentation can be found [here](https://gipplab.github.io/NLP-Land-backend/).
     
 A general overview of standard endpoints, parameters, and possible queries can be found [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
 
