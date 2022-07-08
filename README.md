@@ -2,7 +2,6 @@
 
 <p align="center">
 <a href="https://codecov.io/gh/ag-gipp/NLP-Land-backend"><img src="https://codecov.io/gh/ag-gipp/NLP-Land-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
-<a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/branch.yml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/branch.yml/badge.svg?branch=main">  
 <a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/release.yml/badge.svg?branch=dev">  
 <a href="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/ag-gipp/NLP-Land-backend/actions/workflows/main.yml/badge.svg">
 <a href="https://github.com/ag-gipp/NLP-Land-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/ag-gipp/NLP-Land-backend?sort=semver"></a>
