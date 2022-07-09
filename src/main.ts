@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import './loadEnv';
 import { initServer } from './app';
 import { loadOptions } from './config';
 

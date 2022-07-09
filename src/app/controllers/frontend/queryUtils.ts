@@ -1,6 +1,6 @@
 import mongoose, { FilterQuery } from 'mongoose';
 import { DatapointsOverTime, FilterMongo, QueryFilters } from '../../../types';
-import { NA_GROUPS } from '../../../config/consts';
+import { NA } from '../../../config/consts';
 
 // no endpoints in this file
 
@@ -92,8 +92,9 @@ export function fixYearData(
   // fill missing years with 0s and remove years that are incorrect in the data
   const min = 1936;
   const max = 2022;
-  const start = filterYearStart ? parseInt(filterYearStart) : min;
-  const end = filterYearEnd ? parseInt(filterYearEnd) : max;
+  const start =
+    filterYearStart && parseInt(filterYearStart) >= min ? parseInt(filterYearStart) : min;
+  const end = filterYearEnd && parseInt(filterYearEnd) <= max ? parseInt(filterYearEnd) : max;
   const entries = end - start;
 
   let naValue = 0;
@@ -118,7 +119,7 @@ export function fixYearData(
     }
   }
   if (offset > 0) {
-    data.years.splice(0, 0, NA_GROUPS);
+    data.years.splice(0, 0, NA);
     data.counts.splice(0, 0, naValue);
   }
   return data;

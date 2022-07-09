@@ -134,7 +134,7 @@ export function initialize(
     async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
         const findObject = buildFindObject(req.query);
-        const rowCount = await model.countDocuments(findObject);
+        const rowCount = await model.find(findObject as FilterQuery<Paper>).countDocuments();
         let response: number[];
         if (rowCount === 0) {
           response = [0, 0, 0, 0, 0];

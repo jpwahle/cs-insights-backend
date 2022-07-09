@@ -37,7 +37,11 @@ docker-compose --env-file=.env.production up --build
 </details>
 <details> <summary> Development </summary>
 
-If you want to actively develop this project, you need to install the project and dependencies locally.
+If you want to actively develop this project, you need to install the project and dependencies locally with
+```shell
+npm install
+```
+
 To run the development environment locally, you need to create up a mongodb instance the first time you start the backend.
 ```shell
 source .env.development
@@ -53,6 +57,7 @@ Then you can start the backend using:
 ```shell
 npm run dev
 ```
+In the future only need to use this command and can skip the other commands.
 It starts the docker container (if it is not started yet), uses auto-reload (whenever the code was changed), automatically compiles TypeScript files, and spawns multiple processes.
 </details>
 

@@ -8,7 +8,7 @@ import {
   fixYearData,
 } from '../../../src/app/controllers/frontend/queryUtils';
 import mongoose from 'mongoose';
-import { NA_GROUPS } from '../../../src/config/consts';
+import { NA } from '../../../src/config/consts';
 
 process.env.NODE_ENV = 'test';
 
@@ -146,7 +146,7 @@ describe('queryUtils', () => {
       const data = { years: [null, 1863, 1990, 1991, 1992], counts: [3, 1, 0, 1, 2] };
       const fixedData = fixYearData(data, undefined, undefined);
       assert.equal(fixedData.years.length, 2022 - 1936 + 2);
-      assert.equal(fixedData.years[0], NA_GROUPS);
+      assert.equal(fixedData.years[0], NA);
       assert.equal(fixedData.counts[0], 4);
     });
   });
