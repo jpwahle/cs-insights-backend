@@ -11,6 +11,7 @@ import * as fieldsOfStudyFE from './frontend/fieldsOfStudy';
 import * as typesOfPaperFE from './frontend/typesOfPaper';
 import * as publishersFE from './frontend/publishers';
 import * as citationsFE from './frontend/citations';
+import * as topicsFE from './frontend/topics';
 import * as users from './users';
 import { APIOptions } from '../../config/interfaces';
 
@@ -29,6 +30,7 @@ export class Controllers {
     fieldsOfStudyFE.initialize(models.Paper, router, options);
     publishersFE.initialize(models.Paper, router, options);
     citationsFE.initialize(models.Paper, router, options);
+    topicsFE.initialize(models.Paper, router, options);
   }
 }
 
