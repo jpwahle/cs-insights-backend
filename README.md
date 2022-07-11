@@ -70,8 +70,8 @@ The `src`-folder contains the main code with the following structure:
 
 ### Packages
 The following is a list of some notable packages we use:
-- [ExpressRestifyMongoose](https://apexcharts.com/react-chart-demos/](https://florianholzapfel.github.io/express-restify-mongoose/v1/): REST API endpoints
-- [Express]([https://mui.com/](https://expressjs.com)): Endpoints
+- [ExpressRestifyMongoose](https://florianholzapfel.github.io/express-restify-mongoose/v1/): REST API endpoints
+- [Express](https://expressjs.com): Endpoints
 - [Mongoose](https://mongoosejs.com): Database layer on mongo
 - [Passport](https://www.passportjs.org): Authentication
 - [Redoc](https://github.com/Redocly/redoc): Automatic documentation
