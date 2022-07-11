@@ -1,9 +1,7 @@
-import { config } from 'dotenv';
+import './loadEnv';
 import cluster from 'cluster';
 import { initServer } from './app';
 import { loadOptions } from './config';
-
-config({ path: `.env.${process.env.NODE_ENV}` });
 
 const numCPUs = require('os').cpus().length;
 

@@ -40,11 +40,11 @@ export interface FilterMongo {
     $lte?: number;
   };
   authorIds?: { $in: mongoose.Types.ObjectId[] };
-  venueId?: { $in: mongoose.Types.ObjectId[] };
+  venueId?: { $in: mongoose.Types.ObjectId[] } | { $ne: null };
   openAccess?: boolean;
-  typeOfPaper?: { $in: string[] };
+  typeOfPaper?: { $in: string[] } | { $ne: null };
   fieldsOfStudy?: { $in: string[] };
-  publisher?: { $in: string[] };
+  publisher?: { $in: string[] } | { $ne: null };
   inCitationsCount?: {
     $gte?: number;
     $lte?: number;
