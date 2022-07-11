@@ -58,6 +58,24 @@ npm run build:live
 ```
 </details>
 
+## Repository
+### Structure
+The `src`-folder contains the main code with the following structure:
+- /app: The main logic for our app
+  - /controllers: Controls api endpoints and requests/responses
+  - /middleware: Middleware for authentication
+  - /models: Data models of the database schemas
+- /config: Configuration parameters for the app
+- Other files
+
+### Packages
+The following is a list of some notable packages we use:
+- [ExpressRestifyMongoose](https://apexcharts.com/react-chart-demos/](https://florianholzapfel.github.io/express-restify-mongoose/v1/): REST API endpoints
+- [Express]([https://mui.com/](https://expressjs.com)): Endpoints
+- [Mongoose](https://mongoosejs.com): Database layer on mongo
+- [Passport](https://www.passportjs.org): Authentication
+- [Redoc](https://github.com/Redocly/redoc): Automatic documentation
+    
 ## Tests
     
 This repository follows clean code principles using static typing, linting, unit tests, semanitc releases, and documentation. In the following you can find details for running these tests in the cloud and locally.
