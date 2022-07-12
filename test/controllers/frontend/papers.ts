@@ -180,7 +180,9 @@ describe('/fe/papers', () => {
       specify('Successful GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50`)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&sortField=inCitationsCount&sortDirection=desc`
+          )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -301,7 +303,11 @@ describe('/fe/papers', () => {
       specify('Filter yearStart GET/info', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&yearStart=${2021}`)
+          .get(
+            `${
+              apiOptions.server.baseRoute
+            }${route}/info?page=0&pageSize=50&yearStart=${2021}&sortField=inCitationsCount&sortDirection=desc`
+          )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
             should().not.exist(err);
@@ -344,7 +350,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&authorIds=["${dummyAuthors[0]._id}"]`
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&authorIds=["${dummyAuthors[0]._id}"]&sortField=inCitationsCount&sortDirection=desc`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
@@ -367,7 +373,7 @@ describe('/fe/papers', () => {
         chai
           .request(apiServer.app)
           .get(
-            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&authorIds=["${dummyAuthors[0]._id}", "${dummyAuthors[1]._id}"]`
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&authorIds=["${dummyAuthors[0]._id}", "${dummyAuthors[1]._id}"]&sortField=inCitationsCount&sortDirection=desc`
           )
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {

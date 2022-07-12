@@ -13,15 +13,14 @@
 </p>
 
 ## Getting Started
-
-After cloning the repository you need to change the directory. 
+First, make sure you are running node v18.5.0 or higher, or you will not be able to query our [predictions endpoints](https://github.com/gipplab/NLP-Land-prediction-endpoint).
+Next, clone the repository and change the directory. 
 ```shell
 cd NLP-Land-backend
 ```
-
 Then we are providing two ways to set up this project.
 
-<details> <summary> Production </summary>
+<details> <summary><b>Production</b></summary>
 
 First, you need to create an `.env.production` file.
 You can copy the `.env.development` file, if you do not intent to change the default values:
@@ -35,9 +34,9 @@ To spin up the production version of this project, switch into the root director
 docker-compose --env-file=.env.production up --build
 ```
 </details>
-<details> <summary> Development </summary>
+<details> <summary><b>Development</b></summary>
 
-If you want to actively develop this project, you need to install the project and dependencies locally with
+If you want to actively develop this project, you need to install the project and its dependencies locally with
 ```shell
 npm install
 ```
