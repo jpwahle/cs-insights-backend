@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "nlp-land-backend",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "license": {
       "name": "MIT"
     },
@@ -75,7 +75,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "6250280ff7e41006e28de0fe"
+                      "example": "62cd87688062f8069368d095"
                     },
                     "name": {
                       "type": "string",
@@ -99,11 +99,11 @@
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "6250280ef7e41006e28de0d1"
+                      "example": "62cd87678062f8069368d068"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:23.584Z"
+                      "example": "2022-07-12T14:38:32.691Z"
                     },
                     "__v": {
                       "type": "number",
@@ -199,7 +199,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "6250280ff7e41006e28de0eb"
+                      "example": "62cd87688062f8069368d082"
                     },
                     "name": {
                       "type": "string",
@@ -223,14 +223,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:23.480Z"
+                      "example": "2022-07-12T14:38:32.497Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "6250280ef7e41006e28de0d1"
+                          "example": "62cd87678062f8069368d068"
                         },
                         "email": {
                           "type": "string",
@@ -312,7 +312,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "6250280ff7e41006e28de101"
+                      "example": "62cd87688062f8069368d098"
                     },
                     "name": {
                       "type": "string",
@@ -336,11 +336,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:23.619Z"
+                      "example": "2022-07-12T14:38:32.757Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "6250280ef7e41006e28de0d1"
+                      "example": "62cd87678062f8069368d068"
                     },
                     "__v": {
                       "type": "number",
@@ -457,13 +457,13 @@
                       "fullname": {
                         "type": "string"
                       },
+                      "orcid": {
+                        "nullable": true
+                      },
                       "timestamp": {
                         "type": "string"
                       },
                       "email": {
-                        "type": "string"
-                      },
-                      "dblpId": {
                         "type": "string"
                       },
                       "createdAt": {
@@ -505,36 +505,32 @@
                         "type": "string"
                       },
                       "example": [
-                        "6250280ef7e41006e28de0ca"
+                        "62cd87668062f8069368d055"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62502810f7e41006e28de135"
+                      "example": "62cd87698062f8069368d0cc"
                     },
                     "fullname": {
                       "type": "string",
-                      "example": "Author Name"
+                      "example": "someone"
                     },
                     "timestamp": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:22.296Z"
+                      "example": "2022-07-12T14:38:30.407Z"
                     },
                     "email": {
                       "type": "string",
                       "example": "test@test.net"
                     },
-                    "dblpId": {
-                      "type": "string",
-                      "example": "something"
-                    },
                     "createdBy": {
                       "type": "string",
-                      "example": "6250280ef7e41006e28de0d1"
+                      "example": "62cd87678062f8069368d068"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:24.384Z"
+                      "example": "2022-07-12T14:38:33.936Z"
                     },
                     "__v": {
                       "type": "number",
@@ -630,7 +626,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62502810f7e41006e28de122"
+                      "example": "62cd87698062f8069368d0b9"
                     },
                     "affiliations": {
                       "type": "array",
@@ -638,35 +634,35 @@
                         "type": "string"
                       },
                       "example": [
-                        "6250280ef7e41006e28de0ca"
+                        "62cd87668062f8069368d055"
                       ]
                     },
                     "fullname": {
                       "type": "string",
                       "example": "Author Name"
                     },
+                    "orcid": {
+                      "example": null,
+                      "nullable": true
+                    },
                     "timestamp": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:22.296Z"
+                      "example": "2022-07-12T14:38:30.407Z"
                     },
                     "email": {
                       "type": "string",
                       "example": "test@test.net"
                     },
-                    "dblpId": {
-                      "type": "string",
-                      "example": "something"
-                    },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:24.253Z"
+                      "example": "2022-07-12T14:38:33.729Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "6250280ef7e41006e28de0d1"
+                          "example": "62cd87678062f8069368d068"
                         },
                         "email": {
                           "type": "string",
@@ -752,36 +748,36 @@
                         "type": "string"
                       },
                       "example": [
-                        "6250280ef7e41006e28de0ca"
+                        "62cd87668062f8069368d055"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62502810f7e41006e28de138"
+                      "example": "62cd876a8062f8069368d0dd"
                     },
                     "fullname": {
                       "type": "string",
                       "example": "New Fullname"
                     },
+                    "orcid": {
+                      "example": null,
+                      "nullable": true
+                    },
                     "timestamp": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:22.296Z"
+                      "example": "2022-07-12T14:38:30.407Z"
                     },
                     "email": {
                       "type": "string",
                       "example": "test@test.net"
                     },
-                    "dblpId": {
-                      "type": "string",
-                      "example": "something"
-                    },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:24.426Z"
+                      "example": "2022-07-12T14:38:34.127Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "6250280ef7e41006e28de0d1"
+                      "example": "62cd87678062f8069368d068"
                     },
                     "__v": {
                       "type": "number",
@@ -889,7 +885,7 @@
                       "_id": {
                         "type": "string"
                       },
-                      "cites": {
+                      "authorIds": {
                         "type": "array",
                         "items": {}
                       },
@@ -899,7 +895,28 @@
                           "type": "string"
                         }
                       },
-                      "venues": {
+                      "fieldsOfStudy": {
+                        "type": "array",
+                        "items": {}
+                      },
+                      "inCitations": {
+                        "type": "array",
+                        "items": {}
+                      },
+                      "inCitationsCount": {
+                        "type": "number"
+                      },
+                      "outCitations": {
+                        "type": "array",
+                        "items": {}
+                      },
+                      "outCitationsCount": {
+                        "type": "number"
+                      },
+                      "openAccess": {
+                        "type": "boolean"
+                      },
+                      "pdfUrls": {
                         "type": "array",
                         "items": {
                           "type": "string"
@@ -911,43 +928,19 @@
                       "abstractText": {
                         "type": "string"
                       },
-                      "abstractExtractor": {
-                        "type": "string"
-                      },
                       "typeOfPaper": {
                         "type": "string"
-                      },
-                      "shortOrLong": {
-                        "type": "string"
-                      },
-                      "atMainConference": {
-                        "type": "boolean"
-                      },
-                      "isSharedTask": {
-                        "type": "boolean"
-                      },
-                      "isStudentPaper": {
-                        "type": "boolean"
                       },
                       "doi": {
                         "type": "string"
                       },
-                      "preProcessingGitHash": {
+                      "url": {
                         "type": "string"
                       },
-                      "pdfUrl": {
-                        "type": "string"
+                      "yearPublished": {
+                        "type": "number"
                       },
-                      "absUrl": {
-                        "type": "string"
-                      },
-                      "datePublished": {
-                        "type": "string"
-                      },
-                      "citationInfoTimestamp": {
-                        "type": "string"
-                      },
-                      "firstAuthor": {
+                      "venue": {
                         "type": "string"
                       },
                       "dblpId": {
@@ -986,7 +979,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "cites": {
+                    "authorIds": {
                       "type": "array",
                       "items": {},
                       "example": [
@@ -999,21 +992,54 @@
                         "type": "string"
                       },
                       "example": [
-                        "6250280ef7e41006e28de0cc"
+                        "62cd87668062f8069368d056"
                       ]
                     },
-                    "venues": {
+                    "fieldsOfStudy": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        null
+                      ]
+                    },
+                    "inCitations": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        null
+                      ]
+                    },
+                    "inCitationsCount": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "outCitations": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        null
+                      ]
+                    },
+                    "outCitationsCount": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "openAccess": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "pdfUrls": {
                       "type": "array",
                       "items": {
                         "type": "string"
                       },
                       "example": [
-                        "6250280ef7e41006e28de0ce"
+                        "https://dummy-url.de/pdf.pdf"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62502811f7e41006e28de16c"
+                      "example": "62cd876b8062f8069368d125"
                     },
                     "title": {
                       "type": "string",
@@ -1023,69 +1049,37 @@
                       "type": "string",
                       "example": "This paper is about a really interesting topic"
                     },
-                    "abstractExtractor": {
-                      "type": "string",
-                      "example": "grobid"
-                    },
                     "typeOfPaper": {
                       "type": "string",
-                      "example": "conference"
-                    },
-                    "shortOrLong": {
-                      "type": "string",
-                      "example": "long"
-                    },
-                    "atMainConference": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "isSharedTask": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "isStudentPaper": {
-                      "type": "boolean",
-                      "example": false
+                      "example": "article"
                     },
                     "doi": {
                       "type": "string",
                       "example": "doi/1.23.123"
                     },
-                    "preProcessingGitHash": {
-                      "type": "string",
-                      "example": "f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6"
-                    },
-                    "pdfUrl": {
-                      "type": "string",
-                      "example": "https://dummy-url.de/pdf.pdf"
-                    },
-                    "absUrl": {
+                    "url": {
                       "type": "string",
                       "example": "https://dummy-url.de/"
                     },
-                    "datePublished": {
-                      "type": "string",
-                      "example": "2022-04-08T12:18:22.364Z"
+                    "yearPublished": {
+                      "type": "number",
+                      "example": 2022
                     },
-                    "citationInfoTimestamp": {
+                    "venue": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:22.364Z"
-                    },
-                    "firstAuthor": {
-                      "type": "string",
-                      "example": "6250280ef7e41006e28de0cd"
+                      "example": "62cd87668062f8069368d057"
                     },
                     "dblpId": {
                       "type": "string",
-                      "example": "some-id-123"
-                    },
-                    "createdBy": {
-                      "type": "string",
-                      "example": "6250280ef7e41006e28de0d1"
+                      "example": "2"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:25.291Z"
+                      "example": "2022-07-12T14:38:35.318Z"
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "example": "62cd87678062f8069368d068"
                     },
                     "__v": {
                       "type": "number",
@@ -1181,9 +1175,9 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62502811f7e41006e28de159"
+                      "example": "62cd876b8062f8069368d10c"
                     },
-                    "cites": {
+                    "authorIds": {
                       "type": "array",
                       "items": {},
                       "example": [
@@ -1196,16 +1190,49 @@
                         "type": "string"
                       },
                       "example": [
-                        "6250280ef7e41006e28de0cc"
+                        "62cd87668062f8069368d056"
                       ]
                     },
-                    "venues": {
+                    "fieldsOfStudy": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        null
+                      ]
+                    },
+                    "inCitations": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        null
+                      ]
+                    },
+                    "inCitationsCount": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "outCitations": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        null
+                      ]
+                    },
+                    "outCitationsCount": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "openAccess": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "pdfUrls": {
                       "type": "array",
                       "items": {
                         "type": "string"
                       },
                       "example": [
-                        "6250280ef7e41006e28de0ce"
+                        "https://dummy-url.de/pdf.pdf"
                       ]
                     },
                     "title": {
@@ -1216,72 +1243,40 @@
                       "type": "string",
                       "example": "This paper is about a really interesting topic"
                     },
-                    "abstractExtractor": {
-                      "type": "string",
-                      "example": "grobid"
-                    },
                     "typeOfPaper": {
                       "type": "string",
-                      "example": "conference"
-                    },
-                    "shortOrLong": {
-                      "type": "string",
-                      "example": "long"
-                    },
-                    "atMainConference": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "isSharedTask": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "isStudentPaper": {
-                      "type": "boolean",
-                      "example": false
+                      "example": "article"
                     },
                     "doi": {
                       "type": "string",
                       "example": "doi/1.23.123"
                     },
-                    "preProcessingGitHash": {
-                      "type": "string",
-                      "example": "f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6"
-                    },
-                    "pdfUrl": {
-                      "type": "string",
-                      "example": "https://dummy-url.de/pdf.pdf"
-                    },
-                    "absUrl": {
+                    "url": {
                       "type": "string",
                       "example": "https://dummy-url.de/"
                     },
-                    "datePublished": {
-                      "type": "string",
-                      "example": "2022-04-08T12:18:22.364Z"
+                    "yearPublished": {
+                      "type": "number",
+                      "example": 2022
                     },
-                    "citationInfoTimestamp": {
+                    "venue": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:22.364Z"
-                    },
-                    "firstAuthor": {
-                      "type": "string",
-                      "example": "6250280ef7e41006e28de0cd"
+                      "example": "62cd87668062f8069368d057"
                     },
                     "dblpId": {
                       "type": "string",
-                      "example": "some-id-123"
+                      "example": "1"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:25.123Z"
+                      "example": "2022-07-12T14:38:35.074Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "6250280ef7e41006e28de0d1"
+                          "example": "62cd87678062f8069368d068"
                         },
                         "email": {
                           "type": "string",
@@ -1361,7 +1356,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "cites": {
+                    "authorIds": {
                       "type": "array",
                       "items": {},
                       "example": [
@@ -1374,21 +1369,54 @@
                         "type": "string"
                       },
                       "example": [
-                        "6250280ef7e41006e28de0cc"
+                        "62cd87668062f8069368d056"
                       ]
                     },
-                    "venues": {
+                    "fieldsOfStudy": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        null
+                      ]
+                    },
+                    "inCitations": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        null
+                      ]
+                    },
+                    "inCitationsCount": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "outCitations": {
+                      "type": "array",
+                      "items": {},
+                      "example": [
+                        null
+                      ]
+                    },
+                    "outCitationsCount": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "openAccess": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "pdfUrls": {
                       "type": "array",
                       "items": {
                         "type": "string"
                       },
                       "example": [
-                        "6250280ef7e41006e28de0ce"
+                        "https://dummy-url.de/pdf.pdf"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62502811f7e41006e28de16f"
+                      "example": "62cd876b8062f8069368d134"
                     },
                     "title": {
                       "type": "string",
@@ -1398,69 +1426,37 @@
                       "type": "string",
                       "example": "This paper is about a really interesting topic"
                     },
-                    "abstractExtractor": {
-                      "type": "string",
-                      "example": "grobid"
-                    },
                     "typeOfPaper": {
                       "type": "string",
-                      "example": "conference"
-                    },
-                    "shortOrLong": {
-                      "type": "string",
-                      "example": "long"
-                    },
-                    "atMainConference": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "isSharedTask": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "isStudentPaper": {
-                      "type": "boolean",
-                      "example": false
+                      "example": "article"
                     },
                     "doi": {
                       "type": "string",
                       "example": "doi/1.23.123"
                     },
-                    "preProcessingGitHash": {
-                      "type": "string",
-                      "example": "f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6"
-                    },
-                    "pdfUrl": {
-                      "type": "string",
-                      "example": "https://dummy-url.de/pdf.pdf"
-                    },
-                    "absUrl": {
+                    "url": {
                       "type": "string",
                       "example": "https://dummy-url.de/"
                     },
-                    "datePublished": {
-                      "type": "string",
-                      "example": "2022-04-08T12:18:22.364Z"
+                    "yearPublished": {
+                      "type": "number",
+                      "example": 2022
                     },
-                    "citationInfoTimestamp": {
+                    "venue": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:22.364Z"
-                    },
-                    "firstAuthor": {
-                      "type": "string",
-                      "example": "6250280ef7e41006e28de0cd"
+                      "example": "62cd87668062f8069368d057"
                     },
                     "dblpId": {
                       "type": "string",
-                      "example": "some-id-123"
+                      "example": "1"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:25.341Z"
+                      "example": "2022-07-12T14:38:35.480Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "6250280ef7e41006e28de0d1"
+                      "example": "62cd87678062f8069368d068"
                     },
                     "__v": {
                       "type": "number",
@@ -1645,7 +1641,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "Empirical Methods in Natural Language Processing"
+                        "Empirical"
                       ]
                     },
                     "acronyms": {
@@ -1668,7 +1664,7 @@
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62502814f7e41006e28de1d3"
+                      "example": "62cd876e8062f8069368d19c"
                     },
                     "venueDetails": {
                       "type": "array",
@@ -1688,23 +1684,23 @@
                       },
                       "example": [
                         {
-                          "_id": "62502814f7e41006e28de1d4",
+                          "_id": "62cd876e8062f8069368d19d",
                           "callForPapersText": "Test",
-                          "timePublished": "2022-04-08T12:18:22.535Z"
+                          "timePublished": "2022-07-12T14:38:30.639Z"
                         }
                       ]
                     },
                     "dblpId": {
                       "type": "string",
-                      "example": "something"
+                      "example": "something2"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "6250280ef7e41006e28de0d1"
+                      "example": "62cd87678062f8069368d068"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:28.181Z"
+                      "example": "2022-07-12T14:38:38.982Z"
                     },
                     "__v": {
                       "type": "number",
@@ -1800,7 +1796,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62502813f7e41006e28de1bc"
+                      "example": "62cd876e8062f8069368d185"
                     },
                     "names": {
                       "type": "array",
@@ -1847,9 +1843,9 @@
                       },
                       "example": [
                         {
-                          "_id": "62502813f7e41006e28de1bd",
+                          "_id": "62cd876e8062f8069368d186",
                           "callForPapersText": "Test",
-                          "timePublished": "2022-04-08T12:18:22.535Z"
+                          "timePublished": "2022-07-12T14:38:30.639Z"
                         }
                       ]
                     },
@@ -1859,14 +1855,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:27.958Z"
+                      "example": "2022-07-12T14:38:38.636Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "6250280ef7e41006e28de0d1"
+                          "example": "62cd87678062f8069368d068"
                         },
                         "email": {
                           "type": "string",
@@ -1975,7 +1971,7 @@
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62502814f7e41006e28de1d7"
+                      "example": "62cd876f8062f8069368d1a0"
                     },
                     "venueDetails": {
                       "type": "array",
@@ -1995,9 +1991,9 @@
                       },
                       "example": [
                         {
-                          "_id": "62502814f7e41006e28de1d8",
+                          "_id": "62cd876f8062f8069368d1a1",
                           "callForPapersText": "Test",
-                          "timePublished": "2022-04-08T12:18:22.535Z"
+                          "timePublished": "2022-07-12T14:38:30.639Z"
                         }
                       ]
                     },
@@ -2007,11 +2003,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-04-08T12:18:28.244Z"
+                      "example": "2022-07-12T14:38:39.063Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "6250280ef7e41006e28de0d1"
+                      "example": "62cd87678062f8069368d068"
                     },
                     "__v": {
                       "type": "number",
@@ -2230,7 +2226,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "6250280ff7e41006e28de0d7"
+                      "example": "62cd87688062f8069368d06e"
                     },
                     "fullname": {
                       "type": "string",
@@ -2310,7 +2306,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "6250280ff7e41006e28de0d7"
+                      "example": "62cd87688062f8069368d06e"
                     },
                     "fullname": {
                       "type": "string",
@@ -2423,7 +2419,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "6250280ff7e41006e28de0d7"
+                      "example": "62cd87688062f8069368d06e"
                     },
                     "fullname": {
                       "type": "string",
@@ -2589,7 +2585,7 @@
                   "properties": {
                     "token": {
                       "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyNTAyODBlZjdlNDEwMDZlMjhkZTBkMSIsImVtYWlsIjoianB3QG5scGxhbmQuY29tIn0sImlhdCI6MTY0OTQyMDMwMn0.zMiZ6pGwTUhGTQSvjgc81sY04MhckgBTGyVQFLrWsdg"
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyY2Q4NzY3ODA2MmY4MDY5MzY4ZDA2OCIsImVtYWlsIjoianB3QG5scGxhbmQuY29tIn0sImlhdCI6MTY1NzYzNjcxMX0.mEXh74Er-j74K6Vcv20T6PAod5JF4Zqhj99LbC3Ypks"
                     }
                   }
                 }
@@ -2611,6 +2607,1574 @@
                 }
               }
             }
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/authors/years": {
+      "get": {
+        "summary": "/api/v0/fe/authors/years",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "years": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        1936
+                      ]
+                    },
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Author"
+        ]
+      }
+    },
+    "/api/v0/fe/authors/info": {
+      "get": {
+        "summary": "/api/v0/fe/authors/info",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rowCount": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "papersCount": {
+                            "type": "number"
+                          },
+                          "inCitationsCount": {
+                            "type": "number"
+                          },
+                          "yearPublishedFirst": {
+                            "type": "number"
+                          },
+                          "yearPublishedLast": {
+                            "type": "number"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "author": {
+                            "type": "string"
+                          },
+                          "inCitationsPerPaper": {
+                            "type": "number"
+                          },
+                          "link": {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "papersCount",
+                          "inCitationsCount",
+                          "yearPublishedFirst",
+                          "yearPublishedLast",
+                          "_id",
+                          "author",
+                          "inCitationsPerPaper",
+                          "link"
+                        ]
+                      },
+                      "example": [
+                        {
+                          "papersCount": 1,
+                          "inCitationsCount": 2,
+                          "yearPublishedFirst": 2022,
+                          "yearPublishedLast": 2022,
+                          "_id": "author2",
+                          "author": "author2",
+                          "inCitationsPerPaper": 2,
+                          "link": "https://dblp.org/search?q=author2"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"page\", \"pageSize\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Author"
+        ]
+      }
+    },
+    "/api/v0/fe/authors/quartiles": {
+      "get": {
+        "summary": "/api/v0/fe/authors/quartiles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Author"
+        ]
+      }
+    },
+    "/api/v0/fe/authors/topk": {
+      "get": {
+        "summary": "/api/v0/fe/authors/topk",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "string"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"k\" and/or \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Author"
+        ]
+      }
+    },
+    "/api/v0/fe/authors/list": {
+      "get": {
+        "summary": "/api/v0/fe/authors/list",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "fullname": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"pattern\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Author"
+        ]
+      }
+    },
+    "/api/v0/fe/papers/years": {
+      "get": {
+        "summary": "/api/v0/fe/papers/years",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "years": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        1936
+                      ]
+                    },
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Paper"
+        ]
+      }
+    },
+    "/api/v0/fe/papers/info": {
+      "get": {
+        "summary": "/api/v0/fe/papers/info",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rowCount": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "inCitationsCount": {
+                            "type": "number"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "yearPublished": {
+                            "type": "number"
+                          },
+                          "authors": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "venue": {
+                            "type": "string"
+                          },
+                          "pdfUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "_id",
+                          "inCitationsCount",
+                          "title",
+                          "yearPublished",
+                          "authors",
+                          "venue",
+                          "pdfUrl"
+                        ]
+                      },
+                      "example": [
+                        {
+                          "_id": "62cd87748062f8069368d23b",
+                          "inCitationsCount": 2,
+                          "title": "Some Paper Title",
+                          "yearPublished": 2022,
+                          "authors": [
+                            "author1",
+                            "author2"
+                          ],
+                          "venue": "venue1",
+                          "pdfUrl": "https://dummy-url.de/pdf.pdf"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"page\", \"pageSize\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Paper"
+        ]
+      }
+    },
+    "/api/v0/fe/papers/quartiles": {
+      "get": {
+        "summary": "/api/v0/fe/papers/quartiles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Paper"
+        ]
+      }
+    },
+    "/api/v0/fe/papers/topk": {
+      "get": {
+        "summary": "/api/v0/fe/papers/topk",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "string"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"k\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Paper"
+        ]
+      }
+    },
+    "/api/v0/fe/papers/list": {
+      "get": {
+        "summary": "/api/v0/fe/papers/list",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameters \"column\" and/or \"pattern\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Paper"
+        ]
+      }
+    },
+    "/api/v0/fe/venues/years": {
+      "get": {
+        "summary": "/api/v0/fe/venues/years",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "years": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        1936
+                      ]
+                    },
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Venue"
+        ]
+      }
+    },
+    "/api/v0/fe/venues/info": {
+      "get": {
+        "summary": "/api/v0/fe/venues/info",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rowCount": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "papersCount": {
+                            "type": "number"
+                          },
+                          "inCitationsCount": {
+                            "type": "number"
+                          },
+                          "yearPublishedFirst": {
+                            "type": "number"
+                          },
+                          "yearPublishedLast": {
+                            "type": "number"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "venue": {
+                            "type": "string"
+                          },
+                          "inCitationsPerPaper": {
+                            "type": "number"
+                          },
+                          "link": {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "papersCount",
+                          "inCitationsCount",
+                          "yearPublishedFirst",
+                          "yearPublishedLast",
+                          "_id",
+                          "venue",
+                          "inCitationsPerPaper",
+                          "link"
+                        ]
+                      },
+                      "example": [
+                        {
+                          "papersCount": 1,
+                          "inCitationsCount": 0,
+                          "yearPublishedFirst": 2020,
+                          "yearPublishedLast": 2020,
+                          "_id": "Others",
+                          "venue": "Others",
+                          "inCitationsPerPaper": 0,
+                          "link": null
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"page\", \"pageSize\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Venue"
+        ]
+      }
+    },
+    "/api/v0/fe/venues/quartiles": {
+      "get": {
+        "summary": "/api/v0/fe/venues/quartiles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Venue"
+        ]
+      }
+    },
+    "/api/v0/fe/venues/topk": {
+      "get": {
+        "summary": "/api/v0/fe/venues/topk",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "string"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"k\" and/or \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Venue"
+        ]
+      }
+    },
+    "/api/v0/fe/venues/list": {
+      "get": {
+        "summary": "/api/v0/fe/venues/list",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "names": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"pattern\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Venue"
+        ]
+      }
+    },
+    "/api/v0/fe/types/years": {
+      "get": {
+        "summary": "/api/v0/fe/types/years",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "years": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        1936
+                      ]
+                    },
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/types/info": {
+      "get": {
+        "summary": "/api/v0/fe/types/info",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rowCount": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "papersCount": {
+                            "type": "number"
+                          },
+                          "inCitationsCount": {
+                            "type": "number"
+                          },
+                          "yearPublishedFirst": {
+                            "type": "number"
+                          },
+                          "yearPublishedLast": {
+                            "type": "number"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "typeOfPaper": {
+                            "type": "string"
+                          },
+                          "inCitationsPerPaper": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "papersCount",
+                          "inCitationsCount",
+                          "yearPublishedFirst",
+                          "yearPublishedLast",
+                          "_id",
+                          "typeOfPaper",
+                          "inCitationsPerPaper"
+                        ]
+                      },
+                      "example": [
+                        {
+                          "papersCount": 2,
+                          "inCitationsCount": 2,
+                          "yearPublishedFirst": 2020,
+                          "yearPublishedLast": 2022,
+                          "_id": "article",
+                          "typeOfPaper": "article",
+                          "inCitationsPerPaper": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/types/quartiles": {
+      "get": {
+        "summary": "/api/v0/fe/types/quartiles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/types/topk": {
+      "get": {
+        "summary": "/api/v0/fe/types/topk",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "string"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"k\" and/or \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/fields/years": {
+      "get": {
+        "summary": "/api/v0/fe/fields/years",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "years": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        1936
+                      ]
+                    },
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/fields/info": {
+      "get": {
+        "summary": "/api/v0/fe/fields/info",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rowCount": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "papersCount": {
+                            "type": "number"
+                          },
+                          "inCitationsCount": {
+                            "type": "number"
+                          },
+                          "yearPublishedFirst": {
+                            "type": "number"
+                          },
+                          "yearPublishedLast": {
+                            "type": "number"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "fieldsOfStudy": {
+                            "type": "string"
+                          },
+                          "inCitationsPerPaper": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "papersCount",
+                          "inCitationsCount",
+                          "yearPublishedFirst",
+                          "yearPublishedLast",
+                          "_id",
+                          "fieldsOfStudy",
+                          "inCitationsPerPaper"
+                        ]
+                      },
+                      "example": [
+                        {
+                          "papersCount": 1,
+                          "inCitationsCount": 0,
+                          "yearPublishedFirst": 2020,
+                          "yearPublishedLast": 2020,
+                          "_id": "Others",
+                          "fieldsOfStudy": "Others",
+                          "inCitationsPerPaper": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/fields/quartiles": {
+      "get": {
+        "summary": "/api/v0/fe/fields/quartiles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/fields/topk": {
+      "get": {
+        "summary": "/api/v0/fe/fields/topk",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "string"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"k\" and/or \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/publishers/years": {
+      "get": {
+        "summary": "/api/v0/fe/publishers/years",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "years": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        1936
+                      ]
+                    },
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/publishers/info": {
+      "get": {
+        "summary": "/api/v0/fe/publishers/info",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rowCount": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "papersCount": {
+                            "type": "number"
+                          },
+                          "inCitationsCount": {
+                            "type": "number"
+                          },
+                          "yearPublishedFirst": {
+                            "type": "number"
+                          },
+                          "yearPublishedLast": {
+                            "type": "number"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "publisher": {
+                            "type": "string"
+                          },
+                          "inCitationsPerPaper": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "papersCount",
+                          "inCitationsCount",
+                          "yearPublishedFirst",
+                          "yearPublishedLast",
+                          "_id",
+                          "publisher",
+                          "inCitationsPerPaper"
+                        ]
+                      },
+                      "example": [
+                        {
+                          "papersCount": 1,
+                          "inCitationsCount": 0,
+                          "yearPublishedFirst": 2020,
+                          "yearPublishedLast": 2020,
+                          "_id": "Others",
+                          "publisher": "Others",
+                          "inCitationsPerPaper": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"page\", \"pageSize\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/publishers/quartiles": {
+      "get": {
+        "summary": "/api/v0/fe/publishers/quartiles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/publishers/topk": {
+      "get": {
+        "summary": "/api/v0/fe/publishers/topk",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "string"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The request is missing the required parameter \"k\" and/or \"metric\"."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/citationsIn/years": {
+      "get": {
+        "summary": "/api/v0/fe/citationsIn/years",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "years": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        1936
+                      ]
+                    },
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/v0/fe/citationsOut/years": {
+      "get": {
+        "summary": "/api/v0/fe/citationsOut/years",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "years": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        1936
+                      ]
+                    },
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "example": [
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": ""
           }
         },
         "tags": []
@@ -2667,6 +4231,9 @@
           "lng": {
             "type": "number"
           },
+          "dblpId": {
+            "type": "string"
+          },
           "_id": {
             "type": "string"
           }
@@ -2676,13 +4243,17 @@
         "title": "Author",
         "required": [
           "fullname",
-          "email",
           "createdBy",
-          "createdAt",
-          "dblpId"
+          "createdAt"
         ],
         "properties": {
           "fullname": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "orcid": {
             "type": "string"
           },
           "affiliations": {
@@ -2698,15 +4269,15 @@
           "email": {
             "type": "string"
           },
+          "dblpId": {
+            "type": "string"
+          },
           "createdBy": {
             "type": "string"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time"
-          },
-          "dblpId": {
-            "type": "string"
           },
           "_id": {
             "type": "string"
@@ -2716,23 +4287,11 @@
       "Paper": {
         "title": "Paper",
         "required": [
-          "title",
-          "abstractText",
-          "abstractExtractor",
-          "typeOfPaper",
-          "shortOrLong",
-          "atMainConference",
-          "isSharedTask",
-          "isStudentPaper",
-          "doi",
-          "preProcessingGitHash",
-          "pdfUrl",
-          "absUrl",
-          "datePublished",
-          "citationInfoTimestamp",
+          "inCitationsCount",
+          "outCitationsCount",
+          "openAccess",
           "createdBy",
-          "createdAt",
-          "dblpId"
+          "createdAt"
         ],
         "properties": {
           "title": {
@@ -2741,67 +4300,10 @@
           "abstractText": {
             "type": "string"
           },
-          "abstractExtractor": {
-            "type": "string",
-            "enum": [
-              "grobid",
-              "anthology",
-              "rulebased"
-            ]
+          "yearPublished": {
+            "type": "number"
           },
-          "typeOfPaper": {
-            "type": "string",
-            "enum": [
-              "journal",
-              "conference",
-              "demo",
-              "workshop",
-              "poster",
-              "tutorial",
-              "doctoralconsortium",
-              "masterthesis",
-              "phdthesis",
-              "other"
-            ]
-          },
-          "shortOrLong": {
-            "type": "string",
-            "enum": [
-              "short",
-              "long",
-              "unknown"
-            ]
-          },
-          "atMainConference": {
-            "type": "boolean"
-          },
-          "isSharedTask": {
-            "type": "boolean"
-          },
-          "isStudentPaper": {
-            "type": "boolean"
-          },
-          "doi": {
-            "type": "string"
-          },
-          "preProcessingGitHash": {
-            "type": "string"
-          },
-          "pdfUrl": {
-            "type": "string"
-          },
-          "absUrl": {
-            "type": "string"
-          },
-          "datePublished": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "citationInfoTimestamp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "cites": {
+          "authorIds": {
             "type": "array",
             "items": {
               "type": "string"
@@ -2813,14 +4315,89 @@
               "type": "string"
             }
           },
-          "firstAuthor": {
+          "venueId": {
             "type": "string"
           },
-          "venues": {
+          "venue": {
+            "type": "string"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "typeOfPaper": {
+            "type": "string",
+            "enum": [
+              "article",
+              "inproceedings",
+              "book",
+              "incollection",
+              "proceedings",
+              "phdthesis",
+              "mastersthesis"
+            ]
+          },
+          "fieldsOfStudy": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Art",
+                "Biology",
+                "Business",
+                "Chemistry",
+                "Computer Science",
+                "Economics",
+                "Engineering",
+                "Environmental Science",
+                "Geography",
+                "Geology",
+                "History",
+                "Materials Science",
+                "Mathematics",
+                "Medicine",
+                "Philosophy",
+                "Physics",
+                "Political Science",
+                "Psychology",
+                "Sociology"
+              ]
+            }
+          },
+          "inCitations": {
             "type": "array",
             "items": {
               "type": "string"
             }
+          },
+          "inCitationsCount": {
+            "type": "number"
+          },
+          "outCitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "outCitationsCount": {
+            "type": "number"
+          },
+          "openAccess": {
+            "type": "boolean"
+          },
+          "dblpId": {
+            "type": "string"
+          },
+          "doi": {
+            "type": "string"
+          },
+          "pdfUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "url": {
+            "type": "string"
           },
           "createdBy": {
             "type": "string"
@@ -2828,9 +4405,6 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
-          },
-          "dblpId": {
-            "type": "string"
           },
           "_id": {
             "type": "string"
@@ -2841,8 +4415,7 @@
         "title": "Venue",
         "required": [
           "createdBy",
-          "createdAt",
-          "dblpId"
+          "createdAt"
         ],
         "properties": {
           "names": {
@@ -2879,15 +4452,15 @@
               "required": []
             }
           },
+          "dblpId": {
+            "type": "string"
+          },
           "createdBy": {
             "type": "string"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time"
-          },
-          "dblpId": {
-            "type": "string"
           },
           "_id": {
             "type": "string"
