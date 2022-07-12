@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import restify from 'express-restify-mongoose';
 import * as DocumentTypes from '../models/interfaces';
 import { APIOptions } from '../../config/interfaces';
+import { addCreated } from './index';
+
 const passport = require('passport');
 
 export function initialize(
@@ -13,14 +15,25 @@ export function initialize(
   // authors endpoint
   restify.serve(router, model, {
     name: 'authors',
-    preMiddleware: passport.authenticate('jwt', { session: false }),
+    preMiddleware: passport.authenticate('admin', { session: false }),
     prefix: options.server.prefix,
     version: options.server.version,
     preCreate: (req: any, res: express.Response, next: NextFunction) => {
       if (req.user.isAdmin) {
         // Add who created the author and when
-        req.body.createdBy = req.user._id;
-        req.body.createdAt = new Date();
+        addCreated(req);
+        // TODO better solution needed
+        if (Array.isArray(req.body)) {
+          for (const i in req.body) {
+            if (req.body[i].orcid === null) {
+              delete req.body[i].orcid;
+            }
+          }
+        } else {
+          if (req.body.orcid === null) {
+            delete req.body.orcid;
+          }
+        }
         return next();
       }
 

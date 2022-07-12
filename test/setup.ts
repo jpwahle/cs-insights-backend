@@ -1,12 +1,12 @@
-import { initServer } from '../src/app';
 import { APIServer } from '../src/app/apiserver';
 import { loadOptions } from '../src/config';
 import { APIOptions } from '../src/config/interfaces';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
+import { initServer } from '../src/app';
 
 let mongod: MongoMemoryServer;
-export let app: APIServer;
+export let apiServer: APIServer;
 
 export async function initDb() {
   mongod = await MongoMemoryServer.create();
@@ -30,16 +30,18 @@ export async function clearDatabase(dropDatabases: string[] = []) {
 }
 
 export async function initApi(): Promise<{
-  app: APIServer;
-  options: APIOptions;
+  apiServer: APIServer;
+  apiOptions: APIOptions;
 }> {
-  const options = await loadOptions('./test', 'options.js');
-  options.database.url = mongod.getUri();
+  const apiOptions = await loadOptions('./test', 'options.js');
+  apiOptions.database.url = mongod.getUri();
 
-  if (app) {
-    return { app, options };
+  if (apiServer) {
+    return { apiServer, apiOptions };
   }
 
-  app = await initServer(options);
-  return { app, options };
+  apiOptions.server.port = 3002;
+  apiServer = await initServer(apiOptions);
+
+  return { apiServer, apiOptions };
 }

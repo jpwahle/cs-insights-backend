@@ -1,3 +1,4 @@
+import './loadEnv';
 import cluster from 'cluster';
 import { initServer } from './app';
 import { loadOptions } from './config';

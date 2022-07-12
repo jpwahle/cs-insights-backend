@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import restify from 'express-restify-mongoose';
 import * as DocumentTypes from '../models/interfaces';
 import { APIOptions } from '../../config/interfaces';
+import { addCreated } from './index';
 const passport = require('passport');
 
 export function initialize(
@@ -13,14 +14,13 @@ export function initialize(
   // affiliations endpoint
   restify.serve(router, model, {
     name: 'affiliations',
-    preMiddleware: passport.authenticate('jwt', { session: false }),
+    preMiddleware: passport.authenticate('admin', { session: false }),
     prefix: options.server.prefix,
     version: options.server.version,
     preCreate: (req: any, res: express.Response, next: NextFunction) => {
       if (req.user.isAdmin) {
         // Add who created the affiliation and when
-        req.body.createdBy = req.user._id;
-        req.body.createdAt = new Date();
+        addCreated(req);
         return next();
       }
 

@@ -39,20 +39,19 @@ describe('/venues', () => {
 
   before(async () => {
     await Setup.initDb();
-    const { app, options } = await Setup.initApi();
-    apiServer = app;
-    apiOptions = options;
+    ({ apiServer, apiOptions } = await Setup.initApi());
+
     adminToken = (
       await chai
-        .request(app.app)
-        .post(`${options.server.prefix}${options.server.version}/login`)
-        .send(options.user.default)
+        .request(apiServer.app)
+        .post(`${apiOptions.server.prefix}${apiOptions.server.version}/login`)
+        .send(apiOptions.user.default)
     ).body.token;
     adminUser = (
       await chai
-        .request(app.app)
+        .request(apiServer.app)
         .get(
-          `${options.server.prefix}${options.server.version}/users?query={"email":"${options.user.default.email}"}`
+          `${apiOptions.server.prefix}${apiOptions.server.version}/users?query={"email":"${apiOptions.user.default.email}"}`
         )
         .set('Authorization', `Bearer ${adminToken}`)
     ).body[0];
@@ -252,7 +251,7 @@ describe('/venues', () => {
         .request(apiServer.app)
         .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send(dummyVenue)
+        .send({ ...dummyVenue, names: ['Empirical'], dblpId: 'something2' })
         .end((err, res) => {
           should().not.exist(err);
           expect(res).to.have.status(201);

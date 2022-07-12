@@ -36,38 +36,59 @@ export interface Venue extends mongoose.Document {
 export interface Paper extends mongoose.Document {
   title: string;
   abstractText: string;
-  abstractExtractor: 'grobid' | 'anthology' | 'rulebased';
+  yearPublished: number;
+
+  authorIds: mongoose.Types.ObjectId[];
+  authors: string[];
+  venueId: mongoose.Types.ObjectId;
+  venue: string;
+  publisher: string;
   typeOfPaper:
-    | 'journal'
-    | 'conference'
-    | 'demo'
-    | 'workshop'
-    | 'poster'
-    | 'tutorial'
-    | 'doctoralconsortium'
-    | 'other';
-  shortOrLong: 'short' | 'long' | 'other';
+    | 'article'
+    | 'inproceedings'
+    | 'book'
+    | 'incollection'
+    | 'proceedings'
+    | 'phdthesis'
+    | 'mastersthesis';
+  fieldsOfStudy:
+    | 'Art'
+    | 'Biology'
+    | 'Business'
+    | 'Chemistry'
+    | 'Computer Science'
+    | 'Economics'
+    | 'Engineering'
+    | 'Environmental Science'
+    | 'Geography'
+    | 'Geology'
+    | 'History'
+    | 'Materials Science'
+    | 'Mathematics'
+    | 'Medicine'
+    | 'Philosophy'
+    | 'Physics'
+    | 'Political Science'
+    | 'Psychology'
+    | 'Sociology';
 
-  atMainConference: boolean;
-  isSharedTask: boolean;
-  isStudentPaper: boolean;
+  inCitations: mongoose.Types.ObjectId[];
+  inCitationsCount: number;
+  // inCitationsRef: string[]; //TODO add
+  outCitations: mongoose.Types.ObjectId[];
+  outCitationsCount: number;
+  // outCitationsRef: string[]; //TODO add
 
+  openAccess: boolean;
+
+  // datasetId: string //TODO add
+  dblpId: string;
   doi: string;
-  preProcessingGitHash: string;
-  pdfUrl: string;
-  absUrl: string;
-
-  datePublished: Date;
-  citationInfoTimestamp: Date;
-  citedBy: mongoose.Types.ObjectId[];
-
-  authors: mongoose.Types.ObjectId[];
-  firstAuthor: mongoose.Types.ObjectId;
-  venues: mongoose.Types.ObjectId[];
+  pdfUrls: string[];
+  url: string;
 
   createdBy: mongoose.Types.ObjectId;
   createdAt: Date;
-  dblpId: string;
 }
 
 export interface User extends mongoose.Document {

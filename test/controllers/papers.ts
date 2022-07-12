@@ -23,23 +23,17 @@ describe('/papers', () => {
   const dummyPaper = {
     title: 'Some Paper Title',
     abstractText: 'This paper is about a really interesting topic',
-    abstractExtractor: 'grobid',
-    typeOfPaper: 'conference',
-    shortOrLong: 'long',
-    atMainConference: true,
-    isSharedTask: false,
-    isStudentPaper: false,
+    typeOfPaper: 'article',
     doi: 'doi/1.23.123',
-    preProcessingGitHash: 'f8bdd1bcdcd8480439d28a38f2fb8c25e20d76c6',
-    pdfUrl: 'https://dummy-url.de/pdf.pdf',
-    absUrl: 'https://dummy-url.de/',
-    datePublished: new Date(),
-    citationInfoTimestamp: new Date(),
-    citedBy: [new mongoose.Types.ObjectId()],
+    pdfUrls: ['https://dummy-url.de/pdf.pdf'],
+    url: 'https://dummy-url.de/',
+    yearPublished: 2022,
+    inCitationsCount: 1,
+    outCitationsCount: 0,
     authors: [new mongoose.Types.ObjectId()],
-    firstAuthor: new mongoose.Types.ObjectId(),
-    venues: [[new mongoose.Types.ObjectId()]],
-    dblpId: 'some-id-123',
+    venue: new mongoose.Types.ObjectId(),
+    dblpId: '1',
+    csvId: '1',
   };
 
   const dummyUpdate = {
@@ -48,55 +42,48 @@ describe('/papers', () => {
 
   before(async () => {
     await Setup.initDb();
-    const { app, options } = await Setup.initApi();
-    apiServer = app;
-    apiOptions = options;
+    ({ apiServer, apiOptions } = await Setup.initApi());
+
     adminToken = (
       await chai
-        .request(app.app)
-        .post(`${options.server.prefix}${options.server.version}/login`)
-        .send(options.user.default)
+        .request(apiServer.app)
+        .post(`${apiOptions.server.baseRoute}/login`)
+        .send(apiOptions.user.default)
     ).body.token;
     adminUser = (
       await chai
-        .request(app.app)
+        .request(apiServer.app)
         .get(
-          `${options.server.prefix}${options.server.version}/users?query={"email":"${options.user.default.email}"}`
+          `${apiOptions.server.baseRoute}/users?query={"email":"${apiOptions.user.default.email}"}`
         )
         .set('Authorization', `Bearer ${adminToken}`)
     ).body[0];
   });
 
   afterEach(async () => {
-    await Setup.clearDatabase(['papers']);
+    await Setup.clearDatabase(['papers', 'venues', 'authors']);
   });
 
   describe('No access', () => {
     let someUserToken: string;
     before(async () => {
-      await chai
-        .request(apiServer.app)
-        .post(`${apiOptions.server.prefix}${apiOptions.server.version}/register`)
-        .send({
+      await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/register`).send({
+        email: 'dummy@user.de',
+        password: 'insecure',
+        fullname: 'Your Name',
+      });
+      someUserToken = (
+        await chai.request(apiServer.app).post(`${apiOptions.server.baseRoute}/login`).send({
           email: 'dummy@user.de',
           password: 'insecure',
-          fullname: 'Your Name',
-        });
-      someUserToken = (
-        await chai
-          .request(apiServer.app)
-          .post(`${apiOptions.server.prefix}${apiOptions.server.version}/login`)
-          .send({
-            email: 'dummy@user.de',
-            password: 'insecure',
-          })
+        })
       ).body.token;
     });
     describe('Unauthorized access', () => {
       specify('Unauthorized GET', (done) => {
         chai
           .request(apiServer.app)
-          .get(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+          .get(`${apiOptions.server.baseRoute}${route}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -107,7 +94,7 @@ describe('/papers', () => {
       specify('Unauthorized POST', (done) => {
         chai
           .request(apiServer.app)
-          .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+          .post(`${apiOptions.server.baseRoute}${route}`)
           .send(dummyPaper)
           .end((err, res) => {
             should().not.exist(err);
@@ -135,7 +122,7 @@ describe('/papers', () => {
       specify('Unauthorized DELETE', (done) => {
         chai
           .request(apiServer.app)
-          .delete(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+          .delete(`${apiOptions.server.baseRoute}${route}`)
           .end((err, res) => {
             should().not.exist(err);
             expect(res).to.have.status(401);
@@ -148,7 +135,7 @@ describe('/papers', () => {
       let paper: DocumentTypes.Paper;
 
       beforeEach(async () => {
-        const dummyPaperDb = lodash.merge({}, dummyPaper, {
+        const dummyPaperDb = lodash.merge(dummyPaper, {
           createdAt: new Date(),
           createdBy: adminUser._id,
         });
@@ -158,7 +145,7 @@ describe('/papers', () => {
       specify('Forbidden POST', (done) => {
         chai
           .request(apiServer.app)
-          .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+          .post(`${apiOptions.server.baseRoute}${route}`)
           .set('Authorization', `Bearer ${someUserToken}`)
           .send(dummyPaper)
           .end((err, res) => {
@@ -170,7 +157,7 @@ describe('/papers', () => {
       specify('Forbidden PATCH', (done) => {
         chai
           .request(apiServer.app)
-          .patch(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}`)
+          .patch(`${apiOptions.server.baseRoute}${route}/${paper._id}`)
           .set('Authorization', `Bearer ${someUserToken}`)
           .send(dummyUpdate)
           .end((err, res) => {
@@ -182,7 +169,7 @@ describe('/papers', () => {
       specify('Forbidden DELETE', (done) => {
         chai
           .request(apiServer.app)
-          .delete(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}`)
+          .delete(`${apiOptions.server.baseRoute}${route}/${paper._id}`)
           .set('Authorization', `Bearer ${someUserToken}`)
           .send(dummyPaper)
           .end((err, res) => {
@@ -198,7 +185,7 @@ describe('/papers', () => {
     let paper: DocumentTypes.Paper;
 
     beforeEach(async () => {
-      const dummyPaperDb = lodash.merge({}, dummyPaper, {
+      const dummyPaperDb = lodash.merge(dummyPaper, {
         createdAt: new Date(),
         createdBy: adminUser._id,
       });
@@ -209,7 +196,7 @@ describe('/papers', () => {
       chai
         .request(apiServer.app)
         .get(
-          `${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}?populate=createdBy&select=createdBy.fullname,createdBy.email`
+          `${apiOptions.server.baseRoute}${route}/${paper._id}?populate=createdBy&select=createdBy.fullname,createdBy.email`
         )
         .set('Authorization', `Bearer ${adminToken}`)
         .end((err, res) => {
@@ -228,7 +215,7 @@ describe('/papers', () => {
     specify('Successful GET/count', (done) => {
       chai
         .request(apiServer.app)
-        .get(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/count`)
+        .get(`${apiOptions.server.baseRoute}${route}/count`)
         .set('Authorization', `Bearer ${adminToken}`)
         .end((err, res) => {
           should().not.exist(err);
@@ -242,7 +229,7 @@ describe('/papers', () => {
     specify('Successful GET', (done) => {
       chai
         .request(apiServer.app)
-        .get(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+        .get(`${apiOptions.server.baseRoute}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .end((err, res) => {
           should().not.exist(err);
@@ -257,11 +244,12 @@ describe('/papers', () => {
     });
 
     specify('Successful POST', (done) => {
+      const dummyPaper2 = { ...dummyPaper, csvId: '2', dblpId: '2' };
       chai
         .request(apiServer.app)
-        .post(`${apiOptions.server.prefix}${apiOptions.server.version}${route}`)
+        .post(`${apiOptions.server.baseRoute}${route}`)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send(dummyPaper)
+        .send(dummyPaper2)
         .end((err, res) => {
           should().not.exist(err);
           expect(res).to.have.status(201);
@@ -274,10 +262,31 @@ describe('/papers', () => {
         });
     });
 
+    specify('Successful POST (multiple)', (done) => {
+      const dummyPaper3 = { ...dummyPaper, csvId: '3', dblpId: '3' };
+      const dummyPaper4 = { ...dummyPaper, csvId: '4', dblpId: '4' };
+      chai
+        .request(apiServer.app)
+        .post(`${apiOptions.server.baseRoute}${route}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send([dummyPaper3, dummyPaper4])
+        .end((err, res) => {
+          should().not.exist(err);
+
+          expect(res).to.have.status(201);
+          expect(res.body[0].createdBy).to.exist;
+          expect(res.body[0].createdAt).to.exist;
+          expect(res.body[0].__v).to.exist;
+          expect(res.body[0]._id).to.exist;
+          expect(res.body[0].createdBy.id == adminUser._id);
+          done();
+        });
+    });
+
     specify('Successful PATCH', (done) => {
       chai
         .request(apiServer.app)
-        .patch(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}`)
+        .patch(`${apiOptions.server.baseRoute}${route}/${paper._id}`)
         .send(dummyUpdate)
         .set('Authorization', `Bearer ${adminToken}`)
         .end((err, res) => {
@@ -292,7 +301,7 @@ describe('/papers', () => {
     specify('Successful DELETE', async () => {
       const res = await chai
         .request(apiServer.app)
-        .delete(`${apiOptions.server.prefix}${apiOptions.server.version}${route}/${paper._id}`)
+        .delete(`${apiOptions.server.baseRoute}${route}/${paper._id}`)
         .set('Authorization', `Bearer ${adminToken}`);
       expect(res).to.have.status(204);
       expect((await apiServer.models.Paper.countDocuments()) === 0);

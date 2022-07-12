@@ -34,5 +34,6 @@ export interface APIOptions {
     jsonParserLimit: string;
     prefix: string;
     version: string;
+    baseRoute: string;
   };
 }

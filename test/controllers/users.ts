@@ -34,9 +34,8 @@ describe('/users', () => {
 
   before(async () => {
     await Setup.initDb();
-    const { app, options } = await Setup.initApi();
-    apiServer = app;
-    apiOptions = options;
+    ({ apiServer, apiOptions } = await Setup.initApi());
+
     adminToken = (
       await chai
         .request(apiServer.app)
