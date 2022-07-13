@@ -1,14 +1,13 @@
 # NLP-Land-backend
 
-<p style="text-align:center">
-<a href="https://codecov.io/gh/gipplab/NLP-Land-backend"><img alt="codecov" src="https://codecov.io/gh/gipplab/NLP-Land-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
-<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/branch.yaml"><img alt="Actions Status" src="https://github.com/gipplab/NLP-Land-backend/actions/workflows/branch.yaml/badge.svg"></a>
-<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/release.yaml"><img alt="Actions Status" src="https://github.com/gipplab/NLP-Land-backend/actions/workflows/release.yaml/badge.svg?branch=dev"></a>  
-<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/main.yaml"><img alt="Actions Status" src="https://github.com/gipplab/NLP-Land-backend/actions/workflows/main.yaml/badge.svg"></a>
+<p align="center">
+<a href="https://codecov.io/gh/gipplab/NLP-Land-backend"><img src="https://codecov.io/gh/gipplab/NLP-Land-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
+<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/gipplab/NLP-Land-backend/actions/workflows/release.yml/badge.svg?branch=dev">  
+<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/gipplab/NLP-Land-backend/actions/workflows/main.yml/badge.svg">
 <a href="https://github.com/gipplab/NLP-Land-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/gipplab/NLP-Land-backend?sort=semver"></a>
 <a href="https://hub.docker.com/repository/docker/jpelhaw/nlp-land-backend"><img alt="Docker Release" src="https://img.shields.io/docker/v/jpelhaw/nlp-land-backend?label=Docker"></a>
 <a href="https://gipplab.github.io/NLP-Land-backend/"><img alt="Docs" src="https://img.shields.io/badge/Docs-gh--pages-blue"></a>
-<a href="https://github.com/gipplab/NLP-Land-backend/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
+<a href="https://github.com/ag-gipp/NLP-Land-backend/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/airbnb/javascript"><img alt="Code style: Airbnb" src="https://img.shields.io/badge/codestyle-Airbnb-success"></a>
 </p>
 
@@ -61,23 +60,24 @@ In the future only need to use this command and can skip the other commands.
 It starts the docker container (if it is not started yet), uses auto-reload (whenever the code was changed), automatically compiles TypeScript files, and spawns multiple processes.
 </details>
 
-
 ## Repository
 ### Structure
-In the `src` folder we have the following structure:
-- /app:
-    - /controllers:
-      - /frontend: Controllers that are queried by the frontend
-    - /middleware:
-    - /models:
-- /config:
+The `src`-folder contains the main code with the following structure:
+- /app: The main logic for our app
+  - /controllers: Controls api endpoints and requests/responses
+  - /middleware: Middleware for authentication
+  - /models: Data models of the database schemas
+- /config: Configuration parameters for the app
 - Other files
 
 ### Packages
 The following is a list of some notable packages we use:
-- [Express Restify Mongoose](https://florianholzapfel.github.io/express-restify-mongoose/): Create REST interface for mongoose models
-
-
+- [ExpressRestifyMongoose](https://florianholzapfel.github.io/express-restify-mongoose/v1/): REST API endpoints
+- [Express](https://expressjs.com): Endpoints
+- [Mongoose](https://mongoosejs.com): Database layer on mongo
+- [Passport](https://www.passportjs.org): Authentication
+- [Redoc](https://github.com/Redocly/redoc): Automatic documentation
+    
 ## Tests
 This repository follows clean code principles using static typing, linting, unit tests, semantic releases, and documentation. In the following you can find details for running these tests in the cloud and locally.
 
@@ -115,8 +115,8 @@ npm run lint
 
 
 ## Documentation
-The auto-generated redoc documentation can be found [here](https://gipplab.github.io/NLP-Land-backend).
-    
+The auto-generated redoc documentation can be found [here](https://gipplab.github.io/NLP-Land-backend/).
+
 A general overview of standard endpoints, parameters, and possible queries can be found [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
 
     
@@ -133,7 +133,8 @@ This project is licensed under the terms of MIT license. For more information, p
 
 ## Citation
 If you use this repository, or use our tool for analysis, please cite our work:
-```
+
+```bib
 @inproceedings{Wahle2022c,
   title        = {D3: A Massive Dataset of Scholarly Metadata for Analyzing the State of Computer Science Research},
   author       = {Wahle, Jan Philip and Ruas, Terry and Mohammad, Saif M. and Gipp, Bela},
