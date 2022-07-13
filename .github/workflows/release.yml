@@ -95,6 +95,7 @@ jobs:
           fetch-depth: '0'
           
       - name: ✅ Setup node
+        uses: actions/setup-node@v2
         with:
           node-version: '17'
           
@@ -171,4 +172,6 @@ jobs:
         run: docker build -t ghcr.io/cs-insights-backend:${{steps.tagging.outputs.tag}} -t ghcr.io/cs-insights-backend:latest .
 
       - name: 📦 Push docker image
-        run: 	docker push ghcr.io/cs-insights-backend:${{steps.tagging.outputs.tag}} && docker push ghcr.io/cs-insights-backend:latest
+        run: |
+          docker push ghcr.io/cs-insights-backend:${{steps.tagging.outputs.tag}}
+          docker push ghcr.io/cs-insights-backend:latest
