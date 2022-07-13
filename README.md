@@ -1,13 +1,13 @@
 # cs-insights-backend
 
 <p align="center">
-<a href="https://codecov.io/gh/gipplab/NLP-Land-backend"><img src="https://codecov.io/gh/gipplab/NLP-Land-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
-<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/gipplab/NLP-Land-backend/actions/workflows/release.yml/badge.svg?branch=dev">  
-<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/gipplab/NLP-Land-backend/actions/workflows/main.yml/badge.svg">
-<a href="https://github.com/gipplab/NLP-Land-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/gipplab/NLP-Land-backend?sort=semver"></a>
+<a href="https://codecov.io/gh/gipplab/cs-insights-backend"><img src="https://codecov.io/gh/gipplab/cs-insights-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
+<a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml/badge.svg?branch=dev">  
+<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml/badge.svg">
+<a href="https://github.com/gipplab/cs-insights-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/gipplab/cs-insights-backend?sort=semver"></a>
 <a href="https://hub.docker.com/repository/docker/jpelhaw/nlp-land-backend"><img alt="Docker Release" src="https://img.shields.io/docker/v/jpelhaw/nlp-land-backend?label=Docker"></a>
-<a href="https://gipplab.github.io/NLP-Land-backend/"><img alt="Docs" src="https://img.shields.io/badge/Docs-gh--pages-blue"></a>
-<a href="https://github.com/ag-gipp/NLP-Land-backend/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
+<a href="https://gipplab.github.io/cs-insights-backend/"><img alt="Docs" src="https://img.shields.io/badge/Docs-gh--pages-blue"></a>
+<a href="https://github.com/ag-gipp/cs-insights-backend/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/airbnb/javascript"><img alt="Code style: Airbnb" src="https://img.shields.io/badge/codestyle-Airbnb-success"></a>
 </p>
 
@@ -15,7 +15,7 @@
 
 After cloning the repository you need to change the directory. 
 ```shell
-cd NLP-Land-backend
+cd cs-insights-backend
 ```
 
 Then we are providing two ways to set up this project.
