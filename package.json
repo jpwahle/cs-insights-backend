@@ -1,5 +1,5 @@
 {
-  "name": "nlp-land-backend",
+  "name": "cs-insights-backend",
   "version": "0.9.0",
   "description": "API server of the nlp-land project. This is the main part of storing data and accessing an external data analysis endpoint. It uses a mongoDB instance to store everything.",
   "main": "./lib/main.js",
