@@ -9,17 +9,23 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: 🏁 Checkout
+        uses: actions/checkout@v2
+        
+      - name: ✅ Setup node
+        uses: actions/setup-node@v2
         with:
           node-version: '17'
-      - name: Install dependencies
+          
+      - name: 📦 Install dependencies
         run: |
           npm install
-      - name: Run linting
+          
+      - name: 📘 Run linting
         run: |
           npm run lint
-      - name: Run tests
+          
+      - name: 🧪 Run tests
         run: |
           npm run test
 
@@ -27,19 +33,25 @@ jobs:
     needs: [Test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: 🏁 Checkout
+        uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-      - uses: actions/setup-node@v2
+          
+      - name: ✅ Setup node
+        uses: actions/setup-node@v2
         with:
           node-version: '17'
-      - name: Install dependencies
+          
+      - name: 📦 Install dependencies
         run: |
           npm install
-      - name: Run tests
+          
+      - name: 🧪 Run tests
         run: |
           npm run test
-      - name: Upload coverage report
+          
+      - name: ⬆️ Upload coverage report
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -50,18 +62,23 @@ jobs:
     needs: [Test]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 🏁 Checkout
         uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+        
+      - name: ✅ Setup node
+        uses: actions/setup-node@v2
         with:
           node-version: '17'
-      - name: Install dependencies
+          
+      - name: 📦 Install dependencies
         run: |
           npm install
-      - name: Run tests (and generate docs with oas)
+          
+      - name: 🧪 Run tests (to generate docs)
         run: |
           npm run test
-      - name: Deploy docs 🚀
+          
+      - name: 🚀 Deploy docs 
         uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
           branch: docs
@@ -71,25 +88,30 @@ jobs:
     needs: [Test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: 🏁 Checkout
+        uses: actions/checkout@v2
         with:
           persist-credentials: false
           fetch-depth: '0'
-      - uses: actions/setup-node@v2
+          
+      - name: ✅ Setup node
         with:
           node-version: '17'
-      - name: Bump version and push tag
+          
+      - name: 🏷 Bump version and push tag
         uses: anothrNick/github-tag-action@1.36.0
         id: tagging
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
-      - name: Build Changelog
+          
+      - name: 📝 Build Changelog
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create Release
+          
+      - name: 📦 Create Release
         uses: actions/create-release@v1
         with:
           release_name: ${{steps.tagging.outputs.tag}}
@@ -97,39 +119,56 @@ jobs:
           tag_name: ${{steps.tagging.outputs.tag}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Update npm package version
+          
+      - name: ⬆️ Update npm package version
         uses: reedyuk/npm-version@1.1.1
         with:
           version: ${{steps.tagging.outputs.tag}}
-      - name: Commit files
+          
+      - name: ➕ Commit files
         run: |
           git config --local user.email "jan.philip.wahle@gmail.com"
           git config --local user.name "github-actions[bot]"
           git add package.json
           git commit -m "[release-bot] Update npm version"
-      - name: Push changes
+          
+      - name: 💨 Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
           branch: ${{ github.ref }}
-      - name: Set up QEMU
+          
+      - name: 🐳 Set up QEMU
         uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
+        
+      - name: 🐳 Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: Login to DockerHub
+        
+      - name: 🔑 Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push version
+          
+      - name: 🐳 Build and push version
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
           tags: jpelhaw/nlp-land-backend:${{steps.tagging.outputs.tag}}
-      - name: Build and push latest
+          
+      - name: 🐳 Build and push latest
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
           tags: jpelhaw/nlp-land-backend:latest
+          
+      - name: 🔑 Docker GitHub package login
+        run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐳 Build docker image
+        run: docker build -t ghcr.io/cs-insights-backend:${{steps.tagging.outputs.tag}} -t ghcr.io/cs-insights-backend:latest .
+
+      - name: 📦 Push docker image
+        run: 	docker push ghcr.io/cs-insights-backend:${{steps.tagging.outputs.tag}} && docker push ghcr.io/cs-insights-backend:latest
