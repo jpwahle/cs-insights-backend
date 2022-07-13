@@ -1,4 +1,4 @@
-# NLP-Land-backend
+# cs-insights-backend
 
 <p align="center">
 <a href="https://codecov.io/gh/gipplab/NLP-Land-backend"><img src="https://codecov.io/gh/gipplab/NLP-Land-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
