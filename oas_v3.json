@@ -1,12 +1,12 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "nlp-land-backend",
-    "version": "0.8.0",
+    "title": "cs-insights-backend",
+    "version": "0.9.0",
     "license": {
       "name": "MIT"
     },
-    "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI server of the nlp-land project. This is the main part of storing data and accessing an external data analysis endpoint. It uses a mongoDB instance to store everything."
+    "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI server of the cs-insights project. This is the main part of storing data and accessing an external data analysis endpoint. It uses a mongoDB instance to store everything."
   },
   "paths": {
     "/api/v0/affiliations": {
@@ -75,7 +75,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62cd87688062f8069368d095"
+                      "example": "62cec4b7b7b70806bdafd3c3"
                     },
                     "name": {
                       "type": "string",
@@ -99,11 +99,11 @@
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "62cd87678062f8069368d068"
+                      "example": "62cec4b6b7b70806bdafd396"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:32.691Z"
+                      "example": "2022-07-13T13:12:23.644Z"
                     },
                     "__v": {
                       "type": "number",
@@ -199,7 +199,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62cd87688062f8069368d082"
+                      "example": "62cec4b7b7b70806bdafd3b0"
                     },
                     "name": {
                       "type": "string",
@@ -223,14 +223,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:32.497Z"
+                      "example": "2022-07-13T13:12:23.504Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "62cd87678062f8069368d068"
+                          "example": "62cec4b6b7b70806bdafd396"
                         },
                         "email": {
                           "type": "string",
@@ -312,7 +312,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62cd87688062f8069368d098"
+                      "example": "62cec4b7b7b70806bdafd3c6"
                     },
                     "name": {
                       "type": "string",
@@ -336,11 +336,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:32.757Z"
+                      "example": "2022-07-13T13:12:23.687Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "62cd87678062f8069368d068"
+                      "example": "62cec4b6b7b70806bdafd396"
                     },
                     "__v": {
                       "type": "number",
@@ -505,12 +505,12 @@
                         "type": "string"
                       },
                       "example": [
-                        "62cd87668062f8069368d055"
+                        "62cec4b5b7b70806bdafd383"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62cd87698062f8069368d0cc"
+                      "example": "62cec4b8b7b70806bdafd3fa"
                     },
                     "fullname": {
                       "type": "string",
@@ -518,7 +518,7 @@
                     },
                     "timestamp": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:30.407Z"
+                      "example": "2022-07-13T13:12:21.596Z"
                     },
                     "email": {
                       "type": "string",
@@ -526,11 +526,11 @@
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "62cd87678062f8069368d068"
+                      "example": "62cec4b6b7b70806bdafd396"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:33.936Z"
+                      "example": "2022-07-13T13:12:24.582Z"
                     },
                     "__v": {
                       "type": "number",
@@ -626,7 +626,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62cd87698062f8069368d0b9"
+                      "example": "62cec4b8b7b70806bdafd3e7"
                     },
                     "affiliations": {
                       "type": "array",
@@ -634,7 +634,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "62cd87668062f8069368d055"
+                        "62cec4b5b7b70806bdafd383"
                       ]
                     },
                     "fullname": {
@@ -647,7 +647,7 @@
                     },
                     "timestamp": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:30.407Z"
+                      "example": "2022-07-13T13:12:21.596Z"
                     },
                     "email": {
                       "type": "string",
@@ -655,14 +655,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:33.729Z"
+                      "example": "2022-07-13T13:12:24.427Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "62cd87678062f8069368d068"
+                          "example": "62cec4b6b7b70806bdafd396"
                         },
                         "email": {
                           "type": "string",
@@ -748,12 +748,12 @@
                         "type": "string"
                       },
                       "example": [
-                        "62cd87668062f8069368d055"
+                        "62cec4b5b7b70806bdafd383"
                       ]
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62cd876a8062f8069368d0dd"
+                      "example": "62cec4b8b7b70806bdafd40b"
                     },
                     "fullname": {
                       "type": "string",
@@ -765,7 +765,7 @@
                     },
                     "timestamp": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:30.407Z"
+                      "example": "2022-07-13T13:12:21.596Z"
                     },
                     "email": {
                       "type": "string",
@@ -773,11 +773,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:34.127Z"
+                      "example": "2022-07-13T13:12:24.733Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "62cd87678062f8069368d068"
+                      "example": "62cec4b6b7b70806bdafd396"
                     },
                     "__v": {
                       "type": "number",
@@ -992,7 +992,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "62cd87668062f8069368d056"
+                        "62cec4b5b7b70806bdafd384"
                       ]
                     },
                     "fieldsOfStudy": {
@@ -1039,7 +1039,7 @@
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62cd876b8062f8069368d125"
+                      "example": "62cec4b9b7b70806bdafd453"
                     },
                     "title": {
                       "type": "string",
@@ -1067,7 +1067,7 @@
                     },
                     "venue": {
                       "type": "string",
-                      "example": "62cd87668062f8069368d057"
+                      "example": "62cec4b5b7b70806bdafd385"
                     },
                     "dblpId": {
                       "type": "string",
@@ -1075,11 +1075,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:35.318Z"
+                      "example": "2022-07-13T13:12:25.727Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "62cd87678062f8069368d068"
+                      "example": "62cec4b6b7b70806bdafd396"
                     },
                     "__v": {
                       "type": "number",
@@ -1175,7 +1175,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62cd876b8062f8069368d10c"
+                      "example": "62cec4b9b7b70806bdafd43a"
                     },
                     "authorIds": {
                       "type": "array",
@@ -1190,7 +1190,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "62cd87668062f8069368d056"
+                        "62cec4b5b7b70806bdafd384"
                       ]
                     },
                     "fieldsOfStudy": {
@@ -1261,7 +1261,7 @@
                     },
                     "venue": {
                       "type": "string",
-                      "example": "62cd87668062f8069368d057"
+                      "example": "62cec4b5b7b70806bdafd385"
                     },
                     "dblpId": {
                       "type": "string",
@@ -1269,14 +1269,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:35.074Z"
+                      "example": "2022-07-13T13:12:25.542Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "62cd87678062f8069368d068"
+                          "example": "62cec4b6b7b70806bdafd396"
                         },
                         "email": {
                           "type": "string",
@@ -1369,7 +1369,7 @@
                         "type": "string"
                       },
                       "example": [
-                        "62cd87668062f8069368d056"
+                        "62cec4b5b7b70806bdafd384"
                       ]
                     },
                     "fieldsOfStudy": {
@@ -1416,7 +1416,7 @@
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62cd876b8062f8069368d134"
+                      "example": "62cec4b9b7b70806bdafd462"
                     },
                     "title": {
                       "type": "string",
@@ -1444,7 +1444,7 @@
                     },
                     "venue": {
                       "type": "string",
-                      "example": "62cd87668062f8069368d057"
+                      "example": "62cec4b5b7b70806bdafd385"
                     },
                     "dblpId": {
                       "type": "string",
@@ -1452,11 +1452,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:35.480Z"
+                      "example": "2022-07-13T13:12:25.930Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "62cd87678062f8069368d068"
+                      "example": "62cec4b6b7b70806bdafd396"
                     },
                     "__v": {
                       "type": "number",
@@ -1664,7 +1664,7 @@
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62cd876e8062f8069368d19c"
+                      "example": "62cec4bcb7b70806bdafd4ca"
                     },
                     "venueDetails": {
                       "type": "array",
@@ -1684,9 +1684,9 @@
                       },
                       "example": [
                         {
-                          "_id": "62cd876e8062f8069368d19d",
+                          "_id": "62cec4bcb7b70806bdafd4cb",
                           "callForPapersText": "Test",
-                          "timePublished": "2022-07-12T14:38:30.639Z"
+                          "timePublished": "2022-07-13T13:12:21.823Z"
                         }
                       ]
                     },
@@ -1696,11 +1696,11 @@
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "62cd87678062f8069368d068"
+                      "example": "62cec4b6b7b70806bdafd396"
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:38.982Z"
+                      "example": "2022-07-13T13:12:28.859Z"
                     },
                     "__v": {
                       "type": "number",
@@ -1796,7 +1796,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62cd876e8062f8069368d185"
+                      "example": "62cec4bcb7b70806bdafd4b3"
                     },
                     "names": {
                       "type": "array",
@@ -1843,9 +1843,9 @@
                       },
                       "example": [
                         {
-                          "_id": "62cd876e8062f8069368d186",
+                          "_id": "62cec4bcb7b70806bdafd4b4",
                           "callForPapersText": "Test",
-                          "timePublished": "2022-07-12T14:38:30.639Z"
+                          "timePublished": "2022-07-13T13:12:21.823Z"
                         }
                       ]
                     },
@@ -1855,14 +1855,14 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:38.636Z"
+                      "example": "2022-07-13T13:12:28.651Z"
                     },
                     "createdBy": {
                       "type": "object",
                       "properties": {
                         "_id": {
                           "type": "string",
-                          "example": "62cd87678062f8069368d068"
+                          "example": "62cec4b6b7b70806bdafd396"
                         },
                         "email": {
                           "type": "string",
@@ -1971,7 +1971,7 @@
                     },
                     "_id": {
                       "type": "string",
-                      "example": "62cd876f8062f8069368d1a0"
+                      "example": "62cec4bcb7b70806bdafd4ce"
                     },
                     "venueDetails": {
                       "type": "array",
@@ -1991,9 +1991,9 @@
                       },
                       "example": [
                         {
-                          "_id": "62cd876f8062f8069368d1a1",
+                          "_id": "62cec4bcb7b70806bdafd4cf",
                           "callForPapersText": "Test",
-                          "timePublished": "2022-07-12T14:38:30.639Z"
+                          "timePublished": "2022-07-13T13:12:21.823Z"
                         }
                       ]
                     },
@@ -2003,11 +2003,11 @@
                     },
                     "createdAt": {
                       "type": "string",
-                      "example": "2022-07-12T14:38:39.063Z"
+                      "example": "2022-07-13T13:12:28.915Z"
                     },
                     "createdBy": {
                       "type": "string",
-                      "example": "62cd87678062f8069368d068"
+                      "example": "62cec4b6b7b70806bdafd396"
                     },
                     "__v": {
                       "type": "number",
@@ -2226,7 +2226,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62cd87688062f8069368d06e"
+                      "example": "62cec4b7b7b70806bdafd39c"
                     },
                     "fullname": {
                       "type": "string",
@@ -2306,7 +2306,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62cd87688062f8069368d06e"
+                      "example": "62cec4b7b7b70806bdafd39c"
                     },
                     "fullname": {
                       "type": "string",
@@ -2419,7 +2419,7 @@
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62cd87688062f8069368d06e"
+                      "example": "62cec4b7b7b70806bdafd39c"
                     },
                     "fullname": {
                       "type": "string",
@@ -2585,7 +2585,7 @@
                   "properties": {
                     "token": {
                       "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyY2Q4NzY3ODA2MmY4MDY5MzY4ZDA2OCIsImVtYWlsIjoianB3QG5scGxhbmQuY29tIn0sImlhdCI6MTY1NzYzNjcxMX0.mEXh74Er-j74K6Vcv20T6PAod5JF4Zqhj99LbC3Ypks"
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyY2VjNGI2YjdiNzA4MDZiZGFmZDM5NiIsImVtYWlsIjoianB3QG5scGxhbmQuY29tIn0sImlhdCI6MTY1NzcxNzk0Mn0.PrgoU-5oRU1eDPVRW_yNmCNMHnBULP4c-1CazLt0j7s"
                     }
                   }
                 }
@@ -2714,14 +2714,14 @@
                       },
                       "example": [
                         {
-                          "papersCount": 1,
-                          "inCitationsCount": 2,
+                          "papersCount": 2,
+                          "inCitationsCount": 3,
                           "yearPublishedFirst": 2022,
                           "yearPublishedLast": 2022,
-                          "_id": "author2",
-                          "author": "author2",
-                          "inCitationsPerPaper": 2,
-                          "link": "https://dblp.org/search?q=author2"
+                          "_id": "author1",
+                          "author": "author1",
+                          "inCitationsPerPaper": 1.5,
+                          "link": "https://dblp.org/search?q=author1"
                         }
                       ]
                     }
@@ -3001,7 +3001,7 @@
                       },
                       "example": [
                         {
-                          "_id": "62cd87748062f8069368d23b",
+                          "_id": "62cec4c1b7b70806bdafd569",
                           "inCitationsCount": 2,
                           "title": "Some Paper Title",
                           "yearPublished": 2022,
@@ -3269,13 +3269,13 @@
                       "example": [
                         {
                           "papersCount": 1,
-                          "inCitationsCount": 0,
-                          "yearPublishedFirst": 2020,
-                          "yearPublishedLast": 2020,
-                          "_id": "Others",
-                          "venue": "Others",
-                          "inCitationsPerPaper": 0,
-                          "link": null
+                          "inCitationsCount": 2,
+                          "yearPublishedFirst": 2022,
+                          "yearPublishedLast": 2022,
+                          "_id": "venue1",
+                          "venue": "venue1",
+                          "inCitationsPerPaper": 2,
+                          "link": "https://dblp.org/search?q=venue1"
                         }
                       ]
                     }
@@ -3550,12 +3550,12 @@
                       },
                       "example": [
                         {
-                          "papersCount": 2,
-                          "inCitationsCount": 2,
-                          "yearPublishedFirst": 2020,
+                          "papersCount": 1,
+                          "inCitationsCount": 1,
+                          "yearPublishedFirst": 2022,
                           "yearPublishedLast": 2022,
-                          "_id": "article",
-                          "typeOfPaper": "article",
+                          "_id": "inproceedings",
+                          "typeOfPaper": "inproceedings",
                           "inCitationsPerPaper": 1
                         }
                       ]
