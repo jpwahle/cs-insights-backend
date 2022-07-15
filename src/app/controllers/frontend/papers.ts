@@ -41,14 +41,6 @@ export function initialize(
         const timeData = await model.aggregate([
           matchObject,
           {
-            $match: {
-              $and: [
-                { yearPublished: { $gte: req.query.yearStart } },
-                { yearPublished: { $lte: req.query.yearEnd } },
-              ],
-            },
-          },
-          {
             $group: {
               _id: '$yearPublished',
               counts: { $count: {} },
