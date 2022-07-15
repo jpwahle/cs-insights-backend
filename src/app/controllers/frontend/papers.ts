@@ -149,7 +149,7 @@ export function initialize(
         if (rowCount === 0) {
           response = [0, 0, 0, 0, 0];
         } else {
-          const quartiles = [0.25, 0.5, 0.75, 1.0].map((quartile) =>
+          const quartiles = [0, 0.25, 0.5, 0.75, 1.0].map((quartile) =>
             quartilePosition(rowCount, quartile)
           );
           const quartileData = await Promise.all(
@@ -162,7 +162,6 @@ export function initialize(
                   .limit(1)
             )
           );
-          console.log(quartileData);
           response = quartileData.map((quart) => quart[0].inCitationsCount);
         }
         res.json(response);
