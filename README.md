@@ -56,8 +56,7 @@ Then you can start the backend using:
 ```shell
 npm run dev
 ```
-In the future only need to use this command and can skip the other commands.
-It starts the docker container (if it is not started yet), uses auto-reload (whenever the code was changed), automatically compiles TypeScript files, and spawns multiple processes.
+It uses auto-reload (whenever the code was changed), automatically compiles TypeScript files, and spawns multiple processes.
 </details>
 
 ## Repository

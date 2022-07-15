@@ -30,6 +30,8 @@ export function initialize(
   // papers endpoint
   const route = `${options.server.baseRoute}/fe/papers`;
 
+  // TODO: How to make it super fast: use .count() instead of .aggregate() and run it for all years that are passed in req.query.yearStart and req.query.yearEnd
+
   router.get(
     route + '/years',
     passport.authenticate('user', { session: false }),
@@ -139,30 +141,20 @@ export function initialize(
         if (rowCount === 0) {
           response = [0, 0, 0, 0, 0];
         } else {
-          const quartileData = await model
-            .aggregate([
-              getMatchObject(findObject),
-              { $sort: { inCitationsCount: 1 } },
-              { $project: { inCitationsCount: 1 } },
-              {
-                $facet: {
-                  min: [{ $limit: 1 }],
-                  first: [{ $skip: quartilePosition(rowCount, 0.25) }, { $limit: 1 }],
-                  median: [{ $skip: quartilePosition(rowCount, 0.5) }, { $limit: 1 }],
-                  third: [{ $skip: quartilePosition(rowCount, 0.75) }, { $limit: 1 }],
-                  max: [{ $skip: rowCount - 1 }, { $limit: 1 }],
-                },
-              },
-            ])
-            .allowDiskUse(true);
-
-          response = [
-            quartileData[0].min[0].inCitationsCount,
-            quartileData[0].first[0].inCitationsCount,
-            quartileData[0].median[0].inCitationsCount,
-            quartileData[0].third[0].inCitationsCount,
-            quartileData[0].max[0].inCitationsCount,
-          ];
+          const quartiles = [0, 0.25, 0.5, 0.75, 1.0].map((quartile) =>
+            quartilePosition(rowCount, quartile)
+          );
+          const quartileData = await Promise.all(
+            quartiles.map(
+              async (quartile): Promise<Paper[]> =>
+                model
+                  .find({}, { inCitationsCount: 1 })
+                  .sort({ inCitationsCount: 1 })
+                  .skip(quartile)
+                  .limit(1)
+            )
+          );
+          response = quartileData.map((quart) => quart[0].inCitationsCount);
         }
         res.json(response);
       } catch (error: any) {

@@ -6,7 +6,7 @@ export const paperSchema = new mongoose.Schema(
     abstractText: {
       type: String,
     },
-    yearPublished: { type: Number },
+    yearPublished: { type: Number, index: true },
 
     authorIds: [
       {
