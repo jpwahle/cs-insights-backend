@@ -6,22 +6,24 @@ export const paperSchema = new mongoose.Schema(
     abstractText: {
       type: String,
     },
-    yearPublished: { type: Number },
+    yearPublished: { type: Number, index: true },
 
     authorIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Author',
         required: true,
+        index: true,
       },
     ],
     authors: [{ type: String, required: true, index: true, default: [] }],
     venueId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Venue',
+      index: true,
     },
-    venue: { type: String },
-    publisher: { type: String },
+    venue: { type: String, index: true },
+    publisher: { type: String, index: true },
 
     typeOfPaper: {
       type: String,
@@ -34,6 +36,7 @@ export const paperSchema = new mongoose.Schema(
         'phdthesis',
         'mastersthesis',
       ],
+      index: true,
     },
     fieldsOfStudy: [
       {
@@ -59,6 +62,7 @@ export const paperSchema = new mongoose.Schema(
           'Psychology',
           'Sociology',
         ],
+        index: true,
       },
     ],
 
@@ -79,7 +83,7 @@ export const paperSchema = new mongoose.Schema(
     outCitationsCount: { type: Number, required: true, default: 0 },
     // outCitationsRef: [{ type: String, required: true }], //TODO add
 
-    openAccess: { type: Boolean, required: true, default: false },
+    openAccess: { type: Boolean, required: true, default: false, index: true },
 
     // datasetId: { type: String, unique: true, required: true }, //TODO add
     dblpId: { type: String, unique: true, sparse: true },

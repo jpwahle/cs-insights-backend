@@ -127,6 +127,12 @@ export function fixYearData(
 
 // if there are only a handful of data points, the index can go out of bounds
 export function quartilePosition(rowCount: number, multiplier: number): number {
+  if (multiplier === 1.0) {
+    return rowCount - 1;
+  }
+  if (multiplier === 0.0) {
+    return 0;
+  }
   const rounded = Math.round(rowCount * multiplier);
   if (rounded >= rowCount) {
     return rowCount - 1;

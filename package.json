@@ -1,12 +1,11 @@
 {
-  "name": "nlp-land-backend",
-  "version": "0.4.1",
-  "description": "API server of the nlp-land project. This is the main part of storing data and accessing an external data analysis endpoint. It uses a mongoDB instance to store everything.",
+  "name": "cs-insights-backend",
+  "version": "0.13.0",
+  "description": "API server of the cs-insights project. This is the main part of storing data and accessing an external data analysis endpoint. It uses a mongoDB instance to store everything.",
   "main": "./lib/main.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
     "test": "nyc ts-mocha --no-deprecation -t 60000 --exit test/**/*.ts test/**/**/*.ts",
-    "test2": "ts-mocha --exit test/**/*.ts test/**/**/*.ts",
     "build": "tsc -p .",
     "start": "NODE_ENV=production node ./lib/main.js",
     "cluster": "NODE_ENV=production node ./lib/cluster.js",
@@ -14,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ag-gipp/NLP-Land-backend.git"
+    "url": "git+https://github.com/gipplab/cs-insights-backend.git"
   },
   "contributors": [
     "Jan Philip Wahle",
@@ -22,9 +21,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ag-gipp/NLP-Land-backend/issues"
+    "url": "https://github.com/gipplab/cs-insights-backend/issues"
   },
-  "homepage": "https://github.com/ag-gipp/NLP-Land-backend#readme",
+  "homepage": "https://github.com/gipplab/cs-insights-backend#readme",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/chai": "^4.2.22",
