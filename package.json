@@ -1,6 +1,6 @@
 {
   "name": "cs-insights-backend",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "API server of the cs-insights project. This is the main part of storing data and accessing an external data analysis endpoint. It uses a mongoDB instance to store everything.",
   "main": "./lib/main.js",
   "scripts": {
