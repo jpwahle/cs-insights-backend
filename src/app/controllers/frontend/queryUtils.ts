@@ -146,12 +146,8 @@ export function computeQuartiles(quartileData: { count: number }[]): number[] {
   if (rowCount === 0) {
     return [0, 0, 0, 0, 0];
   } else {
-    return [
-      quartileData[0].count,
-      quartileData[quartilePosition(rowCount, 0.25)].count,
-      quartileData[quartilePosition(rowCount, 0.5)].count,
-      quartileData[quartilePosition(rowCount, 0.75)].count,
-      quartileData[rowCount - 1].count,
-    ];
+    return [0, 0.25, 0.5, 0.75, 1.0].map(
+      (multiplier) => quartileData[quartilePosition(rowCount, multiplier)].count
+    );
   }
 }
