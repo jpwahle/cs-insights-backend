@@ -15,7 +15,7 @@ jobs:
       - name: ✅ Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '18'
 
       - name: 📦 Install dependencies
         run: |
@@ -41,7 +41,7 @@ jobs:
       - name: ✅ Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '18'
 
       - name: 📦 Install dependencies
         run: |
@@ -68,7 +68,7 @@ jobs:
       - name: ✅ Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '18'
 
       - name: 📦 Install dependencies
         run: |
@@ -97,7 +97,7 @@ jobs:
       - name: ✅ Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '18'
 
       - name: 🏷 Bump version and push tag
         uses: anothrNick/github-tag-action@1.36.0
