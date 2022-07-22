@@ -428,7 +428,6 @@ describe('/fe/papers', () => {
             expect(res.body.rowCount).to.equal(1);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
             expect(res.body.rows[0].venue).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
@@ -472,7 +471,6 @@ describe('/fe/papers', () => {
             expect(res.body.rowCount).to.equal(1);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
             expect(res.body.rows[0].venue).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;
@@ -514,7 +512,7 @@ describe('/fe/papers', () => {
             expect(res.body.rowCount).to.equal(2);
             expect(res.body.rows).to.be.an('array');
             expect(res.body.rows[0]._id).to.exist;
-            expect(res.body.rows[0].title).to.exist;
+            expect(res.body.rows[1].title).to.exist;
             expect(res.body.rows[0].authors).to.exist;
             expect(res.body.rows[0].venue).to.exist;
             expect(res.body.rows[0].inCitationsCount).to.exist;

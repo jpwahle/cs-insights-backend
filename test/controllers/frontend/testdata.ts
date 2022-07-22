@@ -73,8 +73,8 @@ export const dummyPapers = [
     csvId: '2',
   },
   {
-    title: 'Some Paper Title',
-    abstractText: 'This paper is about a really interesting topic',
+    title: null,
+    abstractText: null,
     doi: 'doi/3.33.333',
     pdfUrls: ['https://dummy-url.de/pdf.pdf'],
     absUrl: 'https://dummy-url.de/',

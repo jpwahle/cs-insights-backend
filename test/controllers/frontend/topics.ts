@@ -125,8 +125,8 @@ describe('/fe/topics', () => {
                   abstractText: 'This paper is about a really interesting topic',
                 },
                 {
-                  title: 'Some Paper Title',
-                  abstractText: 'This paper is about a really interesting topic',
+                  title: null,
+                  abstractText: null,
                 },
               ],
             },
