@@ -46,33 +46,40 @@ export function initialize(
       } else {
         const findObject = buildFindObject(req.query);
         try {
-          const rowCount = await model.find(findObject as FilterQuery<Paper>).countDocuments();
-          if (process.env.LDA_PAPER_LIMIT && rowCount >= parseInt(process.env.LDA_PAPER_LIMIT)) {
-            res.status(413).json({
-              message: `The request would process over ${process.env.LDA_PAPER_LIMIT} papers. Please try again after applying more filters.`,
+          if (process.env.LDA_PAPER_LIMIT) {
+            const rowCount = await model.find(findObject as FilterQuery<Paper>).countDocuments();
+            if (rowCount >= parseInt(process.env.LDA_PAPER_LIMIT)) {
+              res.status(413).json({
+                message: `The request would process over ${process.env.LDA_PAPER_LIMIT} papers. Please try again after applying more filters.`,
+              });
+            }
+          }
+          const textData = await model.find(findObject as FilterQuery<Paper>).select({
+            title: 1,
+            abstractText: 1,
+            _id: 0,
+          });
+          let counts = textData.reduce(
+            (prev, curr) => {
+              if (curr.title) {
+                prev.titles += 1;
+              }
+              if (curr.abstractText) {
+                prev.abstracts += 1;
+              }
+              return prev;
+            },
+            { titles: 0, abstracts: 0 }
+          );
+          console.log(
+            `#papers: ${textData.length}\n#titles: ${counts.titles}\n#abstracts: ${counts.abstracts}`
+          );
+          console.log(`${textData.length},${counts.titles},${counts.abstracts}`);
+          if (textData.length === 0) {
+            res.status(400).json({
+              message: `The selection is empty. Please try again after applying less filters.`,
             });
           } else {
-            const textData = await model.find(findObject as FilterQuery<Paper>).select({
-              title: 1,
-              abstractText: 1,
-              _id: 0,
-            });
-            let counts = textData.reduce(
-              (prev, curr) => {
-                if (curr.title) {
-                  prev.titles += 1;
-                }
-                if (curr.abstractText) {
-                  prev.abstracts += 1;
-                }
-                return prev;
-              },
-              { titles: 0, abstracts: 0 }
-            );
-            console.log(
-              `#papers: ${textData.length}\n#titles: ${counts.titles}\n#abstracts: ${counts.abstracts}`
-            );
-            console.log(`${textData.length},${counts.titles},${counts.abstracts}`);
             //query predictions endpoint
             const url = `http://${process.env.PREDICTIONS_ENDPOINT_HOST}:${process.env.PREDICTIONS_ENDPOINT_PORT}/api/v0/models/${modelId}`;
             const init = {
@@ -86,8 +93,16 @@ export function initialize(
               }),
             };
             const response = await fetch(url, init);
-            const json = await response.json();
-            res.status(response.status).json(json);
+            if (!response.ok || response.status >= 400) {
+              const contentType = response.headers.get('content-type');
+              if (contentType && contentType.indexOf('application/json') !== -1) {
+                const json = await response.json();
+                res.status(response.status).json(json);
+              } else {
+                res.status(response.status);
+                res.send();
+              }
+            }
           }
         } catch (error: any) {
           /* istanbul ignore next */

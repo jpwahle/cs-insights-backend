@@ -3,7 +3,7 @@
 <p>
 <a href="https://codecov.io/gh/gipplab/cs-insights-backend"><img alt="Code Coverage" src="https://codecov.io/gh/gipplab/cs-insights-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
 <a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml/badge.svg?branch=dev"></a>  
-<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml/badge.svg"></a>
+<a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml/badge.svg"></a>
 <a href="https://github.com/gipplab/cs-insights-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/gipplab/cs-insights-backend?sort=semver"></a>
 <a href="https://hub.docker.com/repository/docker/jpelhaw/nlp-land-backend"><img alt="Docker Release" src="https://img.shields.io/docker/v/jpelhaw/nlp-land-backend?label=Docker"></a>
 <a href="https://gipplab.github.io/cs-insights-backend/"><img alt="Docs" src="https://img.shields.io/badge/Docs-gh--pages-blue"></a>
@@ -12,7 +12,7 @@
 </p>
 
 ## Getting Started
-First, make sure you are running node v18.5.0 or higher, or you will not be able to query our [predictions endpoints](https://github.com/gipplab/NLP-Land-prediction-endpoint).
+First, make sure you are running node v18.5.0 or higher, or you will not be able to query our [predictions endpoints](https://github.com/gipplab/cs-insights-prediction-endpoint).
 Next, clone the repository and change the directory. 
 ```shell
 cd cs-insights-backend
@@ -119,7 +119,7 @@ e.g. `topics` only tests or test groups that contain the word `topics` will be r
 
 
 ## Documentation
-The auto-generated redoc documentation can be found [here](https://gipplab.github.io/NLP-Land-backend/).
+The auto-generated redoc documentation can be found [here](https://gipplab.github.io/cs-insights-backend/).
 
 A general overview of standard endpoints, parameters, and possible queries can be found [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
 

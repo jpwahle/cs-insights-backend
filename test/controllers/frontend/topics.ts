@@ -162,6 +162,22 @@ describe('/fe/topics', () => {
             done();
           });
       });
+
+      specify('Successful GET/lda: empty selection', (done) => {
+        const stubbedFetch = sandbox.stub(global, 'fetch');
+        chai
+          .request(apiServer.app)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/lda?modelId=LDA54321&yearStart=2020&yearEnd=2010`
+          )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(400);
+            sinon.assert.notCalled(stubbedFetch);
+            done();
+          });
+      });
     });
   });
 });
