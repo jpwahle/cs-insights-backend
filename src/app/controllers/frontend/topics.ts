@@ -1,3 +1,4 @@
+//@ts-nocheck
 import express from 'express';
 import mongoose, { FilterQuery } from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
@@ -24,8 +25,14 @@ export function initialize(
         //query predictions endpoint
         const url = `http://${process.env.PREDICTIONS_ENDPOINT_HOST}:${process.env.PREDICTIONS_ENDPOINT_PORT}/api/v0/models`;
         const response = await fetch(url);
-        const json = await response.json();
-        res.status(response.status).json(json);
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.indexOf('application/json') !== -1) {
+          const json = await response.json();
+          res.status(response.status).json(json);
+        } else {
+          res.status(response.status);
+          res.send();
+        }
       } catch (error: any) {
         /* istanbul ignore next */
         res.status(500).json({ message: error.message });
@@ -93,15 +100,13 @@ export function initialize(
               }),
             };
             const response = await fetch(url, init);
-            if (!response.ok || response.status >= 400) {
-              const contentType = response.headers.get('content-type');
-              if (contentType && contentType.indexOf('application/json') !== -1) {
-                const json = await response.json();
-                res.status(response.status).json(json);
-              } else {
-                res.status(response.status);
-                res.send();
-              }
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.indexOf('application/json') !== -1) {
+              const json = await response.json();
+              res.status(response.status).json(json);
+            } else {
+              res.status(response.status);
+              res.send();
             }
           }
         } catch (error: any) {

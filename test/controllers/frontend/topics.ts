@@ -88,9 +88,14 @@ describe('/fe/topics', () => {
     describe('GET/models', () => {
       specify('Successful GET/models', (done) => {
         const body = { models: ['123', '456'] };
-        const stubbedFetch = sandbox
-          .stub(global, 'fetch')
-          .returns(Promise.resolve(new Response(JSON.stringify(body), { status: 200 })));
+        const stubbedFetch = sandbox.stub(global, 'fetch').returns(
+          Promise.resolve(
+            new Response(JSON.stringify(body), {
+              status: 200,
+              headers: { 'content-type': 'application/json' },
+            })
+          )
+        );
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/models`)
@@ -103,14 +108,40 @@ describe('/fe/topics', () => {
             done();
           });
       });
+
+      specify('Successful GET/models: no content-type (error)', (done) => {
+        const stubbedFetch = sandbox.stub(global, 'fetch').returns(
+          Promise.resolve(
+            new Response('', {
+              status: 500,
+            })
+          )
+        );
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/models`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(500);
+            expect(res.body).deep.equal({});
+            sinon.assert.calledWith(stubbedFetch, `http://${host}:${port}/api/v0/models`);
+            done();
+          });
+      });
     });
 
     describe('GET/lda', () => {
       specify('Successful GET/lda', (done) => {
         const body = { outputData: { test: 'test' } };
-        const stubbedFetch = sandbox
-          .stub(global, 'fetch')
-          .returns(Promise.resolve(new Response(JSON.stringify(body), { status: 200 })));
+        const stubbedFetch = sandbox.stub(global, 'fetch').returns(
+          Promise.resolve(
+            new Response(JSON.stringify(body), {
+              status: 200,
+              headers: { 'content-type': 'application/json' },
+            })
+          )
+        );
         const init = {
           method: 'POST',
           headers: {
@@ -163,6 +194,29 @@ describe('/fe/topics', () => {
           });
       });
 
+      specify('Successful GET/lda: no paper limit', (done) => {
+        delete process.env.LDA_PAPER_LIMIT;
+        const body = { outputData: { test: 'test' } };
+        const stubbedFetch = sandbox.stub(global, 'fetch').returns(
+          Promise.resolve(
+            new Response(JSON.stringify(body), {
+              status: 200,
+              headers: { 'content-type': 'application/json' },
+            })
+          )
+        );
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/lda?modelId=LDA54321`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            sinon.assert.calledWith(stubbedFetch, `http://${host}:${port}/api/v0/models/LDA54321`);
+            done();
+          });
+      });
+
       specify('Successful GET/lda: empty selection', (done) => {
         const stubbedFetch = sandbox.stub(global, 'fetch');
         chai
@@ -175,6 +229,29 @@ describe('/fe/topics', () => {
             should().not.exist(err);
             expect(res).to.have.status(400);
             sinon.assert.notCalled(stubbedFetch);
+            done();
+          });
+      });
+
+      specify('Successful GET/lda: no content-type (error)', (done) => {
+        const stubbedFetch = sandbox.stub(global, 'fetch').returns(
+          Promise.resolve(
+            new Response('', {
+              status: 500,
+            })
+          )
+        );
+        chai
+          .request(apiServer.app)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/lda?modelId=LDA54321&yearStart=2020&yearEnd=2020`
+          )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(500);
+            expect(res.body).deep.equal({});
+            sinon.assert.calledWith(stubbedFetch, `http://${host}:${port}/api/v0/models/LDA54321`);
             done();
           });
       });
