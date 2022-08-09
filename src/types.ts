@@ -21,6 +21,8 @@ export type Metric = { metric: string };
 
 export type TopKParameters = { k: string } & Metric;
 
+export type ModelId = { modelId: string };
+
 export interface QueryFilters {
   yearStart?: string;
   yearEnd?: string;

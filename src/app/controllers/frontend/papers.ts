@@ -148,7 +148,7 @@ export function initialize(
             quartiles.map(
               async (quartile): Promise<Paper[]> =>
                 model
-                  .find({}, { inCitationsCount: 1 })
+                  .find(findObject, { inCitationsCount: 1 })
                   .sort({ inCitationsCount: 1 })
                   .skip(quartile)
                   .limit(1)

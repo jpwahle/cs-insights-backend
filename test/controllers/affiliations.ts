@@ -21,7 +21,6 @@ before(() => {
   return new Promise<void>((resolve) => {
     Setup.initDb().then(() => {
       Setup.initApi().then(() => {
-        console.log('BEFORE ALL ROOT');
         resolve();
       });
     });

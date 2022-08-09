@@ -1,9 +1,9 @@
 # cs-insights-backend
 
-<p align="center">
-<a href="https://codecov.io/gh/gipplab/cs-insights-backend"><img src="https://codecov.io/gh/gipplab/cs-insights-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
-<a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml/badge.svg?branch=dev">  
-<a href="https://github.com/gipplab/NLP-Land-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml/badge.svg">
+<p>
+<a href="https://codecov.io/gh/gipplab/cs-insights-backend"><img alt="Code Coverage" src="https://codecov.io/gh/gipplab/cs-insights-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
+<a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml/badge.svg?branch=dev"></a>  
+<a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml/badge.svg"></a>
 <a href="https://github.com/gipplab/cs-insights-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/gipplab/cs-insights-backend?sort=semver"></a>
 <a href="https://hub.docker.com/repository/docker/jpelhaw/nlp-land-backend"><img alt="Docker Release" src="https://img.shields.io/docker/v/jpelhaw/nlp-land-backend?label=Docker"></a>
 <a href="https://gipplab.github.io/cs-insights-backend/"><img alt="Docs" src="https://img.shields.io/badge/Docs-gh--pages-blue"></a>
@@ -12,15 +12,14 @@
 </p>
 
 ## Getting Started
-
-After cloning the repository you need to change the directory. 
+First, make sure you are running node v18.5.0 or higher, or you will not be able to query our [predictions endpoints](https://github.com/gipplab/cs-insights-prediction-endpoint).
+Next, clone the repository and change the directory. 
 ```shell
 cd cs-insights-backend
 ```
-
 Then we are providing two ways to set up this project.
 
-<details> <summary> Production </summary>
+<details> <summary><b>Production</b></summary>
 
 First, you need to create an `.env.production` file.
 You can copy the `.env.development` file, if you do not intent to change the default values:
@@ -34,9 +33,9 @@ To spin up the production version of this project, switch into the root director
 docker-compose --env-file=.env.production up --build
 ```
 </details>
-<details> <summary> Development </summary>
+<details> <summary><b>Development</b></summary>
 
-If you want to actively develop this project, you need to install the project and dependencies locally with
+If you want to actively develop this project, you need to install the project and its dependencies locally with
 ```shell
 npm install
 ```
@@ -56,7 +55,9 @@ Then you can start the backend using:
 ```shell
 npm run dev
 ```
-It uses auto-reload (whenever the code was changed), automatically compiles TypeScript files, and spawns multiple processes.
+It starts the docker container (if it is not started yet), uses auto-reload (whenever the code was changed), automatically compiles TypeScript files, and spawns multiple processes.
+If you want to start the backend again later on running this command will be enough and previous commands can be skipped.
+
 </details>
 
 ## Repository
@@ -82,9 +83,8 @@ This repository follows clean code principles using static typing, linting, unit
 
 <details> <summary> Continuous Integration (CI) </summary>
 
-1. Whenever an issue is assigned, an issue branch from the current `dev` branch is created.
-2. Whenever you create a pull request against the `dev` branch, typing, linting, and unit tests are checked.
-3. Whenever a maintainer or admin creates a pull request from the `dev` to the `main` branch, a new release, docker image, documentation, and coverage report is generated.
+1. Whenever you create a pull request against the `dev` branch, typing, linting, and unit tests are checked.
+2. Whenever a maintainer or admin creates a pull request from the `dev` to the `main` branch, a new release, docker image, documentation, and coverage report is generated.
 
 </details>
 
@@ -93,28 +93,33 @@ This repository follows clean code principles using static typing, linting, unit
 To run these CI pipelines such as tests and linting locally install [act](https://github.com/nektos/act). With act you can run CI tests in docker containers the way they are run on GitHub actions.
 
 To run the full check suite with act you need the full ubuntu image (>12GB) and then execute:
-
 ```shell
 act
 ```
 
 To run a single check like the Test from the pipeline, execute:
-
 ```shell
 act -j Test
 ```
 
 You can also run the tests without act using:
-
 ```shell
 npm run test
 npm run lint
 ```
+
+We use an additional npm script `test2` to make it easier to run specific tests using `grep`:
+```shell
+npm run test2 -- -g <query>
+```
+This will not generate a code coverage report and by replacing `<query>` with
+e.g. `topics` only tests or test groups that contain the word `topics` will be run.
+
 </details>
 
 
 ## Documentation
-The auto-generated redoc documentation can be found [here](https://gipplab.github.io/NLP-Land-backend/).
+The auto-generated redoc documentation can be found [here](https://gipplab.github.io/cs-insights-backend/).
 
 A general overview of standard endpoints, parameters, and possible queries can be found [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
 
