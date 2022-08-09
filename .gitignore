@@ -9,3 +9,4 @@ coverage
 .idea
 docs/oas_v3.json
 docs/oas.json
+version.ts

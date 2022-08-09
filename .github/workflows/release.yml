@@ -29,6 +29,11 @@ jobs:
         run: |
           npm run test
 
+      - name: 🔨 Run build
+        run: |
+          npm run prebuild
+          npm run build --omit=dev
+
   Coverage:
     needs: [Test]
     runs-on: ubuntu-latest
