@@ -1,15 +1,10 @@
 import express from 'express';
-import {version} from '../../../package.json'; 
+import { version } from '../../../package.json';
 
 import { APIOptions } from '../../config/interfaces';
-import {
-  QueryFilters,
-} from '../../types';
+import { QueryFilters } from '../../types';
 
-export function initialize(
-  router: express.Router,
-  options: APIOptions
-) {
+export function initialize(router: express.Router, options: APIOptions) {
   // authors endpoint
   const route = `${options.server.baseRoute}`;
 
@@ -23,5 +18,5 @@ export function initialize(
         res.status(500).json({ version, status: error.message });
       }
     }
-  )
+  );
 }
