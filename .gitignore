@@ -7,3 +7,5 @@ public
 coverage
 .DS_Store
 .idea
+docs/oas_v3.json
+docs/oas.json

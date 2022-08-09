@@ -6,6 +6,7 @@ import * as affiliations from './affiliations';
 import * as venues from './venues';
 import * as venuesFE from './frontend/venues';
 import * as authors from './authors';
+import * as status from './status';
 import * as authorsFE from './frontend/authors';
 import * as fieldsOfStudyFE from './frontend/fieldsOfStudy';
 import * as typesOfPaperFE from './frontend/typesOfPaper';
@@ -22,6 +23,7 @@ export class Controllers {
     papers.initialize(models.Paper, router, options);
     venues.initialize(models.Venue, router, options);
     users.initialize(models.User, router, options);
+    status.initialize(router, options);
 
     authorsFE.initialize(models.Paper, models.Author, router, options);
     papersFE.initialize(models.Paper, router, options);
