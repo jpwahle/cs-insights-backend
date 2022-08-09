@@ -14,7 +14,7 @@ jobs:
       - name: ✅ Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '18'
           
       - name: 📦 Install dependencies
         run: |
@@ -27,3 +27,8 @@ jobs:
       - name: 🧪 Run tests
         run: |
           npm run test
+
+      - name: 🔨 Run build
+        run: |
+          npm run prebuild
+          npm run build --omit=dev

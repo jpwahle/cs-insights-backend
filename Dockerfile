@@ -6,4 +6,5 @@ COPY ./ /cs-insights-backend
 
 ENV NODE_ENV=production
 RUN npm install --omit=dev
+RUN npm run prebuild
 RUN npm run build --omit=dev
