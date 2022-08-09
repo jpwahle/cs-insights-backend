@@ -1,9 +1,9 @@
-FROM node:17
+FROM node:18
 
-RUN mkdir /api-server
-WORKDIR /api-server
-COPY ./ /api-server
+RUN mkdir /cs-insights-backend
+WORKDIR /cs-insights-backend
+COPY ./ /cs-insights-backend
 
 ENV NODE_ENV=production
-RUN npm install --production
-RUN npm run build --production
+RUN npm install --omit=dev
+RUN npm run build --omit=dev
