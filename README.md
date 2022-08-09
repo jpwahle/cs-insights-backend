@@ -12,53 +12,8 @@
 </p>
 
 ## Getting Started
-First, make sure you are running node v18.5.0 or higher, or you will not be able to query our [predictions endpoints](https://github.com/gipplab/cs-insights-prediction-endpoint).
-Next, clone the repository and change the directory. 
-```shell
-cd cs-insights-backend
-```
-Then we are providing two ways to set up this project.
 
-<details> <summary><b>Production</b></summary>
-
-First, you need to create an `.env.production` file.
-You can copy the `.env.development` file, if you do not intent to change the default values:
-```shell
-cp .env.development .env.production
-```
-
-In production mode an instance of mongo is created in Docker and the backend started and connected to it.
-To spin up the production version of this project, switch into the root directory of this project and run:
-```shell
-docker-compose --env-file=.env.production up --build
-```
-</details>
-<details> <summary><b>Development</b></summary>
-
-If you want to actively develop this project, you need to install the project and its dependencies locally with
-```shell
-npm install
-```
-
-To run the development environment locally, you need to create up a mongodb instance the first time you start the backend.
-```shell
-source .env.development
-set -o allexport
-docker run -d -p 27017:27017 --name mongodev \
-    -e MONGO_INITDB_ROOT_USERNAME=$MONGO_USER \
-    -e MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD \
-    -e MONGO_INITDB_DATABASE=$MONGO_DB \
-    mongo
-```
-
-Then you can start the backend using:
-```shell
-npm run dev
-```
-It starts the docker container (if it is not started yet), uses auto-reload (whenever the code was changed), automatically compiles TypeScript files, and spawns multiple processes.
-If you want to start the backend again later on running this command will be enough and previous commands can be skipped.
-
-</details>
+This project is part of the `cs-insights`-ecosystem. Please refer to the readme [here](https://github.com/gipplab/cs-insights-main) to spin up the development and production system.
 
 ## Repository
 ### Structure
