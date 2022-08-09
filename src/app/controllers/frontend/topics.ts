@@ -78,10 +78,10 @@ export function initialize(
             },
             { titles: 0, abstracts: 0 }
           );
-          console.log(
-            `#papers: ${textData.length}\n#titles: ${counts.titles}\n#abstracts: ${counts.abstracts}`
-          );
-          console.log(`${textData.length},${counts.titles},${counts.abstracts}`);
+          // console.log(
+          //   `#papers: ${textData.length}\n#titles: ${counts.titles}\n#abstracts: ${counts.abstracts}`
+          // );
+          // console.log(`${textData.length},${counts.titles},${counts.abstracts}`);
           if (textData.length === 0) {
             res.status(400).json({
               message: `The selection is empty. Please try again after applying less filters.`,
