@@ -12,12 +12,10 @@ chai.use(chaiHttp);
 let apiServer: APIServer;
 let apiOptions: APIOptions;
 describe('/status', () => {
-
   before(async () => {
     await Setup.initDb();
     ({ apiServer, apiOptions } = await Setup.initApi());
   });
-
 
   const route = '/status';
   specify('Successful GET/status', (done) => {

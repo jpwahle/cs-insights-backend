@@ -66,18 +66,18 @@ export function initialize(
             abstractText: 1,
             _id: 0,
           });
-          let counts = textData.reduce(
-            (prev, curr) => {
-              if (curr.title) {
-                prev.titles += 1;
-              }
-              if (curr.abstractText) {
-                prev.abstracts += 1;
-              }
-              return prev;
-            },
-            { titles: 0, abstracts: 0 }
-          );
+          // let counts = textData.reduce(
+          //   (prev, curr) => {
+          //     if (curr.title) {
+          //       prev.titles += 1;
+          //     }
+          //     if (curr.abstractText) {
+          //       prev.abstracts += 1;
+          //     }
+          //     return prev;
+          //   },
+          //   { titles: 0, abstracts: 0 }
+          // );
           // console.log(
           //   `#papers: ${textData.length}\n#titles: ${counts.titles}\n#abstracts: ${counts.abstracts}`
           // );
