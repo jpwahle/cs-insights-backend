@@ -9,5 +9,6 @@
   "parserOptions": {
     "project": ["./tsconfig.json", "./tsconfig-test.json"]
   },
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  "ignorePatterns": ["version.ts"]
 }
