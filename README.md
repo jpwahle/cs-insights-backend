@@ -1,6 +1,6 @@
 # cs-insights-backend
 
-<p>
+<p align="center">
 <a href="https://codecov.io/gh/gipplab/cs-insights-backend"><img alt="Code Coverage" src="https://codecov.io/gh/gipplab/cs-insights-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
 <a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml/badge.svg?branch=dev"></a>  
 <a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml/badge.svg"></a>
@@ -9,6 +9,8 @@
 <a href="https://gipplab.github.io/cs-insights-backend/"><img alt="Docs" src="https://img.shields.io/badge/Docs-gh--pages-blue"></a>
 <a href="https://github.com/ag-gipp/cs-insights-backend/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/airbnb/javascript"><img alt="Code style: Airbnb" src="https://img.shields.io/badge/codestyle-Airbnb-success"></a>
+<img alt="All-time uptime 100.00%" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgipplab%2Fcs-insights-uptime%2FHEAD%2Fapi%2Fbackend%2Fuptime.json">
+<img alt="Response time 773" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgipplab%2Fcs-insights-uptime%2FHEAD%2Fapi%2Fbackend%2Fresponse-time.json">
 </p>
 
 ## Getting Started
