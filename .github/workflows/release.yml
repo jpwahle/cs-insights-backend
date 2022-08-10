@@ -31,7 +31,6 @@ jobs:
 
       - name: 🔨 Run build
         run: |
-          npm run prebuild
           npm run build --omit=dev
 
   Coverage:
