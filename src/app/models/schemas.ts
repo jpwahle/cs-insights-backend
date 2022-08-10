@@ -80,7 +80,7 @@ export const paperSchema = new mongoose.Schema(
         ref: 'Paper',
       },
     ],
-    outCitationsCount: { type: Number, required: true, default: 0 },
+    outCitationsCount: { type: Number, required: true, default: 0, index: true },
     // outCitationsRef: [{ type: String, required: true }], //TODO add
 
     openAccess: { type: Boolean, required: true, default: false, index: true },
