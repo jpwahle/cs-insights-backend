@@ -1,9 +1,10 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import * as DocumentTypes from '../../models/interfaces';
 import { APIOptions } from '../../../config/interfaces';
 import { DatapointsOverTime, QueryFilters } from '../../../types';
-import { buildMatchObject, fixYearData } from './queryUtils';
+import { buildFindObject, buildMatchObject, fixYearData, quartilePosition } from './queryUtils';
+import { Paper } from '../../models/interfaces';
 
 const passport = require('passport');
 
@@ -74,6 +75,53 @@ export function initialize(
     passport.authenticate('user', { session: false }),
     (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       citationsYears(req, res, '$outCitationsCount');
+    }
+  );
+
+  async function citationsQuartiles(
+    req: express.Request<{}, {}, {}, QueryFilters>,
+    res: express.Response,
+    field: keyof Paper
+  ) {
+    try {
+      const findObject = buildFindObject(req.query);
+      const rowCount = await model.find(findObject as FilterQuery<Paper>).countDocuments();
+      let response: number[];
+      if (rowCount === 0) {
+        response = [0, 0, 0, 0, 0];
+      } else {
+        const quartiles = [0, 0.25, 0.5, 0.75, 1.0].map((quartile) =>
+          quartilePosition(rowCount, quartile)
+        );
+        let project = { [field]: 1 };
+        const quartileData = await Promise.all(
+          quartiles.map(
+            async (quartile): Promise<Paper[]> =>
+              model.find(findObject, project).sort(project).skip(quartile).limit(1)
+          )
+        );
+        response = quartileData.map((quart) => quart[0][field]);
+      }
+      res.json(response);
+    } catch (error: any) {
+      /* istanbul ignore next */
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  router.get(
+    route + 'In/quartiles',
+    passport.authenticate('user', { session: false }),
+    (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
+      citationsQuartiles(req, res, 'inCitationsCount');
+    }
+  );
+
+  router.get(
+    route + 'Out/quartiles',
+    passport.authenticate('user', { session: false }),
+    (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
+      citationsQuartiles(req, res, 'outCitationsCount');
     }
   );
 }

@@ -54,6 +54,28 @@ describe('/fe/citations', () => {
             done();
           });
       });
+
+      specify('Unauthorized GET/In/quartiles', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}In/quartiles`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(401);
+            done();
+          });
+      });
+
+      specify('Unauthorized GET/Out/quartiles', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}Out/quartiles`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(401);
+            done();
+          });
+      });
     });
   });
 
@@ -123,6 +145,72 @@ describe('/fe/citations', () => {
             expect(res.body.years).to.be.an('array');
             expect(res.body.counts).to.be.an('array');
             expect(res.body.counts.every((count: number) => count === 0));
+            done();
+          });
+      });
+    });
+
+    describe('GET/In/quartiles', () => {
+      specify('Successful GET/In/quartiles', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}In/quartiles`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(0);
+            expect(res.body[4]).to.equal(2);
+            done();
+          });
+      });
+
+      specify('Successful GET/In/quartiles: no data', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}In/quartiles?yearStart=2020&yearEnd=2010`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.deep.equal([0, 0, 0, 0, 0]);
+            done();
+          });
+      });
+    });
+
+    describe('GET/Out/quartiles', () => {
+      specify('Successful GET/Out/quartiles', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}Out/quartiles`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(0);
+            expect(res.body[4]).to.equal(1);
+            done();
+          });
+      });
+
+      specify('Successful GET/Out/quartiles: no data', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}Out/quartiles?yearStart=2020&yearEnd=2010`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.deep.equal([0, 0, 0, 0, 0]);
             done();
           });
       });

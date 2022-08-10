@@ -76,10 +76,8 @@ export function buildSortObject(sortField: string, sortDirection: string) {
     } else {
       direction = -1;
     }
-    const sort: { [key: string]: number } = {};
-    sort[sortField] = direction;
     return {
-      $sort: sort,
+      $sort: { [sortField]: direction },
     };
   }
 }
