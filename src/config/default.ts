@@ -20,7 +20,7 @@ export const options: APIOptions = {
   // User
   user: {
     default: {
-      email: process.env.ADMIN_USER || 'jpw@nlpland.com',
+      email: process.env.ADMIN_USER || 'admin@cs-insights.com',
       password: process.env.ADMIN_PASSWORD || 'admin',
       fullname: process.env.ADMIN_NAME || 'admin',
       isAdmin: true,

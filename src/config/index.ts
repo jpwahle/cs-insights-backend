@@ -4,8 +4,8 @@ import { APIOptions } from './interfaces';
 const lodash = require('lodash');
 
 export async function loadOptions(
-  baseDir: string = '/etc/nlpland/config',
-  configPath: string = 'nlpland.js'
+  baseDir: string = '/etc/cs-insights-crawler/config',
+  configPath: string = 'cs-insights-crawler.js'
 ): Promise<APIOptions> {
   let options: APIOptions = defaultOptions;
 
