@@ -23,7 +23,7 @@ export const options: APIOptions = {
   auth: {
     jwt: {
       secret:
-        getSecret('/run/secrets/mongo_user') ||
+        getSecret('/run/secrets/jwt_secret') ||
         process.env.JWT_SECRET ||
         'Never use this in production. Use JWT_SECRET environment variable.',
       maxAge: '4w',
