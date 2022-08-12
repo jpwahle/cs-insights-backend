@@ -305,7 +305,7 @@
   },
   "info": {
     "title": "cs-insights-backend",
-    "version": "0.17.0",
+    "version": "0.18.0",
     "license": {
       "name": "MIT"
     },
@@ -381,7 +381,7 @@
               "properties": {
                 "_id": {
                   "type": "string",
-                  "example": "62f3792329892b06e805aea0"
+                  "example": "62f6633a73b38706a7abff4e"
                 },
                 "name": {
                   "type": "string",
@@ -405,11 +405,11 @@
                 },
                 "createdBy": {
                   "type": "string",
-                  "example": "62f3792229892b06e805ae6c"
+                  "example": "62f6633973b38706a7abff19"
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:47.610Z"
+                  "example": "2022-08-12T14:27:06.789Z"
                 },
                 "__v": {
                   "type": "number",
@@ -503,7 +503,7 @@
               "properties": {
                 "_id": {
                   "type": "string",
-                  "example": "62f3792329892b06e805ae8d"
+                  "example": "62f6633a73b38706a7abff3b"
                 },
                 "name": {
                   "type": "string",
@@ -527,18 +527,18 @@
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:47.472Z"
+                  "example": "2022-08-12T14:27:06.622Z"
                 },
                 "createdBy": {
                   "type": "object",
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62f3792229892b06e805ae6c"
+                      "example": "62f6633973b38706a7abff19"
                     },
                     "email": {
                       "type": "string",
-                      "example": "jpw@nlpland.com"
+                      "example": "admin@cs-insights.com"
                     },
                     "fullname": {
                       "type": "string",
@@ -615,7 +615,7 @@
               "properties": {
                 "_id": {
                   "type": "string",
-                  "example": "62f3792329892b06e805aea3"
+                  "example": "62f6633a73b38706a7abff51"
                 },
                 "name": {
                   "type": "string",
@@ -639,11 +639,11 @@
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:47.650Z"
+                  "example": "2022-08-12T14:27:06.838Z"
                 },
                 "createdBy": {
                   "type": "string",
-                  "example": "62f3792229892b06e805ae6c"
+                  "example": "62f6633973b38706a7abff19"
                 },
                 "__v": {
                   "type": "number",
@@ -803,12 +803,12 @@
                     "type": "string"
                   },
                   "example": [
-                    "62f3792129892b06e805ae57"
+                    "62f6633873b38706a7abff05"
                   ]
                 },
                 "_id": {
                   "type": "string",
-                  "example": "62f3792429892b06e805aed7"
+                  "example": "62f6633b73b38706a7abff85"
                 },
                 "fullname": {
                   "type": "string",
@@ -816,7 +816,7 @@
                 },
                 "timestamp": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:45.324Z"
+                  "example": "2022-08-12T14:27:04.288Z"
                 },
                 "email": {
                   "type": "string",
@@ -824,11 +824,11 @@
                 },
                 "createdBy": {
                   "type": "string",
-                  "example": "62f3792229892b06e805ae6c"
+                  "example": "62f6633973b38706a7abff19"
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:48.563Z"
+                  "example": "2022-08-12T14:27:07.894Z"
                 },
                 "__v": {
                   "type": "number",
@@ -922,7 +922,7 @@
               "properties": {
                 "_id": {
                   "type": "string",
-                  "example": "62f3792429892b06e805aec4"
+                  "example": "62f6633b73b38706a7abff72"
                 },
                 "affiliations": {
                   "type": "array",
@@ -930,7 +930,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "62f3792129892b06e805ae57"
+                    "62f6633873b38706a7abff05"
                   ]
                 },
                 "fullname": {
@@ -943,7 +943,7 @@
                 },
                 "timestamp": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:45.324Z"
+                  "example": "2022-08-12T14:27:04.288Z"
                 },
                 "email": {
                   "type": "string",
@@ -951,18 +951,18 @@
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:48.411Z"
+                  "example": "2022-08-12T14:27:07.713Z"
                 },
                 "createdBy": {
                   "type": "object",
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62f3792229892b06e805ae6c"
+                      "example": "62f6633973b38706a7abff19"
                     },
                     "email": {
                       "type": "string",
-                      "example": "jpw@nlpland.com"
+                      "example": "admin@cs-insights.com"
                     },
                     "fullname": {
                       "type": "string",
@@ -1043,12 +1043,12 @@
                     "type": "string"
                   },
                   "example": [
-                    "62f3792129892b06e805ae57"
+                    "62f6633873b38706a7abff05"
                   ]
                 },
                 "_id": {
                   "type": "string",
-                  "example": "62f3792429892b06e805aee8"
+                  "example": "62f6633c73b38706a7abff96"
                 },
                 "fullname": {
                   "type": "string",
@@ -1060,7 +1060,7 @@
                 },
                 "timestamp": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:45.324Z"
+                  "example": "2022-08-12T14:27:04.288Z"
                 },
                 "email": {
                   "type": "string",
@@ -1068,11 +1068,11 @@
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:48.729Z"
+                  "example": "2022-08-12T14:27:08.077Z"
                 },
                 "createdBy": {
                   "type": "string",
-                  "example": "62f3792229892b06e805ae6c"
+                  "example": "62f6633973b38706a7abff19"
                 },
                 "__v": {
                   "type": "number",
@@ -1282,7 +1282,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "62f3792129892b06e805ae58"
+                    "62f6633873b38706a7abff06"
                   ]
                 },
                 "fieldsOfStudy": {
@@ -1329,7 +1329,7 @@
                 },
                 "_id": {
                   "type": "string",
-                  "example": "62f3792529892b06e805af30"
+                  "example": "62f6633d73b38706a7abffde"
                 },
                 "title": {
                   "type": "string",
@@ -1357,7 +1357,7 @@
                 },
                 "venue": {
                   "type": "string",
-                  "example": "62f3792129892b06e805ae59"
+                  "example": "62f6633873b38706a7abff07"
                 },
                 "dblpId": {
                   "type": "string",
@@ -1365,11 +1365,11 @@
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:49.717Z"
+                  "example": "2022-08-12T14:27:09.253Z"
                 },
                 "createdBy": {
                   "type": "string",
-                  "example": "62f3792229892b06e805ae6c"
+                  "example": "62f6633973b38706a7abff19"
                 },
                 "__v": {
                   "type": "number",
@@ -1463,7 +1463,7 @@
               "properties": {
                 "_id": {
                   "type": "string",
-                  "example": "62f3792529892b06e805af17"
+                  "example": "62f6633d73b38706a7abffc5"
                 },
                 "authorIds": {
                   "type": "array",
@@ -1478,7 +1478,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "62f3792129892b06e805ae58"
+                    "62f6633873b38706a7abff06"
                   ]
                 },
                 "fieldsOfStudy": {
@@ -1549,7 +1549,7 @@
                 },
                 "venue": {
                   "type": "string",
-                  "example": "62f3792129892b06e805ae59"
+                  "example": "62f6633873b38706a7abff07"
                 },
                 "dblpId": {
                   "type": "string",
@@ -1557,18 +1557,18 @@
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:49.523Z"
+                  "example": "2022-08-12T14:27:09.024Z"
                 },
                 "createdBy": {
                   "type": "object",
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62f3792229892b06e805ae6c"
+                      "example": "62f6633973b38706a7abff19"
                     },
                     "email": {
                       "type": "string",
-                      "example": "jpw@nlpland.com"
+                      "example": "admin@cs-insights.com"
                     },
                     "fullname": {
                       "type": "string",
@@ -1656,7 +1656,7 @@
                     "type": "string"
                   },
                   "example": [
-                    "62f3792129892b06e805ae58"
+                    "62f6633873b38706a7abff06"
                   ]
                 },
                 "fieldsOfStudy": {
@@ -1703,7 +1703,7 @@
                 },
                 "_id": {
                   "type": "string",
-                  "example": "62f3792529892b06e805af3f"
+                  "example": "62f6633d73b38706a7abffed"
                 },
                 "title": {
                   "type": "string",
@@ -1731,7 +1731,7 @@
                 },
                 "venue": {
                   "type": "string",
-                  "example": "62f3792129892b06e805ae59"
+                  "example": "62f6633873b38706a7abff07"
                 },
                 "dblpId": {
                   "type": "string",
@@ -1739,11 +1739,11 @@
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:49.845Z"
+                  "example": "2022-08-12T14:27:09.405Z"
                 },
                 "createdBy": {
                   "type": "string",
-                  "example": "62f3792229892b06e805ae6c"
+                  "example": "62f6633973b38706a7abff19"
                 },
                 "__v": {
                   "type": "number",
@@ -1946,7 +1946,7 @@
                 },
                 "_id": {
                   "type": "string",
-                  "example": "62f3792829892b06e805afa7"
+                  "example": "62f6634073b38706a7ac0055"
                 },
                 "venueDetails": {
                   "type": "array",
@@ -1966,9 +1966,9 @@
                   },
                   "example": [
                     {
-                      "_id": "62f3792829892b06e805afa8",
+                      "_id": "62f6634073b38706a7ac0056",
                       "callForPapersText": "Test",
-                      "timePublished": "2022-08-10T09:23:45.580Z"
+                      "timePublished": "2022-08-12T14:27:04.584Z"
                     }
                   ]
                 },
@@ -1978,11 +1978,11 @@
                 },
                 "createdBy": {
                   "type": "string",
-                  "example": "62f3792229892b06e805ae6c"
+                  "example": "62f6633973b38706a7abff19"
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:52.904Z"
+                  "example": "2022-08-12T14:27:12.975Z"
                 },
                 "__v": {
                   "type": "number",
@@ -2076,7 +2076,7 @@
               "properties": {
                 "_id": {
                   "type": "string",
-                  "example": "62f3792829892b06e805af90"
+                  "example": "62f6634073b38706a7ac003e"
                 },
                 "names": {
                   "type": "array",
@@ -2123,9 +2123,9 @@
                   },
                   "example": [
                     {
-                      "_id": "62f3792829892b06e805af91",
+                      "_id": "62f6634073b38706a7ac003f",
                       "callForPapersText": "Test",
-                      "timePublished": "2022-08-10T09:23:45.580Z"
+                      "timePublished": "2022-08-12T14:27:04.584Z"
                     }
                   ]
                 },
@@ -2135,18 +2135,18 @@
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:52.696Z"
+                  "example": "2022-08-12T14:27:12.707Z"
                 },
                 "createdBy": {
                   "type": "object",
                   "properties": {
                     "_id": {
                       "type": "string",
-                      "example": "62f3792229892b06e805ae6c"
+                      "example": "62f6633973b38706a7abff19"
                     },
                     "email": {
                       "type": "string",
-                      "example": "jpw@nlpland.com"
+                      "example": "admin@cs-insights.com"
                     },
                     "fullname": {
                       "type": "string",
@@ -2250,7 +2250,7 @@
                 },
                 "_id": {
                   "type": "string",
-                  "example": "62f3792829892b06e805afab"
+                  "example": "62f6634173b38706a7ac0059"
                 },
                 "venueDetails": {
                   "type": "array",
@@ -2270,9 +2270,9 @@
                   },
                   "example": [
                     {
-                      "_id": "62f3792829892b06e805afac",
+                      "_id": "62f6634173b38706a7ac005a",
                       "callForPapersText": "Test",
-                      "timePublished": "2022-08-10T09:23:45.580Z"
+                      "timePublished": "2022-08-12T14:27:04.584Z"
                     }
                   ]
                 },
@@ -2282,11 +2282,11 @@
                 },
                 "createdAt": {
                   "type": "string",
-                  "example": "2022-08-10T09:23:52.957Z"
+                  "example": "2022-08-12T14:27:13.077Z"
                 },
                 "createdBy": {
                   "type": "string",
-                  "example": "62f3792229892b06e805ae6c"
+                  "example": "62f6633973b38706a7abff19"
                 },
                 "__v": {
                   "type": "number",
@@ -2502,7 +2502,7 @@
               "properties": {
                 "_id": {
                   "type": "string",
-                  "example": "62f3792329892b06e805ae79"
+                  "example": "62f6633a73b38706a7abff27"
                 },
                 "fullname": {
                   "type": "string",
@@ -2581,7 +2581,7 @@
               "properties": {
                 "_id": {
                   "type": "string",
-                  "example": "62f3792329892b06e805ae79"
+                  "example": "62f6633a73b38706a7abff27"
                 },
                 "fullname": {
                   "type": "string",
@@ -2688,7 +2688,7 @@
               "properties": {
                 "_id": {
                   "type": "string",
-                  "example": "62f3792329892b06e805ae79"
+                  "example": "62f6633a73b38706a7abff27"
                 },
                 "fullname": {
                   "type": "string",
@@ -2849,7 +2849,7 @@
               "properties": {
                 "token": {
                   "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyZjM3OTIyMjk4OTJiMDZlODA1YWU2YyIsImVtYWlsIjoianB3QG5scGxhbmQuY29tIn0sImlhdCI6MTY2MDEyMzQyNn0.0hh3Nhu95GIBXJF0BmaP4Uu0LJhEsgqMzg96LQELfmM"
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyZjY2MzM5NzNiMzg3MDZhN2FiZmYxOSIsImVtYWlsIjoiYWRtaW5AY3MtaW5zaWdodHMuY29tIn0sImlhdCI6MTY2MDMxNDQyNX0.gKGwv1WvUebItADekOkFh4-RkbIoKjTPkbagY31oLWA"
                 }
               }
             }
@@ -3290,7 +3290,7 @@
                   },
                   "example": [
                     {
-                      "_id": "62f3792e29892b06e805b058",
+                      "_id": "62f6634773b38706a7ac0106",
                       "inCitationsCount": 2,
                       "title": "Some Paper Title",
                       "yearPublished": 2022,
@@ -3534,8 +3534,8 @@
                       },
                       "link": {
                         "type": [
-                          "string",
-                          "null"
+                          "null",
+                          "string"
                         ]
                       }
                     },
@@ -3553,13 +3553,13 @@
                   "example": [
                     {
                       "papersCount": 1,
-                      "inCitationsCount": 2,
-                      "yearPublishedFirst": 2022,
-                      "yearPublishedLast": 2022,
-                      "_id": "venue1",
-                      "venue": "venue1",
-                      "inCitationsPerPaper": 2,
-                      "link": "https://dblp.org/search?q=venue1"
+                      "inCitationsCount": 0,
+                      "yearPublishedFirst": 2020,
+                      "yearPublishedLast": 2020,
+                      "_id": "Others",
+                      "venue": "Others",
+                      "inCitationsPerPaper": 0,
+                      "link": null
                     }
                   ]
                 }
@@ -4028,13 +4028,13 @@
                   },
                   "example": [
                     {
-                      "papersCount": 1,
-                      "inCitationsCount": 0,
-                      "yearPublishedFirst": 2020,
-                      "yearPublishedLast": 2020,
-                      "_id": "Others",
-                      "fieldsOfStudy": "Others",
-                      "inCitationsPerPaper": 0
+                      "papersCount": 2,
+                      "inCitationsCount": 3,
+                      "yearPublishedFirst": 2022,
+                      "yearPublishedLast": 2022,
+                      "_id": "Computer Science",
+                      "fieldsOfStudy": "Computer Science",
+                      "inCitationsPerPaper": 1.5
                     }
                   ]
                 }
