@@ -1,4 +1,14 @@
 import { APIOptions } from './interfaces';
+import fs from 'fs';
+
+function getSecret(path: string): string | undefined {
+  try {
+    const secret = fs.readFileSync(path, 'utf8');
+    return secret;
+  } catch (e) {
+    console.warn(`Could not read secret from ${path}`);
+  }
+}
 
 /* istanbul ignore next */
 export const options: APIOptions = {
@@ -12,6 +22,7 @@ export const options: APIOptions = {
   auth: {
     jwt: {
       secret:
+        getSecret('/run/secrets/mongo_user') ||
         process.env.JWT_SECRET ||
         'Never use this in production. Use JWT_SECRET environment variable.',
       maxAge: '4w',
@@ -38,7 +49,9 @@ export const options: APIOptions = {
 
   // MongoDB connection
   database: {
-    url: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}`,
+    url: `mongodb://${getSecret('/run/secrets/mongo_user') || process.env.MONGO_USER}:${
+      getSecret('/run/secrets/mongo_password') || process.env.MONGO_PASSWORD
+    }@${process.env.MONGO_HOST}`,
     db: 'nlpland',
     autoIndex: true,
   },
