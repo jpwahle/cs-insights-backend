@@ -1,6 +1,7 @@
 import { APIOptions } from './interfaces';
 import fs from 'fs';
 
+/* istanbul ignore next */
 function getSecret(path: string): string | undefined {
   try {
     const secret = fs.readFileSync(path, 'utf8');
