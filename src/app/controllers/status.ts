@@ -19,7 +19,7 @@ export function initialize(router: express.Router, options: APIOptions) {
       }
     }
   );
-
+  /* istanbul ignore next */
   router.get(
     route + '/statusPredictionBackend',
     async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
