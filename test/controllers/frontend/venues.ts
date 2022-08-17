@@ -184,6 +184,38 @@ describe('/fe/venues', () => {
           });
       });
 
+      specify('Successful GET/years (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/years`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(1936);
+            expect(res.body.years[84]).to.equal(2020);
+            expect(res.body.counts).to.be.an('array');
+            expect(res.body.counts[0]).to.equal(0);
+            expect(res.body.counts[84]).to.equal(1);
+          });
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/years`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(1936);
+            expect(res.body.years[84]).to.equal(2020);
+            expect(res.body.counts).to.be.an('array');
+            expect(res.body.counts[0]).to.equal(0);
+            expect(res.body.counts[84]).to.equal(1);
+            done();
+          });
+      });
+
       specify('Successful GET/years: no results', (done) => {
         chai
           .request(apiServer.app)
@@ -202,6 +234,44 @@ describe('/fe/venues', () => {
 
     describe('GET/info', () => {
       specify('Successful GET/info', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(3);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]._id).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].yearPublishedFirst).to.exist;
+            expect(res.body.rows[0].yearPublishedLast).to.exist;
+            expect(res.body.rows[0].papersCount).to.exist;
+            expect(res.body.rows[0].inCitationsPerPaper).to.exist;
+            done();
+          });
+      });
+
+      specify('Successful GET/info', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(3);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]._id).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].yearPublishedFirst).to.exist;
+            expect(res.body.rows[0].yearPublishedLast).to.exist;
+            expect(res.body.rows[0].papersCount).to.exist;
+            expect(res.body.rows[0].inCitationsPerPaper).to.exist;
+          });
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50`)
@@ -268,6 +338,34 @@ describe('/fe/venues', () => {
 
     describe('GET/quartiles', () => {
       specify('Successful GET/quartiles: papersCount', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles?metric=papersCount`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(1);
+            expect(res.body[4]).to.equal(1);
+            done();
+          });
+      });
+
+      specify('Successful GET/quartiles: papersCount (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles?metric=papersCount`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(1);
+            expect(res.body[4]).to.equal(1);
+          });
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/quartiles?metric=papersCount`)
@@ -353,6 +451,37 @@ describe('/fe/venues', () => {
             done();
           });
       });
+      specify('Successful GET/topk: papersCount (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/topk?k=10&metric=papersCount`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(2);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]._id).to.not.exist;
+            expect(res.body[0].x).to.exist;
+            expect(res.body[0].y).to.equal(1);
+            expect(res.body[1].y).to.equal(1);
+          });
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/topk?k=10&metric=papersCount`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(2);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]._id).to.not.exist;
+            expect(res.body[0].x).to.exist;
+            expect(res.body[0].y).to.equal(1);
+            expect(res.body[1].y).to.equal(1);
+            done();
+          });
+      });
 
       specify('Successful GET/topk: inCitationsCount', (done) => {
         chai
@@ -394,6 +523,31 @@ describe('/fe/venues', () => {
 
     describe('GET/list', () => {
       specify('Successful GET/list', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/list?pattern=hel`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.be.length(1);
+            expect(res.body[0].names).to.equal('venue1');
+            done();
+          });
+      });
+      specify('Successful GET/list (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/list?pattern=hel`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.be.length(1);
+            expect(res.body[0].names).to.equal('venue1');
+          });
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/list?pattern=hel`)

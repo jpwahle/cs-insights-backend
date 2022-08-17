@@ -99,6 +99,38 @@ describe('/fe/citations', () => {
           });
       });
 
+      specify('Successful GET/In/years (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}In/years`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(1936);
+            expect(res.body.years[84]).to.equal(2020);
+            expect(res.body.counts).to.be.an('array');
+            expect(res.body.counts[0]).to.equal(0);
+            expect(res.body.counts[86]).to.equal(3);
+          });
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}In/years`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(1936);
+            expect(res.body.years[84]).to.equal(2020);
+            expect(res.body.counts).to.be.an('array');
+            expect(res.body.counts[0]).to.equal(0);
+            expect(res.body.counts[86]).to.equal(3);
+            done();
+          });
+      });
+
       specify('Successful GET/In/years: no results', (done) => {
         chai
           .request(apiServer.app)
@@ -152,6 +184,34 @@ describe('/fe/citations', () => {
 
     describe('GET/In/quartiles', () => {
       specify('Successful GET/In/quartiles', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}In/quartiles`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(0);
+            expect(res.body[4]).to.equal(2);
+            done();
+          });
+      });
+
+      specify('Successful GET/In/quartiles (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}In/quartiles`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(0);
+            expect(res.body[4]).to.equal(2);
+          });
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}In/quartiles`)

@@ -35,5 +35,6 @@ export interface APIOptions {
     prefix: string;
     version: string;
     baseRoute: string;
+    cacheTTL: number;
   };
 }
