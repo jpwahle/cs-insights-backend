@@ -160,6 +160,38 @@ describe('/fe/papers', () => {
           });
       });
 
+      specify('Successful GET/years (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/years`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(1936);
+            expect(res.body.years[84]).to.equal(2020);
+            expect(res.body.counts).to.be.an('array');
+            expect(res.body.counts[0]).to.equal(0);
+            expect(res.body.counts[84]).to.equal(1);
+          });
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/years`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.years).to.be.an('array');
+            expect(res.body.years[0]).to.equal(1936);
+            expect(res.body.years[84]).to.equal(2020);
+            expect(res.body.counts).to.be.an('array');
+            expect(res.body.counts[0]).to.equal(0);
+            expect(res.body.counts[84]).to.equal(1);
+            done();
+          });
+      });
+
       specify('Successful GET/years: no results', (done) => {
         chai
           .request(apiServer.app)
@@ -178,6 +210,48 @@ describe('/fe/papers', () => {
 
     describe('GET/info', () => {
       specify('Successful GET/info', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&sortField=inCitationsCount&sortDirection=desc`
+          )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(3);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]._id).to.exist;
+            expect(res.body.rows[0].title).to.exist;
+            expect(res.body.rows[0].authors).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(2);
+            expect(res.body.rows[0].yearPublished).to.exist;
+            done();
+          });
+      });
+
+      specify('Successful GET/info (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(
+            `${apiOptions.server.baseRoute}${route}/info?page=0&pageSize=50&sortField=inCitationsCount&sortDirection=desc`
+          )
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.rowCount).to.equal(3);
+            expect(res.body.rows).to.be.an('array');
+            expect(res.body.rows[0]._id).to.exist;
+            expect(res.body.rows[0].title).to.exist;
+            expect(res.body.rows[0].authors).to.exist;
+            expect(res.body.rows[0].venue).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.exist;
+            expect(res.body.rows[0].inCitationsCount).to.equal(2);
+            expect(res.body.rows[0].yearPublished).to.exist;
+          });
         chai
           .request(apiServer.app)
           .get(
@@ -241,6 +315,34 @@ describe('/fe/papers', () => {
           });
       });
 
+      specify('Successful GET/quartiles (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(0);
+            expect(res.body[4]).to.equal(2);
+          });
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/quartiles`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(5);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]).to.equal(0);
+            expect(res.body[4]).to.equal(2);
+            done();
+          });
+      });
+
       specify('Successful GET/quartiles: no data', (done) => {
         chai
           .request(apiServer.app)
@@ -275,10 +377,78 @@ describe('/fe/papers', () => {
             done();
           });
       });
+
+      specify('Successful GET/topk (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/topk?k=10`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(3);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]._id).to.not.exist;
+            expect(res.body[0].x).to.exist;
+            expect(res.body[0].y).to.equal(2);
+            expect(res.body[2].y).to.equal(0);
+          });
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/topk?k=10`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body.length).to.equal(3);
+            expect(res.body).to.be.an('array');
+            expect(res.body[0]._id).to.not.exist;
+            expect(res.body[0].x).to.exist;
+            expect(res.body[0].y).to.equal(2);
+            expect(res.body[2].y).to.equal(0);
+            done();
+          });
+      });
     });
 
     describe('GET/list', () => {
       specify('Successful GET/list', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/list?column=publisher&pattern=ABC`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.equal(1);
+            expect(res.body[0]._id).to.not.exist;
+            expect(res.body[0].title).to.not.exist;
+            expect(res.body[0].authors).to.not.exist;
+            expect(res.body[0].venue).to.not.exist;
+            expect(res.body[0].inCitationsCount).to.not.exist;
+            expect(res.body[0].yearPublished).to.not.exist;
+            done();
+          });
+      });
+
+      specify('Successful GET/list (cached)', (done) => {
+        chai
+          .request(apiServer.app)
+          .get(`${apiOptions.server.baseRoute}${route}/list?column=publisher&pattern=ABC`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .end((err, res) => {
+            should().not.exist(err);
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body.length).to.equal(1);
+            expect(res.body[0]._id).to.not.exist;
+            expect(res.body[0].title).to.not.exist;
+            expect(res.body[0].authors).to.not.exist;
+            expect(res.body[0].venue).to.not.exist;
+            expect(res.body[0].inCitationsCount).to.not.exist;
+            expect(res.body[0].yearPublished).to.not.exist;
+          });
         chai
           .request(apiServer.app)
           .get(`${apiOptions.server.baseRoute}${route}/list?column=publisher&pattern=ABC`)

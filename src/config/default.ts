@@ -66,5 +66,6 @@ export const options: APIOptions = {
     get baseRoute() {
       return this.prefix + this.version;
     },
+    cacheTTL: 0,
   },
 };
