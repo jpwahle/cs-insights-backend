@@ -161,20 +161,33 @@ export function initialize(
           if (rowCount === 0) {
             data = [0, 0, 0, 0, 0];
           } else {
-            const quartiles = [0, 0.25, 0.5, 0.75, 1.0].map((quartile) =>
+            const positions = [0, 0.25, 0.5, 0.75, 1.0].map((quartile) =>
               quartilePosition(rowCount, quartile)
             );
-            const quartileData = await Promise.all(
-              quartiles.map(
-                async (quartile): Promise<Paper[]> =>
-                  model
-                    .find(findObject, { inCitationsCount: 1 })
-                    .sort({ inCitationsCount: 1 })
-                    .skip(quartile)
-                    .limit(1)
-              )
-            );
-            data = quartileData.map((quart) => quart[0].inCitationsCount);
+            const quartileData = await model
+              .aggregate([
+                getMatchObject(findObject),
+                { $sort: { inCitationsCount: 1 } },
+                { $project: { inCitationsCount: 1 } },
+                {
+                  $facet: {
+                    min: [{ $skip: positions[0] }, { $limit: 1 }],
+                    first: [{ $skip: positions[1] }, { $limit: 1 }],
+                    median: [{ $skip: positions[2] }, { $limit: 1 }],
+                    third: [{ $skip: positions[3] }, { $limit: 1 }],
+                    max: [{ $skip: positions[4] }, { $limit: 1 }],
+                  },
+                },
+              ])
+              .allowDiskUse(true);
+
+            data = [
+              quartileData[0].min[0].inCitationsCount,
+              quartileData[0].first[0].inCitationsCount,
+              quartileData[0].median[0].inCitationsCount,
+              quartileData[0].third[0].inCitationsCount,
+              quartileData[0].max[0].inCitationsCount,
+            ];
           }
           appCache.set(key, data);
           res.json(data);
