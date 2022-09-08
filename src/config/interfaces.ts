@@ -26,7 +26,6 @@ export interface APIOptions {
   };
   database: {
     url: string;
-    db: string;
     autoIndex: boolean;
   };
   server: {

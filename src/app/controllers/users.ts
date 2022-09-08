@@ -17,7 +17,7 @@ export function initialize(
     prefix: options.server.prefix,
     version: options.server.version,
     preMiddleware: passport.authenticate('admin', { session: false }),
-
+    totalCountHeader: true,
     // disable user creation
     preCreate: (_: any, res: express.Response) => {
       return res.status(403).json({

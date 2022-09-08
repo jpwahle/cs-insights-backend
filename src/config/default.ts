@@ -44,7 +44,7 @@ export const options: APIOptions = {
   docs: {
     title: 'REST API Documentation for NLP-land-backend',
     oasFile: './docs/oas.json',
-    swaggerUiServePath: 'docs/swagger-ui',
+    swaggerUiServePath: '/docs/swagger-ui',
     redocUiServePath: '/docs/redoc',
   },
 
@@ -52,8 +52,7 @@ export const options: APIOptions = {
   database: {
     url: `mongodb://${getSecret('/run/secrets/mongo_user') || process.env.MONGO_USER}:${
       getSecret('/run/secrets/mongo_password') || process.env.MONGO_PASSWORD
-    }@${process.env.MONGO_HOST}`,
-    db: 'nlpland',
+    }@${process.env.MONGO_HOST}/${process.env.MONGO_DB}?authSource=admin`,
     autoIndex: true,
   },
 
