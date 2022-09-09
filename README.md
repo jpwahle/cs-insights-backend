@@ -13,7 +13,7 @@
 <img alt="Response time 773" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgipplab%2Fcs-insights-uptime%2FHEAD%2Fapi%2Fbackend%2Fresponse-time.json">
 </p>
 
-> Starting from version 1.0.0, this project is using [semantic versioning](https://semver.org/). For more infos about the features supported, see the [releases](https://github.com/gipplab/cs-insights-backend/releases) and [CHANGELOG.md](CHANGELOG.md).
+> Starting from version 1.0.0, this project is using [semantic versioning](https://semver.org/). For more infos about the features supported, see the [releases](https://github.com/gipplab/cs-insights-backend/releases).
 
 ## Getting Started
 
