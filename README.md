@@ -1,5 +1,9 @@
-# cs-insights-backend
-
+<div align="center">
+  <a href="https://cs-insights.uni-goettingen.de">
+    <img src="logo.png" alt="Logo" width="500">
+  </a>
+</div>
+<br/>
 <p align="center">
 <a href="https://codecov.io/gh/gipplab/cs-insights-backend"><img alt="Code Coverage" src="https://codecov.io/gh/gipplab/cs-insights-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
 <a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml/badge.svg?branch=dev"></a>  
@@ -12,6 +16,7 @@
 <a href="https://gipplab.github.io/cs-insights-uptime/"><img alt="All-time uptime 100.00%" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgipplab%2Fcs-insights-uptime%2FHEAD%2Fapi%2Fbackend%2Fuptime.json"></a>
 <a href="https://gipplab.github.io/cs-insights-uptime/"><img alt="Response time 773" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgipplab%2Fcs-insights-uptime%2FHEAD%2Fapi%2Fbackend%2Fresponse-time.json"></a>
 </p>
+<br/>
 
 ## Getting Started
 
