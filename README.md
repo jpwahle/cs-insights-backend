@@ -87,7 +87,7 @@ The auto-generated redoc documentation can be found [here](https://gipplab.githu
 A general overview of standard endpoints, parameters, and possible queries can be found [here](https://florianholzapfel.github.io/express-restify-mongoose/v1/).
 
     
-## Contribution
+## Contributing
 Fork the repo, make changes and send a PR. We'll review it together!
 
 Commit messages should follow [Angular's conventions](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
