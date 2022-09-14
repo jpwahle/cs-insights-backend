@@ -52,8 +52,9 @@ export const options: APIOptions = {
   database: {
     url: `mongodb://${getSecret('/run/secrets/mongo_user') || process.env.MONGO_USER}:${
       getSecret('/run/secrets/mongo_password') || process.env.MONGO_PASSWORD
-    }@${process.env.MONGO_HOST}/${process.env.MONGO_DB}?authSource=admin`,
+    }@${process.env.MONGO_HOST}`,
     autoIndex: true,
+    db: process.env.MONGO_DB || 'test',
   },
 
   // API server

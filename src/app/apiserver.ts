@@ -42,14 +42,16 @@ export class APIServer {
   };
 
   connectDb = async () => {
-    await mongoose.connect(this.options.database.url, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    });
+    await mongoose.connect(
+      `${this.options.database.url}/${this.options.database.db}?authSource=admin`,
+      {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      }
+    );
   };
-
   attachRouter = (router: express.Router) => {
     this.app.use(router);
   };
