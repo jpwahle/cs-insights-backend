@@ -6,7 +6,8 @@ export interface APIOptions {
   auth: {
     jwt: {
       secret: string;
-      maxAge: string;
+      maxRefreshTokenAge: string;
+      maxTokenAge: string;
     };
   };
   user: {

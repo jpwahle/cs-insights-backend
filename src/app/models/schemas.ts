@@ -156,6 +156,7 @@ export const userSchema = new mongoose.Schema(
     fullname: { type: String, required: true },
     isAdmin: { type: Boolean, required: false, select: false },
     isActive: { type: Boolean, required: false, select: false },
+    refreshToken: [{ type: String, required: false, select: false }],
   },
   { collection: 'users' }
 );

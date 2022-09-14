@@ -98,4 +98,5 @@ export interface User extends mongoose.Document {
   token?: string;
   isAdmin?: boolean;
   isActive?: boolean;
+  refreshToken?: string[];
 }
