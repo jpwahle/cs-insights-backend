@@ -88,12 +88,9 @@ A general overview of standard endpoints, parameters, and possible queries can b
 
     
 ## Contribution
-New Git and GitHub deploys, releases, as well as changelogs are automatically created and deployed when a maintainer or admin merges a pull request from the `dev` into the `main` branch.
-    
-Developers should proceed in the following way:
-1. If you want to develop a new feature, fix, or test, create an issue and assign yourself to that issue. You can create a new branch using [GitHub's built-in system](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue).
-2. When you are done developing, create a commit with a message that includes "#patch", "#minor", or "#major" according to the semantic versioning [specification](https://semver.org/).
-3. Finally, create a pull request to the `dev` branch. Assign the pull request one of the labels "fix", "feature", or "test" so they appear correctly later in the changelogs.
+Fork the repo, make changes and send a PR. We'll review it together!
+
+Commit messages should follow [Angular's conventions](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
 
 ## License
 This project is licensed under the terms of MIT license. For more information, please see the [LICENSE](LICENSE) file.
