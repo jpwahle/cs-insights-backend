@@ -50,11 +50,11 @@ export const options: APIOptions = {
 
   // MongoDB connection
   database: {
-    url: `mongodb://${getSecret('/run/secrets/mongo_user') || process.env.MONGO_USER}:${
-      getSecret('/run/secrets/mongo_password') || process.env.MONGO_PASSWORD
-    }@${process.env.MONGO_HOST}`,
+    url: `mongodb://${getSecret('/run/secrets/mongo_user') || process.env.MONGO_USER || 'admin'}:${
+      getSecret('/run/secrets/mongo_password') || process.env.MONGO_PASSWORD || 'admin_password'
+    }@${process.env.MONGO_HOST || '127.0.0.1'}/`,
     autoIndex: true,
-    db: process.env.MONGO_DB || 'test',
+    db: process.env.MONGO_DB || 'csinsights',
   },
 
   // API server

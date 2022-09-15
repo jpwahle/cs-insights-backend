@@ -43,7 +43,7 @@ export class APIServer {
 
   connectDb = async () => {
     await mongoose.connect(
-      `${this.options.database.url}/${this.options.database.db}?authSource=admin`,
+      `${this.options.database.url}${this.options.database.db}?authSource=admin`,
       {
         useNewUrlParser: true,
         useCreateIndex: true,
@@ -52,6 +52,7 @@ export class APIServer {
       }
     );
   };
+
   attachRouter = (router: express.Router) => {
     this.app.use(router);
   };
