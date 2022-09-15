@@ -68,7 +68,7 @@ export function initialize(
         // Get user input
         const { fullname, email, password } = req.body;
 
-        userModel.validate(req.body).catch((err) => {
+        userModel.validate(req.body).catch((err: any) => {
           /* istanbul ignore else */
           if (err) res.status(400).json({ message: err });
         });
@@ -127,7 +127,7 @@ export function initialize(
             // Changed to let keyword
             let newRefreshTokenArray = !req.cookies?.jwt
               ? foundUser?.refreshToken
-              : foundUser?.refreshToken?.filter((rt) => rt !== req.cookies?.jwt);
+              : foundUser?.refreshToken?.filter((rt: string) => rt !== req.cookies?.jwt);
 
             if (req.cookies?.jwt) {
               /* 
@@ -209,7 +209,9 @@ export function initialize(
           return res.sendStatus(403); //Forbidden
         }
 
-        const newRefreshTokenArray = foundUser?.refreshToken?.filter((rt) => rt !== refreshToken);
+        const newRefreshTokenArray = foundUser?.refreshToken?.filter(
+          (rt: string) => rt !== refreshToken
+        );
 
         jwt.verify(
           refreshToken,
@@ -260,25 +262,31 @@ export function initialize(
   router.get(
     `${options.server.baseRoute}/logout`,
     async (req: express.Request, res: express.Response, next: NextFunction) => {
-      // On client, also delete the accessToken
+      try {
+        // On client, also delete the accessToken
+        const cookies = req.cookies;
+        if (!cookies?.jwt) return res.sendStatus(204); //No content
+        const refreshToken = cookies.jwt;
 
-      const cookies = req.cookies;
-      if (!cookies?.jwt) return res.sendStatus(204); //No content
-      const refreshToken = cookies.jwt;
+        // Is refreshToken in db?
+        const foundUser = await userModel.findOne({ refreshToken }).exec();
+        if (!foundUser) {
+          res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
+          return res.sendStatus(204);
+        }
 
-      // Is refreshToken in db?
-      const foundUser = await userModel.findOne({ refreshToken }).exec();
-      if (!foundUser) {
+        // Delete refreshToken in db
+        foundUser.refreshToken = foundUser?.refreshToken?.filter(
+          (rt: string) => rt !== refreshToken
+        );
+        await foundUser.save();
+
         res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
-        return res.sendStatus(204);
+        res.sendStatus(204);
+      } catch (err) {
+        /* istanbul ignore next */
+        return next(err);
       }
-
-      // Delete refreshToken in db
-      foundUser.refreshToken = foundUser?.refreshToken?.filter((rt) => rt !== refreshToken);
-      await foundUser.save();
-
-      res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
-      res.sendStatus(204);
     }
   );
 }
