@@ -5,7 +5,6 @@ import { APIOptions } from '../../config/interfaces';
 import { QueryFilters } from '../../types';
 
 export function initialize(router: express.Router, options: APIOptions) {
-  // authors endpoint
   const route = `${options.server.baseRoute}`;
 
   router.get(
