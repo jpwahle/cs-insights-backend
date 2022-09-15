@@ -104,28 +104,10 @@ jobs:
           node-version: '18'
 
       - name: 🏷 Bump version and push tag
-        uses: anothrNick/github-tag-action@1.36.0
-        id: tagging
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-
-      - name: 📝 Build Changelog
-        id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@v1
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
         with:
-          configuration: "changelog_config.json"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 📦 Create Release
-        uses: actions/create-release@v1
-        with:
-          release_name: ${{steps.tagging.outputs.tag}}
-          body: ${{steps.build_changelog.outputs.changelog}}
-          tag_name: ${{steps.tagging.outputs.tag}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ⬆️ Update npm package version
         uses: reedyuk/npm-version@1.1.1
@@ -144,6 +126,16 @@ jobs:
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
           branch: ${{ github.ref }}
+
+      - name: 🔨 Create Release
+        uses: ncipollo/release-action@v1.10.0
+        with:
+          generateReleaseNotes: true
+          draft: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
 
       - name: 🐳 Set up QEMU
         uses: docker/setup-qemu-action@v1
