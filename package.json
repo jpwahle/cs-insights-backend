@@ -5,7 +5,7 @@
   "main": "./lib/main.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "test": "nyc ts-mocha --no-deprecation -t 60000 --exit test/**/*.ts test/**/**/*.ts",
+    "test": "nyc ts-mocha --no-deprecation -t 6000 --exit test/**/*.ts test/**/**/*.ts",
     "test2": "ts-mocha --exit test/**/*.ts test/**/**/*.ts",
     "prebuild": "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
     "predev": "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
