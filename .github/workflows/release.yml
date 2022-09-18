@@ -141,9 +141,9 @@ jobs:
         run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🐳 Build docker image
-        run: docker build -t ghcr.io/gipplab/cs-insights-backend:${{steps.tagging.outputs.tag}} -t ghcr.io/gipplab/cs-insights-backend:latest .
+        run: docker build -t ghcr.io/gipplab/cs-insights-backend:${{ steps.tag_version.outputs.new_tag }} -t ghcr.io/gipplab/cs-insights-backend:latest .
 
       - name: 📦 Push docker image
         run: |
-          docker push ghcr.io/gipplab/cs-insights-backend:${{steps.tag_version.outputs.new_tag}}
+          docker push ghcr.io/gipplab/cs-insights-backend:${{ steps.tag_version.outputs.new_tag }}
           docker push ghcr.io/gipplab/cs-insights-backend:latest
