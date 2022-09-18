@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
 import express, { NextFunction } from 'express';
 import restify from 'express-restify-mongoose';
-import * as DocumentTypes from '../models/interfaces';
+import mongoose from 'mongoose';
 import { APIOptions } from '../../config/interfaces';
+import * as DocumentTypes from '../models/interfaces';
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
@@ -17,12 +17,21 @@ export function initialize(
     prefix: options.server.prefix,
     version: options.server.version,
     preMiddleware: passport.authenticate('admin', { session: false }),
-    totalCountHeader: true,
     // disable user creation
     preCreate: (_: any, res: express.Response) => {
       return res.status(403).json({
         message: 'Users can only be created using the register API',
       });
+    },
+
+    postRead: (req: any, res: express.Response, next: NextFunction) => {
+      // allow reading only for admins or the user itself
+      if (req.user.isAdmin) {
+        return next();
+      }
+      return res
+        .status(200)
+        .json(req.erm.result.filter((el: DocumentTypes.User) => el._id.equals(req.user._id)));
     },
 
     // disable user modification, except for admins and the user itself
