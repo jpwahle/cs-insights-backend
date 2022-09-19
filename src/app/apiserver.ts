@@ -4,6 +4,7 @@ import expressOasGenerator, { SPEC_OUTPUT_FILE_BEHAVIOR } from 'express-oas-gene
 import Models from './models';
 import * as DocumentTypes from './models/interfaces';
 const cors = require('cors');
+const cookies = require('cookie-parser');
 
 import { APIOptions } from '../config/interfaces';
 import { initAuth } from './middleware/auth';
@@ -26,6 +27,7 @@ export class APIServer {
   init = () => {
     this.app.use(express.json({ limit: this.options.server.jsonParserLimit }));
     this.app.use(cors());
+    this.app.use(cookies());
   };
 
   addAuth = () => {

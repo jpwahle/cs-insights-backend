@@ -1,5 +1,7 @@
 {
-  "extends": ["airbnb-typescript/base", "prettier"],
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "extends": ["airbnb-typescript/base", "prettier", "eslint:recommended"],
   "plugins": ["prettier", "@typescript-eslint", "import"],
   "rules": {
     "prettier/prettier": ["error"],
@@ -7,8 +9,12 @@
     "@typescript-eslint/no-unused-expressions": ["off"]
   },
   "parserOptions": {
-    "project": ["./tsconfig.json", "./tsconfig-test.json"]
+    "project": ["tsconfig.json", "tsconfig-test.json"]
   },
-  "parser": "@typescript-eslint/parser",
-  "ignorePatterns": ["version.ts"]
+  "ignorePatterns": ["version.ts"],
+  "env": {
+    "node": true,
+    "es6": true,
+    "mocha": true
+  }
 }

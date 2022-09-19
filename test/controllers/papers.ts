@@ -1,13 +1,13 @@
 process.env.NODE_ENV = 'test';
 
-import 'mocha';
 import chai, { expect, should } from 'chai';
 import chaiHttp from 'chai-http';
+import 'mocha';
+import mongoose from 'mongoose';
 import { APIServer } from '../../src/app/apiserver';
+import * as DocumentTypes from '../../src/app/models/interfaces';
 import { APIOptions } from '../../src/config/interfaces';
 import * as Setup from '../setup';
-import * as DocumentTypes from '../../src/app/models/interfaces';
-import mongoose from 'mongoose';
 const lodash = require('lodash');
 
 chai.use(chaiHttp);
@@ -61,7 +61,7 @@ describe('/papers', () => {
   });
 
   afterEach(async () => {
-    await Setup.clearDatabase(['papers', 'venues', 'authors']);
+    await Setup.clearDatabase(['papers', 'authors']);
   });
 
   describe('No access', () => {

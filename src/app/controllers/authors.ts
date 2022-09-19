@@ -1,8 +1,8 @@
 import express, { NextFunction } from 'express';
-import mongoose from 'mongoose';
 import restify from 'express-restify-mongoose';
-import * as DocumentTypes from '../models/interfaces';
+import mongoose from 'mongoose';
 import { APIOptions } from '../../config/interfaces';
+import * as DocumentTypes from '../models/interfaces';
 import { addCreated } from './index';
 
 const passport = require('passport');
@@ -18,12 +18,11 @@ export function initialize(
     preMiddleware: passport.authenticate('admin', { session: false }),
     prefix: options.server.prefix,
     version: options.server.version,
-    totalCountHeader: true,
     preCreate: (req: any, res: express.Response, next: NextFunction) => {
       if (req.user.isAdmin) {
         // Add who created the author and when
         addCreated(req);
-        // TODO better solution needed
+        // TODO: Better solution needed
         if (Array.isArray(req.body)) {
           for (const i in req.body) {
             if (req.body[i].orcid === null) {

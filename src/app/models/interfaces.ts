@@ -1,92 +1,61 @@
 import mongoose from 'mongoose';
 
-export interface Affiliation extends mongoose.Document {
-  name: string;
-  country: string;
-  city: string;
-  lat: number;
-  lng: number;
+export interface Paper extends mongoose.Document {
+  corpusid: string;
+  abstract: string;
+  updated: Date;
+  externalids: {
+    DBLP: string;
+    DOI: string;
+    ACL: string;
+    arXiv: string;
+    PubMed: string;
+    PubMedCentral: string;
+    MAG: string;
+    CorpusId: string;
+  };
+  url: string;
+  title: string;
+  authors: { name: string; authorId: string }[];
+  venue: string;
+  year: number;
+  referencecount: number;
+  citationcount: number;
+  influentialcitationcount: number;
+  isopenaccess: boolean;
+  s2fieldsofstudy: string[];
+  publicationtypes: string[];
+  publicationdate: Date;
+  journal: {
+    name: string;
+    volume: string;
+    pages: string;
+  };
   createdBy: mongoose.Types.ObjectId;
   createdAt: Date;
 }
 
 export interface Author extends mongoose.Document {
-  fullname: string;
-  affiliations: mongoose.Types.ObjectId[];
-  timestamp: Date;
-  email: string;
-  createdBy: mongoose.Types.ObjectId;
-  createdAt: Date;
-  dblpId: string;
-}
-
-export interface Venue extends mongoose.Document {
-  names: string[];
-  acronyms: string[];
-  venueCodes: string[];
-  venueDetails: {
-    callForPapersText: string;
-    timePublished: Date;
-  }[];
-  createdBy: mongoose.Types.ObjectId;
-  createdAt: Date;
-  dblpId: string;
-}
-
-export interface Paper extends mongoose.Document {
-  title: string;
-  abstractText: string;
-  yearPublished: number;
-
-  authorIds: mongoose.Types.ObjectId[];
-  authors: string[];
-  venueId: mongoose.Types.ObjectId;
-  venue: string;
-  publisher: string;
-  typeOfPaper:
-    | 'article'
-    | 'inproceedings'
-    | 'book'
-    | 'incollection'
-    | 'proceedings'
-    | 'phdthesis'
-    | 'mastersthesis';
-  fieldsOfStudy:
-    | 'Art'
-    | 'Biology'
-    | 'Business'
-    | 'Chemistry'
-    | 'Computer Science'
-    | 'Economics'
-    | 'Engineering'
-    | 'Environmental Science'
-    | 'Geography'
-    | 'Geology'
-    | 'History'
-    | 'Materials Science'
-    | 'Mathematics'
-    | 'Medicine'
-    | 'Philosophy'
-    | 'Physics'
-    | 'Political Science'
-    | 'Psychology'
-    | 'Sociology';
-
-  inCitations: mongoose.Types.ObjectId[];
-  inCitationsCount: number;
-  // inCitationsRef: string[]; //TODO add
-  outCitations: mongoose.Types.ObjectId[];
-  outCitationsCount: number;
-  // outCitationsRef: string[]; //TODO add
-
-  openAccess: boolean;
-
-  // datasetId: string //TODO add
-  dblpId: string;
-  doi: string;
-  pdfUrls: string[];
-  url: string;
-
+  authorid: string;
+  externalids: {
+    DBLP: string;
+    DOI: string;
+    ACL: string;
+    arXiv: string;
+    PubMed: string;
+    PubMedCentral: string;
+    MAG: string;
+    CorpusId: string;
+  };
+  name: string;
+  aliases: string[];
+  affiliations: string[];
+  homepage: string;
+  papercount: number;
+  citationcount: number;
+  hindex: number;
+  updated: Date;
+  s2url: string;
   createdBy: mongoose.Types.ObjectId;
   createdAt: Date;
 }
@@ -98,4 +67,5 @@ export interface User extends mongoose.Document {
   token?: string;
   isAdmin?: boolean;
   isActive?: boolean;
+  refreshToken?: string[];
 }

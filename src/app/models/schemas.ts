@@ -2,151 +2,99 @@ import mongoose from 'mongoose';
 
 export const paperSchema = new mongoose.Schema(
   {
-    title: { type: String },
-    abstractText: {
+    corpusid: { type: String, required: true, index: true },
+    abstract: {
       type: String,
-    },
-    yearPublished: { type: Number, index: true },
-
-    authorIds: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Author',
-        required: true,
-        index: true,
-      },
-    ],
-    authors: [{ type: String, required: true, index: true, default: [] }],
-    venueId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Venue',
       index: true,
     },
-    venue: { type: String, index: true },
-    publisher: { type: String, index: true },
-
-    typeOfPaper: {
-      type: String,
-      enum: [
-        'article',
-        'inproceedings',
-        'book',
-        'incollection',
-        'proceedings',
-        'phdthesis',
-        'mastersthesis',
+    updated: { type: Date, required: false, index: true },
+    externalids: {
+      type: {
+        DBLP: { type: String, index: true },
+        DOI: { type: String, index: true },
+        ACL: { type: String, index: true },
+        ArXiv: { type: String, index: true },
+        PubMed: { type: String, index: true },
+        PubMedCentral: { type: String, index: true },
+        MAG: { type: String, index: true },
+        CorpusId: { type: String, index: true },
+      },
+    },
+    url: { type: String, index: true },
+    title: { type: String, required: true, index: true },
+    authors: {
+      type: [
+        {
+          name: { type: String, required: true, index: true },
+          authorId: { type: String, required: true, index: true },
+        },
       ],
+      default: [],
+    },
+    venue: {
+      type: String,
       index: true,
     },
-    fieldsOfStudy: [
-      {
-        type: String,
-        enum: [
-          'Art',
-          'Biology',
-          'Business',
-          'Chemistry',
-          'Computer Science',
-          'Economics',
-          'Engineering',
-          'Environmental Science',
-          'Geography',
-          'Geology',
-          'History',
-          'Materials Science',
-          'Mathematics',
-          'Medicine',
-          'Philosophy',
-          'Physics',
-          'Political Science',
-          'Psychology',
-          'Sociology',
-        ],
-        index: true,
+    year: { type: Number, index: true },
+    referencecount: { type: Number, index: true, default: 0 },
+    citationcount: { type: Number, index: true, default: 0 },
+    influentialcitationcount: { type: Number, index: true, default: 0 },
+    isopenaccess: { type: Boolean, index: true, default: false },
+    s2fieldsofstudy: {
+      type: [
+        {
+          category: { type: String, index: true },
+          source: { type: String, index: true },
+        },
+      ],
+      default: [],
+    },
+    publicationtypes: {
+      type: [String],
+      index: true,
+    },
+    publicationdate: { type: Date, index: true },
+    journal: {
+      type: {
+        name: { type: String, index: true },
+        volume: { type: String, index: true },
+        pages: { type: String, index: true },
       },
-    ],
-
-    inCitations: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Paper',
-      },
-    ],
-    inCitationsCount: { type: Number, required: true, default: 0, index: true },
-    // inCitationsRef: [{ type: String, required: true }], //TODO add
-    outCitations: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Paper',
-      },
-    ],
-    outCitationsCount: { type: Number, required: true, default: 0, index: true },
-    // outCitationsRef: [{ type: String, required: true }], //TODO add
-
-    openAccess: { type: Boolean, required: true, default: false, index: true },
-
-    // datasetId: { type: String, unique: true, required: true }, //TODO add
-    dblpId: { type: String, unique: true, sparse: true },
-    doi: { type: String },
-    pdfUrls: [{ type: String }],
-    url: { type: String },
-
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    createdAt: { type: Date, required: true },
+    },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+    createdAt: { type: Date, required: true, index: true },
   },
   { collection: 'papers' }
 );
 
-export const venueSchema = new mongoose.Schema(
-  {
-    names: [{ type: String, required: true, unique: true }],
-    acronyms: [{ type: String, required: true }],
-    venueCodes: [{ type: String, required: true }],
-    venueDetails: [
-      {
-        callForPapersText: String,
-        timePublished: Date,
-      },
-    ],
-    dblpId: { type: String, unique: true, sparse: true },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    createdAt: { type: Date, required: true },
-  },
-  { collection: 'venues' }
-);
-
 export const authorSchema = new mongoose.Schema(
   {
-    fullname: { type: String, required: true, unique: true },
-    number: { type: String },
-    orcid: { type: String, unique: true, sparse: true },
-    affiliations: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Affiliation',
+    authorid: { type: String, required: true, index: true },
+    externalids: {
+      type: {
+        DBLP: { type: String, index: true },
+        DOI: { type: String, index: true },
+        ACL: { type: String, index: true },
+        arXiv: { type: String, index: true },
+        PubMed: { type: String, index: true },
+        PubMedCentral: { type: String, index: true },
+        MAG: { type: String, index: true },
+        CorpusId: { type: String, index: true },
       },
-    ],
-    timestamp: { type: Date },
-    email: { type: String },
-    dblpId: { type: String, unique: true, sparse: true },
+    },
+    name: { type: String, required: true, index: true },
+    aliases: { type: [String], index: true },
+    affiliations: { type: [String], index: true, default: [] },
+    homepage: { type: String, index: true },
+    papercount: { type: Number, index: true, default: 0 },
+    citationcount: { type: Number, index: true, default: 0 },
+    hindex: { type: Number, index: true, default: 0 },
+    updated: { type: Date, required: false, index: true },
+    s2url: { type: String, index: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
   },
   { collection: 'authors' }
-);
-
-export const affiliationSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    country: { type: String, required: true },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    createdAt: { type: Date, required: true },
-    city: { type: String },
-    lat: { type: Number },
-    lng: { type: Number },
-    dblpId: { type: String, unique: true, sparse: true },
-  },
-  { collection: 'affiliations' }
 );
 
 export const userSchema = new mongoose.Schema(
@@ -156,6 +104,7 @@ export const userSchema = new mongoose.Schema(
     fullname: { type: String, required: true },
     isAdmin: { type: Boolean, required: false, select: false },
     isActive: { type: Boolean, required: false, select: false },
+    refreshToken: [{ type: String, required: false, select: false }],
   },
   { collection: 'users' }
 );
