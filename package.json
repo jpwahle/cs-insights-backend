@@ -11,7 +11,7 @@
     "build": "tsc -p .",
     "start": "NODE_ENV=production node ./lib/main.js",
     "cluster": "NODE_ENV=production node ./lib/cluster.js",
-    "dev": "NODE_ENV=development  nodemon --watch 'src/**' --ext 'ts,js,json' --exec 'ts-node src/main.ts' --project 'src/tsconfig.json'"
+    "dev": "NODE_ENV=development  nodemon --watch 'src/**' --ext 'ts,js,json' --exec 'ts-node src/cluster.ts' --project 'src/tsconfig.json'"
   },
   "repository": {
     "type": "git",

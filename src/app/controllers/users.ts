@@ -197,75 +197,56 @@ export function initialize(
 
         const foundUser = await userModel.findOne({ refreshToken });
 
-        // Detected refresh token reuse!
-        if (!foundUser) {
+        if (foundUser) {
+          const newRefreshTokenArray = foundUser?.refreshToken?.filter(
+            (rt: string) => rt !== refreshToken
+          );
+
           jwt.verify(
             refreshToken,
             options.auth.jwt.secret,
             async (err: any, decoded: { _id: string; email: string }) => {
-              if (err) return res.sendStatus(403); //Forbidden
-              console.log('attempted refresh token reuse!');
-              const hackedUser = await userModel.findOne({ email: decoded.email });
-              if (hackedUser) {
-                hackedUser.refreshToken = [];
+              if (err) {
+                console.log('expired refresh token');
+                foundUser.refreshToken = [...(newRefreshTokenArray || [])];
+                await userModel.updateOne(
+                  { _id: foundUser?._id },
+                  { refreshToken: foundUser?.refreshToken }
+                );
               }
+              if (err || foundUser.email !== decoded.email) return res.sendStatus(403);
+
+              const user = {
+                _id: foundUser._id,
+                email: foundUser.email,
+                fullname: foundUser.fullname,
+              };
+              // Refresh token was still valid
+              const token = jwt.sign({ user }, options.auth.jwt.secret, {
+                expiresIn: options.auth.jwt.maxTokenAge,
+              });
+
+              const newRefreshToken = jwt.sign({ email: user.email }, options.auth.jwt.secret, {
+                expiresIn: options.auth.jwt.maxRefreshTokenAge,
+              });
+              // Saving refreshToken with current user
+              foundUser.refreshToken = [...(newRefreshTokenArray || []), newRefreshToken];
               await userModel.updateOne(
-                { _id: hackedUser?._id },
-                { refreshToken: hackedUser?.refreshToken }
+                { _id: foundUser._id },
+                { refreshToken: foundUser.refreshToken }
               );
+              // Creates Secure Cookie with refresh token
+              res.cookie('jwt', newRefreshToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                maxAge: 24 * 60 * 60 * 1000,
+              });
+
+              res.json({ token, email: user.email, fullname: user.fullname });
             }
           );
-          return res.sendStatus(403); //Forbidden
         }
-
-        const newRefreshTokenArray = foundUser?.refreshToken?.filter(
-          (rt: string) => rt !== refreshToken
-        );
-
-        jwt.verify(
-          refreshToken,
-          options.auth.jwt.secret,
-          async (err: any, decoded: { _id: string; email: string }) => {
-            if (err) {
-              console.log('expired refresh token');
-              foundUser.refreshToken = [...(newRefreshTokenArray || [])];
-              await userModel.updateOne(
-                { _id: foundUser?._id },
-                { refreshToken: foundUser?.refreshToken }
-              );
-            }
-            if (err || foundUser.email !== decoded.email) return res.sendStatus(403);
-
-            const user = {
-              _id: foundUser._id,
-              email: foundUser.email,
-              fullname: foundUser.fullname,
-            };
-            // Refresh token was still valid
-            const token = jwt.sign({ user }, options.auth.jwt.secret, {
-              expiresIn: options.auth.jwt.maxTokenAge,
-            });
-
-            const newRefreshToken = jwt.sign({ email: user.email }, options.auth.jwt.secret, {
-              expiresIn: options.auth.jwt.maxRefreshTokenAge,
-            });
-            // Saving refreshToken with current user
-            foundUser.refreshToken = [...(newRefreshTokenArray || []), newRefreshToken];
-            await userModel.updateOne(
-              { _id: foundUser._id },
-              { refreshToken: foundUser.refreshToken }
-            );
-            // Creates Secure Cookie with refresh token
-            res.cookie('jwt', newRefreshToken, {
-              httpOnly: true,
-              secure: true,
-              sameSite: 'none',
-              maxAge: 24 * 60 * 60 * 1000,
-            });
-
-            res.json({ token, email: user.email, fullname: user.fullname });
-          }
-        );
       } catch (err) {
         /* istanbul ignore next */
         return next(err);
