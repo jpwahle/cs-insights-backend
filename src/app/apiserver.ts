@@ -1,6 +1,6 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import expressOasGenerator, { SPEC_OUTPUT_FILE_BEHAVIOR } from 'express-oas-generator';
+import mongoose from 'mongoose';
 import Models from './models';
 import * as DocumentTypes from './models/interfaces';
 const cors = require('cors');

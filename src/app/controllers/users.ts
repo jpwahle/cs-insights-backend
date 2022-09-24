@@ -155,7 +155,10 @@ export function initialize(
                 newRefreshTokenArray = [];
               }
 
-              res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
+              res.clearCookie('jwt', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV == 'production',
+              });
             }
 
             // Saving refreshToken with current user
@@ -170,8 +173,7 @@ export function initialize(
             // Creates Secure Cookie with refresh token
             res.cookie('jwt', newRefreshToken, {
               httpOnly: true,
-              secure: true,
-              sameSite: 'none',
+              secure: process.env.NODE_ENV == 'production',
               maxAge: 24 * 60 * 60 * 1000,
             });
 
@@ -193,7 +195,10 @@ export function initialize(
       try {
         if (!req.cookies?.jwt) return res.sendStatus(401);
         const refreshToken = req.cookies.jwt;
-        res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
+        res.clearCookie('jwt', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV == 'production',
+        });
 
         const foundUser = await userModel.findOne({ refreshToken });
 
@@ -238,8 +243,7 @@ export function initialize(
               // Creates Secure Cookie with refresh token
               res.cookie('jwt', newRefreshToken, {
                 httpOnly: true,
-                secure: true,
-                sameSite: 'none',
+                secure: process.env.NODE_ENV == 'production',
                 maxAge: 24 * 60 * 60 * 1000,
               });
 
@@ -265,7 +269,10 @@ export function initialize(
         // Is refreshToken in db?
         const foundUser = await userModel.findOne({ refreshToken }).exec();
         if (!foundUser) {
-          res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
+          res.clearCookie('jwt', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV == 'production',
+          });
           return res.sendStatus(204);
         }
 
@@ -275,7 +282,10 @@ export function initialize(
         );
         await foundUser.save();
 
-        res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
+        res.clearCookie('jwt', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV == 'production',
+        });
         res.sendStatus(204);
       } catch (err) {
         /* istanbul ignore next */
