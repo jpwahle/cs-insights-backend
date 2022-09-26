@@ -5,9 +5,8 @@ export const paperSchema = new mongoose.Schema(
     corpusid: { type: String, required: true, index: true },
     abstract: {
       type: String,
-      index: true,
     },
-    updated: { type: Date, required: false, index: true },
+    updated: { type: Date, required: false },
     externalids: {
       type: {
         DBLP: { type: String, index: true },
@@ -20,7 +19,7 @@ export const paperSchema = new mongoose.Schema(
         CorpusId: { type: String, index: true },
       },
     },
-    url: { type: String, index: true },
+    url: { type: String },
     title: { type: String, required: true, index: true },
     authors: {
       type: [
@@ -38,31 +37,30 @@ export const paperSchema = new mongoose.Schema(
     year: { type: Number, index: true },
     referencecount: { type: Number, index: true, default: 0 },
     citationcount: { type: Number, index: true, default: 0 },
-    influentialcitationcount: { type: Number, index: true, default: 0 },
-    isopenaccess: { type: Boolean, index: true, default: false },
+    influentialcitationcount: { type: Number, default: 0 },
+    isopenaccess: { type: Boolean, default: false },
     s2fieldsofstudy: {
       type: [
         {
-          category: { type: String, index: true },
-          source: { type: String, index: true },
+          category: { type: String },
+          source: { type: String },
         },
       ],
       default: [],
     },
     publicationtypes: {
       type: [String],
-      index: true,
     },
-    publicationdate: { type: Date, index: true },
+    publicationdate: { type: Date },
     journal: {
       type: {
-        name: { type: String, index: true },
-        volume: { type: String, index: true },
-        pages: { type: String, index: true },
+        name: { type: String },
+        volume: { type: String },
+        pages: { type: String },
       },
     },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
-    createdAt: { type: Date, required: true, index: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    createdAt: { type: Date, required: true },
   },
   { collection: 'papers' }
 );
@@ -83,14 +81,14 @@ export const authorSchema = new mongoose.Schema(
       },
     },
     name: { type: String, required: true, index: true },
-    aliases: { type: [String], index: true },
+    aliases: { type: [String] },
     affiliations: { type: [String], index: true, default: [] },
-    homepage: { type: String, index: true },
+    homepage: { type: String },
     papercount: { type: Number, index: true, default: 0 },
     citationcount: { type: Number, index: true, default: 0 },
     hindex: { type: Number, index: true, default: 0 },
-    updated: { type: Date, required: false, index: true },
-    s2url: { type: String, index: true },
+    updated: { type: Date, required: false },
+    s2url: { type: String },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, required: true },
   },
