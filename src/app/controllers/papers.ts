@@ -18,6 +18,52 @@ export function initialize(
     preMiddleware: passport.authenticate('admin', { session: false }),
     prefix: options.server.prefix,
     version: options.server.version,
+    preRead: async (req: any, res: express.Response, next: NextFunction) => {
+      // If there is the "years" flag on the query, run a mongoose query to get the annual counts
+      if (req.query.hasOwnProperty('years')) {
+        const byYears = await model.aggregate([
+          { $match: JSON.parse(req.query.query) },
+          { $sort: { year: 1 } },
+          {
+            $group: {
+              _id: '$year',
+              count: { $count: {} },
+            },
+          },
+          {
+            $sort: {
+              year: 1,
+            },
+          },
+        ]);
+        res.json(byYears);
+      }
+      // If there is the "venues" flag on the query, run a mongoose query to get the annual counts
+      if (req.query.hasOwnProperty('venues')) {
+        const byVenues = await model.aggregate([
+          { $match: JSON.parse(req.query.query) },
+          { $sort: { year: 1 } },
+          {
+            $group: {
+              _id: '$venue',
+              count: { $count: {} },
+            },
+          },
+          {
+            $sort: {
+              count: -1,
+            },
+          },
+        ]);
+        console.log(byVenues);
+        res.json(byVenues);
+      }
+      // If there is no limit, limit max documents to 100
+      if (!req.query.limit) {
+        req.query.limit = 10;
+      }
+      next();
+    },
     preCreate: (req: any, res: express.Response, next: NextFunction) => {
       if (req.user.isAdmin) {
         // Add who created the paper and when
