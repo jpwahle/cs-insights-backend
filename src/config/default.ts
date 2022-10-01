@@ -26,7 +26,8 @@ export const options: APIOptions = {
         getSecret('/run/secrets/jwt_secret') ||
         process.env.JWT_SECRET ||
         'Never use this in production. Use JWT_SECRET environment variable.',
-      maxAge: '4w',
+      maxRefreshTokenAge: '1d',
+      maxTokenAge: '60s',
     },
   },
   // User
@@ -63,9 +64,7 @@ export const options: APIOptions = {
     jsonParserLimit: '50mb',
     prefix: '/api',
     version: `/v${process.env.npm_package_version?.split('.', 1)[0]}`,
-    get baseRoute() {
-      return this.prefix + this.version;
-    },
+    baseRoute: `/api/v${process.env.npm_package_version?.split('.', 1)[0]}`,
     cacheTTL: 0,
   },
 };

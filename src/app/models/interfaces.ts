@@ -92,10 +92,12 @@ export interface Paper extends mongoose.Document {
 }
 
 export interface User extends mongoose.Document {
+  _id: mongoose.Types.ObjectId;
   email: string;
   fullname: string;
   password?: string;
   token?: string;
   isAdmin?: boolean;
   isActive?: boolean;
+  refreshToken?: string[];
 }
