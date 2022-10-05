@@ -13,7 +13,7 @@ export async function initServer(options: APIOptions): Promise<APIServer> {
   const app = new APIServer(options, models);
 
   // Initialize automatic oas for responses
-  app.handleOasResponses();
+  // app.handleOasResponses();
 
   // Initialize standard app config
   app.init();
@@ -37,7 +37,7 @@ export async function initServer(options: APIOptions): Promise<APIServer> {
   await app.createDefaultUser(<DocumentTypes.User>options.user.default);
 
   // Initialize automatic oas for requests
-  app.handleOasRequests();
+  // app.handleOasRequests();
 
   // Start the server
   app.start();

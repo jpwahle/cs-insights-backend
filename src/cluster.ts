@@ -3,6 +3,9 @@ import cluster from 'cluster';
 import { initServer } from './app';
 import { loadOptions } from './config';
 
+// const dns = require('node:dns');
+// dns.setDefaultResultOrder('ipv4first');
+
 const numCPUs = require('os').cpus().length;
 
 (async () => {

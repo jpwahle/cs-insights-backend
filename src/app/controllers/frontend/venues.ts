@@ -281,7 +281,7 @@ export function initialize(
             // { names: { $first: '$names' } }
             // );
             const data = await modelVenue.aggregate([
-              { $match: { names: { $regex: pattern } } },
+              { $match: { names: { $regex: pattern, $options: 'i' } } },
               { $project: { names: { $first: '$names' } } },
             ]);
             appCache.set(key, data);
