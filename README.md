@@ -6,22 +6,21 @@
 </div>
 <br/>
 <p align="center">
-<a href="https://codecov.io/gh/gipplab/cs-insights-backend"><img alt="Code Coverage" src="https://codecov.io/gh/gipplab/cs-insights-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
-<a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/release.yml/badge.svg?branch=dev"></a>  
-<a href="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/gipplab/cs-insights-backend/actions/workflows/main.yml/badge.svg"></a>
-<a href="https://github.com/gipplab/cs-insights-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/gipplab/cs-insights-backend?sort=semver"></a>
-<a href="https://hub.docker.com/repository/docker/jpelhaw/nlp-land-backend"><img alt="Docker Release" src="https://img.shields.io/docker/v/jpelhaw/nlp-land-backend?label=Docker"></a>
-<a href="https://gipplab.github.io/cs-insights-backend/"><img alt="Docs" src="https://img.shields.io/badge/Docs-gh--pages-blue"></a>
+<a href="https://codecov.io/gh/jpwahle/cs-insights-backend"><img alt="Code Coverage" src="https://codecov.io/gh/jpwahle/cs-insights-backend/branch/main/graph/badge.svg?token=FW8MXQX5XK"/></a>
+<a href="https://github.com/jpwahle/cs-insights-backend/actions/workflows/release.yml"><img alt="Actions Status" src="https://github.com/jpwahle/cs-insights-backend/actions/workflows/release.yml/badge.svg?branch=dev"></a>  
+<a href="https://github.com/jpwahle/cs-insights-backend/actions/workflows/main.yml"><img alt="Actions Status" src="https://github.com/jpwahle/cs-insights-backend/actions/workflows/main.yml/badge.svg"></a>
+<a href="https://github.com/jpwahle/cs-insights-backend/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/jpwahle/cs-insights-backend?sort=semver"></a>
+<a href="https://jpwahle.github.io/cs-insights-backend/"><img alt="Docs" src="https://img.shields.io/badge/Docs-gh--pages-blue"></a>
 <a href="https://github.com/ag-gipp/cs-insights-backend/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/airbnb/javascript"><img alt="Code style: Airbnb" src="https://img.shields.io/badge/codestyle-Airbnb-success"></a>
-<a href="https://gipplab.github.io/cs-insights-uptime/"><img alt="All-time uptime 100.00%" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgipplab%2Fcs-insights-uptime%2FHEAD%2Fapi%2Fbackend%2Fuptime.json"></a>
-<a href="https://gipplab.github.io/cs-insights-uptime/"><img alt="Response time 773" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fgipplab%2Fcs-insights-uptime%2FHEAD%2Fapi%2Fbackend%2Fresponse-time.json"></a>
+<a href="https://jpwahle.github.io/cs-insights-uptime/"><img alt="All-time uptime 100.00%" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjpwahle%2Fcs-insights-uptime%2FHEAD%2Fapi%2Fbackend%2Fuptime.json"></a>
+<a href="https://jpwahle.github.io/cs-insights-uptime/"><img alt="Response time 773" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjpwahle%2Fcs-insights-uptime%2FHEAD%2Fapi%2Fbackend%2Fresponse-time.json"></a>
 </p>
 <br/>
 
 ## Getting Started
 
-This project is part of the `cs-insights`-ecosystem. Please refer to the readme [here](https://github.com/gipplab/cs-insights-main) to spin up the development and production system.
+This project is part of the `cs-insights`-ecosystem. Please refer to the readme [here](https://github.com/jpwahle/cs-insights) to spin up the development and production system.
 
 ## Repository
 ### Structure
