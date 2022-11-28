@@ -25,7 +25,7 @@ export function initialize(router: express.Router, options: APIOptions) {
     async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
         //query predictions endpoint
-        const url = `http://${process.env.PREDICTIONS_ENDPOINT_HOST}:${process.env.PREDICTIONS_ENDPOINT_PORT}/api/v0/status`;
+        const url = `http://${process.env.PREDICTION_ENDPOINT_HOST}:${process.env.PREDICTION_ENDPOINT_PORT}/api/v0/status`;
         const response = await fetch(url);
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.indexOf('application/json') !== -1) {

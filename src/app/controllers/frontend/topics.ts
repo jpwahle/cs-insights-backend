@@ -1,11 +1,11 @@
 //@ts-nocheck
 import express from 'express';
 import mongoose, { FilterQuery } from 'mongoose';
+import { APIOptions } from '../../../config/interfaces';
+import { ModelId, QueryFilters } from '../../../types';
 import * as DocumentTypes from '../../models/interfaces';
 import { Paper } from '../../models/interfaces';
-import { APIOptions } from '../../../config/interfaces';
 import { buildFindObject } from './queryUtils';
-import { ModelId, QueryFilters } from '../../../types';
 
 const passport = require('passport');
 
@@ -23,7 +23,7 @@ export function initialize(
     async (req: express.Request<{}, {}, {}, QueryFilters>, res: express.Response) => {
       try {
         //query predictions endpoint
-        const url = `http://${process.env.PREDICTIONS_ENDPOINT_HOST}:${process.env.PREDICTIONS_ENDPOINT_PORT}/api/v0/models`;
+        const url = `http://${process.env.PREDICTION_ENDPOINT_HOST}:${process.env.PREDICTION_ENDPOINT_PORT}/api/v0/models`;
         const response = await fetch(url);
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.indexOf('application/json') !== -1) {
@@ -72,7 +72,7 @@ export function initialize(
             });
           } else {
             //query predictions endpoint
-            const url = `http://${process.env.PREDICTIONS_ENDPOINT_HOST}:${process.env.PREDICTIONS_ENDPOINT_PORT}/api/v0/models/${modelId}`;
+            const url = `http://${process.env.PREDICTION_ENDPOINT_HOST}:${process.env.PREDICTION_ENDPOINT_PORT}/api/v0/models/${modelId}`;
             const init = {
               method: 'POST',
               headers: {

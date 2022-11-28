@@ -1,8 +1,8 @@
-import { beforeEach, describe } from 'mocha';
-import 'mocha';
-import sinon, { SinonSandbox } from 'sinon';
 import chai, { expect, should } from 'chai';
 import chaiHttp from 'chai-http';
+import 'mocha';
+import { beforeEach, describe } from 'mocha';
+import sinon, { SinonSandbox } from 'sinon';
 import { APIServer } from '../../../src/app/apiserver';
 import { APIOptions } from '../../../src/config/interfaces';
 import * as Setup from '../../setup';
@@ -20,8 +20,8 @@ describe('/fe/topics', () => {
   const route = '/fe/topics';
   const host = '123.4.5.678';
   const port = '1234';
-  process.env.PREDICTIONS_ENDPOINT_HOST = host;
-  process.env.PREDICTIONS_ENDPOINT_PORT = port;
+  process.env.PREDICTION_ENDPOINT_HOST = host;
+  process.env.PREDICTION_ENDPOINT_PORT = port;
   process.env.LDA_PAPER_LIMIT = '3';
 
   before(async () => {
