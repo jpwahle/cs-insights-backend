@@ -76,22 +76,16 @@ export function initialize(
             const init = {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                functionCall: 'getLDAvis',
-                inputData: { data: textData },
+                function_call: 'getLDAvis',
+                input_data: { data: textData },
               }),
             };
             const response = await fetch(url, init);
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.indexOf('application/json') !== -1) {
-              const json = await response.json();
-              res.status(response.status).json(json);
-            } else {
-              res.status(response.status);
-              res.send();
-            }
+            const json = await response.json();
+            res.status(response.status).json(json);
           }
         } catch (error: any) {
           /* istanbul ignore next */
