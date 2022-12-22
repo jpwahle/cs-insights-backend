@@ -68,7 +68,7 @@
     "express-oas-generator": "^1.0.44",
     "express-restify-mongoose": "^6.1.2",
     "express-session": "^1.17.2",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "mongoose": "^5.13.14",
     "node-cache": "^5.1.2",
